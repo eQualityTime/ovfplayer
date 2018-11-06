@@ -1,0 +1,14 @@
+<div class="speechbarContainer">
+  <button mat-raised-button (click)="speechbarService.speak()">Speak</button>
+
+  <div class="speechbar">
+    <mat-card class="speechbarItem" *ngFor="let butt of speechbarService.getButtons()">
+      {{butt.label}}
+    </mat-card>
+  </div>
+
+  <div class="stackedButtonContainer">
+    <button class="stackedButton" mat-raised-button (click)="speechbarService.backspace()">Backspace</button>
+    <button class="stackedButton" mat-raised-button (click)="speechbarService.clear()">Clear</button>
+  </div>
+</div>

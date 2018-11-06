@@ -1,0 +1,31 @@
+.form-title {
+  height: 100%;
+  background-color: #e0e0e0;
+  padding: 10px;
+}
+
+.form-card {
+  padding: 0px;
+  margin: 20px;
+}
+
+.form-container {
+  padding: 20px;
+  width: 100%;
+}
+
+.form-input-url {
+  width: 100%;
+}
+
+.form-input-field {
+  width: 90%;
+  padding-right: 10px;
+}
+
+.form-buttons {
+  padding-bottom: 5px;
+  padding-right: 5px;
+  display: flex;
+  justify-content: flex-end;
+}

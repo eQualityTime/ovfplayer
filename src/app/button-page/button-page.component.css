@@ -1,0 +1,13 @@
+mat-card {
+  width: calc(100% - 70px);
+  height: calc(100% - 70px);
+}
+
+.mat-raised-button {
+  padding: 0px;
+}
+
+.buttonDiv {
+  width: 100%;
+  border: 2px solid;
+}

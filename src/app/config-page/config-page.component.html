@@ -1,0 +1,13 @@
+<mat-card class="form-card">
+  <div class="form-title">
+    Configuration
+  </div>
+  <div class="form-container">
+    <mat-form-field class="form-input-field">
+      <input [(ngModel)]="boardURL" matInput placeholder="URL for obf/obz file" class="form-input-url">
+    </mat-form-field>
+  </div>
+  <div class="form-buttons">
+    <button mat-raised-button color="primary" (click)="save()">Save</button>
+  </div>
+</mat-card>

@@ -1,0 +1,26 @@
+.speechbarContainer {
+  display: flex;
+  height: 20%;
+}
+
+.speechbar {
+  border: 1px black solid;
+  display: flex;
+  flex-wrap: wrap;
+  overflow-y: scroll;
+  flex-grow: 1;
+}
+
+.speechbarItem {
+  flex-shrink: 1;
+  padding: 12px;
+}
+
+.stackedButtonContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.stackedButton {
+  flex-grow: 1;
+}
