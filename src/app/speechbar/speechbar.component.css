@@ -4,7 +4,6 @@
 }
 
 .speechbar {
-  border: 1px black solid;
   display: flex;
   flex-wrap: wrap;
   overflow-y: scroll;
