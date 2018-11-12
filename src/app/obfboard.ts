@@ -42,8 +42,9 @@ export class Button {
   borderColor: string;
   actions: string[];
   loadBoardAction: LoadBoardAction;
+  parent: OBFBoard;
 
-  deserialize(input: any): Button {
+  deserialize(input: any, parent: OBFBoard): Button {
     this.id = String(input.id);
     this.label = input.label;
     this.vocalization = input.vocalization;
@@ -51,6 +52,7 @@ export class Button {
     this.soundId = input.sound_id || input.sound_id === 0 ? String(input.sound_id) : undefined;
     this.backgroundColor = input.background_color;
     this.borderColor = input.border_color;
+    this.parent = parent;
 
     if (input.actions && input.actions.length > 0) {
       this.actions = input.actions;
@@ -68,6 +70,10 @@ export class Button {
 
   getVocalization(): string {
     return this.vocalization || this.label;
+  }
+
+  getImage(): Image {
+    return this.imageId && this.parent.getImage(this.imageId);
   }
 }
 
@@ -158,7 +164,7 @@ export class OBFBoard {
     this.name = input.name;
     this.descriptionHtml = input.description_html;
     this.grid = new Grid().deserialize(input.grid);
-    this.buttons = input.buttons.map(button => new Button().deserialize(button));
+    this.buttons = input.buttons.map(button => new Button().deserialize(button, this));
     this.images = input.images.map(image => new Image().deserialize(image, this));
     this.sounds = input.sounds.map(sound => new Sound().deserialize(sound));
 
