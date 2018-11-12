@@ -1,11 +1,19 @@
 import { TestBed, inject } from '@angular/core/testing';
 
 import { BoardService } from './board.service';
+import { ObzService } from './obz.service';
 
 describe('BoardService', () => {
+  let obzServiceStub: Partial<ObzService>;
+
   beforeEach(() => {
+    obzServiceStub = {};
+
     TestBed.configureTestingModule({
-      providers: [BoardService]
+      providers: [
+        BoardService,
+        {provide: ObzService, useValue: obzServiceStub}
+      ]
     });
   });
 
