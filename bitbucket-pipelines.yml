@@ -1,0 +1,16 @@
+# Check our guides at https://confluence.atlassian.com/x/14UWN for more examples.
+# Only use spaces to indent your .yml configuration.
+# -----
+# You can specify a custom docker image from Docker Hub as your build environment.
+image: markhobson/node-chrome
+
+pipelines:
+  branches:
+   develop:
+    - step:
+        caches:
+          - node
+        script: # Modify the commands below to build your repository.
+          - npm install
+          - npm install -g @angular/cli
+          - ng test --watch=false --browsers ChromeHeadless
