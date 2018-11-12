@@ -1,0 +1,24 @@
+.buttonDiv {
+  --borderWidth : 2px;
+  width: calc(100% - 2 * var(--borderWidth));
+  height: calc(100% - 2 * var(--borderWidth));
+  border: var(--borderWidth) solid;
+  display: flex;
+  flex-direction: column;
+}
+
+.buttonImageDiv {
+  width: 100%;
+  height: 100%;
+  display: flex;
+}
+
+.buttonImage {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.buttonLabel {
+  text-align: center;
+}

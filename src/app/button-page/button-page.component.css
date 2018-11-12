@@ -1,7 +1,3 @@
-.mat-raised-button {
-  padding: 0px;
-}
-
 .board {
   display: flex;
   flex-direction: column;
@@ -18,29 +14,4 @@
 .boardButton {
   flex: 1 1 auto;
   width: 100%;
-}
-
-.buttonDiv {
-  --borderWidth : 2px;
-  width: calc(100% - 2 * var(--borderWidth));
-  height: calc(100% - 2 * var(--borderWidth));
-  border: var(--borderWidth) solid;
-  display: flex;
-  flex-direction: column;
-}
-
-.buttonImageDiv {
-  width: 100%;
-  height: 100%;
-  display: flex;
-}
-
-.buttonImage {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-
-.buttonLabel {
-  text-align: center;
 }

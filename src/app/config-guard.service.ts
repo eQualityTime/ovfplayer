@@ -6,9 +6,9 @@ import { ConfigService } from './config.service';
   providedIn: 'root'
 })
 export class ConfigGuardService implements CanActivate {
-  
+
   constructor(private router: Router, private config: ConfigService) { }
-  
+
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     // TODO: check more config and possibly validate it
     const hasConfig = this.config.getBoardURL();
