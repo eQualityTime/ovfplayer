@@ -2,7 +2,45 @@
   padding: 0px;
 }
 
-.buttonDiv {
+.board {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.boardRow {
+  display: flex;
+  flex-direction: row;
+  flex: 1 1 auto;
+  overflow: hidden;
+}
+
+.boardButton {
+  flex: 1 1 auto;
   width: 100%;
-  border: 2px solid;
+}
+
+.buttonDiv {
+  --borderWidth : 2px;
+  width: calc(100% - 2 * var(--borderWidth));
+  height: calc(100% - 2 * var(--borderWidth));
+  border: var(--borderWidth) solid;
+  display: flex;
+  flex-direction: column;
+}
+
+.buttonImageDiv {
+  width: 100%;
+  height: 100%;
+  display: flex;
+}
+
+.buttonImage {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.buttonLabel {
+  text-align: center;
 }

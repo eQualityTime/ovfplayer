@@ -1,8 +1,6 @@
-interface Serializable<T> {
-    deserialize(input: any): T;
-}
+import { ImageResolver } from './image-resolver';
 
-export class Grid implements Serializable<Grid> {
+export class Grid {
   rows: number;
   columns: number;
   order: string[][];
@@ -16,7 +14,7 @@ export class Grid implements Serializable<Grid> {
   }
 }
 
-export class LoadBoardAction implements Serializable<LoadBoardAction> {
+export class LoadBoardAction {
   id: string;
   name: string;
   url: string;
@@ -34,7 +32,7 @@ export class LoadBoardAction implements Serializable<LoadBoardAction> {
   }
 }
 
-export class Button implements Serializable<Button> {
+export class Button {
   id: string;
   label: string;
   vocalization: string;
@@ -73,29 +71,58 @@ export class Button implements Serializable<Button> {
   }
 }
 
-export class Image implements Serializable<Image> {
+export class Image {
   id: string;
   width: number;
   height: number;
   data: string;
   url: string;
+  path: string;
+  contentType: string;
+  parent: OBFBoard;
+  svgData: string;
 
-  deserialize(input: any): Image {
+  deserialize(input: any, parent: OBFBoard): Image {
     this.id = String(input.id);
     this.width = input.width;
     this.height = input.height;
     this.data = input.data;
     this.url = input.url;
+    this.path = input.path;
+    this.contentType = input.content_type;
+    this.parent = parent;
 
     return this;
   }
 
+  isSVG(): boolean {
+    return 'image/svg+xml' === this.contentType || (this.path && this.path.toLowerCase().endsWith('.svg'));
+  }
+
   getSource(): string {
+    if (this.path && this.parent.imageResolver) {
+      const imageData = this.parent.imageResolver.getImageData(this.path);
+      if (this.isSVG()) {
+        if (!this.svgData) {
+          // Make SVGs scale nicely in the grid regardless of original size
+          const imgData = imageData.substring(imageData.indexOf('<svg'));
+          const htmlTag = document.createElement('div');
+          htmlTag.innerHTML = imgData;
+          const svgTag = htmlTag.getElementsByTagName('svg')[0];
+          svgTag.setAttribute('height', '100%');
+          svgTag.setAttribute('width', '100%');
+          this.svgData = htmlTag.innerHTML;
+        }
+        return this.svgData;
+      } else {
+        return `data:${this.contentType};base64,${imageData}`;
+      }
+    }
     return this.data || this.url;
   }
 }
 
-export class Sound implements Serializable<Sound> {
+export class Sound {
   id: string;
   data: string;
   url: string;
@@ -111,7 +138,7 @@ export class Sound implements Serializable<Sound> {
   }
 }
 
-export class OBFPage implements Serializable<OBFPage> {
+export class OBFBoard {
 
   format: string;
   id: string;
@@ -122,8 +149,9 @@ export class OBFPage implements Serializable<OBFPage> {
   buttons: Button[];
   images: Image[];
   sounds: Sound[];
+  imageResolver: ImageResolver;
 
-  deserialize(input: any): OBFPage {
+  deserialize(input: any): OBFBoard {
     this.format = input.format;
     this.id = String(input.id);
     this.locale = input.locale;
@@ -131,10 +159,14 @@ export class OBFPage implements Serializable<OBFPage> {
     this.descriptionHtml = input.description_html;
     this.grid = new Grid().deserialize(input.grid);
     this.buttons = input.buttons.map(button => new Button().deserialize(button));
-    this.images = input.images.map(image => new Image().deserialize(image));
+    this.images = input.images.map(image => new Image().deserialize(image, this));
     this.sounds = input.sounds.map(sound => new Sound().deserialize(sound));
 
     return this;
+  }
+
+  setImageResolver(imageResolver: ImageResolver) {
+    this.imageResolver = imageResolver;
   }
 
   getButton(id: string): Button {

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Button } from './obfpage';
+import { Button } from './obfboard';
 
 @Injectable({
   providedIn: 'root'

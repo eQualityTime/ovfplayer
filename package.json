@@ -23,8 +23,10 @@
     "@angular/platform-browser-dynamic": "^6.0.3",
     "@angular/router": "^6.0.3",
     "core-js": "^2.5.4",
+    "jszip": "^3.1.5",
     "ngx-store": "^2.0.0",
     "rxjs": "^6.0.0",
+    "url-parse": "^1.4.4",
     "zone.js": "^0.8.26"
   },
   "devDependencies": {

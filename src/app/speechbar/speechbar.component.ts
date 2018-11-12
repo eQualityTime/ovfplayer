@@ -1,6 +1,8 @@
-import { Button } from '../obfpage';
+import { Button } from '../obfboard';
 import { Component, OnInit } from '@angular/core';
+import { ConfigService, ButtonDisplayConfig } from '../config.service';
 import { SpeechbarService } from '../speechbar.service';
+import { BoardService } from '../board.service';
 
 @Component({
   selector: 'app-speechbar',
@@ -8,10 +10,13 @@ import { SpeechbarService } from '../speechbar.service';
   styleUrls: ['./speechbar.component.css']
 })
 export class SpeechbarComponent implements OnInit {
+  private displayedButtons: ButtonDisplayConfig;
 
-  constructor(private speechbarService: SpeechbarService) { }
+  constructor(private speechbarService: SpeechbarService, private config: ConfigService,
+              private boardService: BoardService) { }
 
   ngOnInit() {
+    this.displayedButtons = this.config.getDisplayedButtons();
   }
 
 }

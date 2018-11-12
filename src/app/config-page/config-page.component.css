@@ -11,7 +11,6 @@
 
 .formContainer {
   padding: 20px;
-  width: 100%;
 }
 
 .formInputUrl {
@@ -19,7 +18,7 @@
 }
 
 .formInputField {
-  width: 90%;
+  width: 100%;
   padding-right: 10px;
 }
 

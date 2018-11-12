@@ -1,7 +1,7 @@
 import { Component, OnInit, Output } from '@angular/core';
-import { PageService } from '../page.service';
+import { BoardService } from '../board.service';
 import { SpeechbarService } from '../speechbar.service';
-import { OBFPage, Button, LoadBoardAction } from '../obfpage';
+import { OBFBoard, Button, LoadBoardAction } from '../obfboard';
 
 @Component({
   selector: 'app-button-page',
@@ -10,29 +10,32 @@ import { OBFPage, Button, LoadBoardAction } from '../obfpage';
 })
 export class ButtonPageComponent implements OnInit {
 
-  @Output() page: OBFPage;
+  @Output() board: OBFBoard;
 
   actionPerformers: {[key: string]: () => void} = {
     ':clear' : this.speechbarService.clear.bind(this.speechbarService),
     ':backspace' : this.speechbarService.backspace.bind(this.speechbarService),
-    ':speak' : this.speechbarService.speak.bind(this.speechbarService)
+    ':speak' : this.speechbarService.speak.bind(this.speechbarService),
+    ':home' : this.boardService.home.bind(this.boardService)
   };
 
-  constructor(private pageService: PageService, private speechbarService: SpeechbarService) { }
+  constructor(private boardService: BoardService, private speechbarService: SpeechbarService) { }
 
   ngOnInit() {
-    this.loadPage();
+    this.loadBoard();
   }
 
-  loadPage(): void {
-    this.pageService.getPage().subscribe(
-      page => this.page = page
-    );
+  loadBoard(): void {
+    this.boardService.getBoard().subscribe(this.setBoard);
+  }
+
+  private setBoard = (board: OBFBoard) => {
+    this.board = board;
   }
 
   handleButtonClick(button: Button) {
     if (button.soundId) {
-      const sound = this.page.getSound(button.soundId);
+      const sound = this.board.getSound(button.soundId);
 
       if (sound && (sound.data || sound.url)) {
         const audioSound = new Audio(sound.data || sound.url);
@@ -49,10 +52,13 @@ export class ButtonPageComponent implements OnInit {
     if (button.loadBoardAction) {
       const loadBoardAction: LoadBoardAction = button.loadBoardAction;
 
-      // TODO: handle path!
-      if (loadBoardAction.dataUrl) {
-        this.pageService.setPage(loadBoardAction.dataUrl);
-        this.loadPage();
+      if (loadBoardAction.path) {
+        this.boardService.navigateToBoard(loadBoardAction.path);
+      } else if (loadBoardAction.dataUrl) {
+        // TODO: fix this back up!
+        // this.pageService.setPage(loadBoardAction.dataUrl);
+        // TODO: shouldn't need to call loadPage anymore!
+        // this.loadPage();
       } else if (loadBoardAction.url) {
         // TODO: redirect whole page to site!
       }
@@ -78,5 +84,9 @@ export class ButtonPageComponent implements OnInit {
     } else {
       console.log('Unsupported action: ' + action);
     }
+  }
+
+  calculateRowHeight(): string {
+    return (100 / this.board.grid.rows).toString() + '%';
   }
 }

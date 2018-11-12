@@ -1,20 +1,24 @@
-<mat-grid-list cols="{{page.grid.columns}}" rowHeight="1:1" *ngIf="page; else noPage">
-  <ng-container *ngFor="let row of page.grid.order">
-    <mat-grid-tile *ngFor="let cell of row">
-      <button mat-raised-button *ngIf="page.getButton(cell) as butt " (click)="handleButtonClick(butt)">
-        <div class="buttonDiv" [style.background-color]="butt.backgroundColor" [style.border-color]="butt.borderColor">
-          <div class="buttonImage">
-            <ng-container *ngIf="page.getImage(butt.imageId) as image">
-              <img [width]="image.width" [height]="image.height" [src]="image.getSource()" *ngIf="image.getSource()"/>
+<div class="board" *ngIf="board; else noBoard">
+  <div class="boardRow" [style.height]="calculateRowHeight()" *ngFor="let row of board.grid.order">
+    <div class="boardButton" *ngFor="let cell of row">
+        <div class="buttonDiv" [style.background-color]="butt.backgroundColor" [style.border-color]="butt.borderColor"
+                                *ngIf="board.getButton(cell) as butt " (click)="handleButtonClick(butt)">
+          <div class="buttonImageDiv" *ngIf="board.getImage(butt.imageId) as image">
+            <ng-container *ngIf="board.getImage(butt.imageId) as image">
+              <div *ngIf="image.isSVG(); else normalImage" [innerHTML]="image.getSource() | safe">SVG Image</div>
+              <ng-template #normalImage>
+                <img class="buttonImage" [src]="image.getSource()" *ngIf="image.getSource()" />
+              </ng-template>
             </ng-container>
           </div>
-          {{butt.label}}
+          <div class="buttonLabel">
+            {{butt.label}}
+          </div>
         </div>
-      </button>
-    </mat-grid-tile>
-  </ng-container>
-</mat-grid-list>
+    </div>
+  </div>
+</div>
 
-<ng-template #noPage>
-  Loading Page...
+<ng-template #noBoard>
+  Loading Board...
 </ng-template>

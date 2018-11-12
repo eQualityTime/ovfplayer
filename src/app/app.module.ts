@@ -8,17 +8,19 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatMenuModule, MatIconModule, MatButtonModule } from '@angular/material';
 
 import { WebStorageModule } from 'ngx-store';
 
 import { AppComponent } from './app.component';
 import { ButtonPageComponent } from './button-page/button-page.component';
-import { MatMenuModule, MatIconModule, MatButtonModule } from '@angular/material';
 import { LayoutModule } from '@angular/cdk/layout';
 import { SpeechbarComponent } from './speechbar/speechbar.component';
 import { AppRoutingModule } from './app-routing.module';
 import { ConfigPageComponent } from './config-page/config-page.component';
 import { MainPageComponent } from './main-page/main-page.component';
+import { SafePipe } from './safe.pipe';
 
 @NgModule({
   declarations: [
@@ -26,7 +28,8 @@ import { MainPageComponent } from './main-page/main-page.component';
     ButtonPageComponent,
     SpeechbarComponent,
     ConfigPageComponent,
-    MainPageComponent
+    MainPageComponent,
+    SafePipe
   ],
   imports: [
     BrowserModule,
@@ -36,6 +39,7 @@ import { MainPageComponent } from './main-page/main-page.component';
     MatGridListModule,
     MatCardModule,
     MatFormFieldModule,
+    MatCheckboxModule,
     MatMenuModule,
     MatIconModule,
     MatInputModule,

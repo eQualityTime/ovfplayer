@@ -1,5 +1,10 @@
 <div class="speechbarContainer">
-  <button mat-raised-button (click)="speechbarService.speak()">Speak</button>
+  <div class="stackedButtonContainer">
+      <button class="stackedButton" mat-raised-button (click)="speechbarService.speak()"
+              *ngIf="displayedButtons.showSpeakButton">Speak</button>
+      <button class="stackedButton" mat-raised-button (click)="boardService.home()"
+              *ngIf="displayedButtons.showHomeButton">Home</button>
+  </div>
 
   <mat-card class="speechbar">
     <mat-card class="speechbarItem" *ngFor="let butt of speechbarService.getButtons()">
@@ -8,7 +13,9 @@
   </mat-card>
 
   <div class="stackedButtonContainer">
-    <button class="stackedButton" mat-raised-button (click)="speechbarService.backspace()">Backspace</button>
-    <button class="stackedButton" mat-raised-button (click)="speechbarService.clear()">Clear</button>
+    <button class="stackedButton" mat-raised-button (click)="speechbarService.backspace()"
+            *ngIf="displayedButtons.showBackspaceButton">Backspace</button>
+    <button class="stackedButton" mat-raised-button (click)="speechbarService.clear()"
+            *ngIf="displayedButtons.showClearButton">Clear</button>
   </div>
 </div>
