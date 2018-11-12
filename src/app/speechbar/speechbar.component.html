@@ -6,11 +6,20 @@
               *ngIf="displayedButtons.showHomeButton">Home</button>
   </div>
 
-  <mat-card class="speechbar">
-    <mat-card class="speechbarItem" *ngFor="let butt of speechbarService.getButtons()">
-      {{butt.label}}
-    </mat-card>
+  <mat-card class="speechbar" *ngIf="showIconsInSpeechbar; else vocalization" >
+    <div class="speechbarButtonItem" *ngFor="let butt of speechbarService.getButtons()">
+      <app-obf-button [butt]="butt"></app-obf-button>
+    </div>
   </mat-card>
+  <ng-template #vocalization>
+    <mat-card class="speechbar">
+      <div class="speechbarTextItem" *ngFor="let butt of speechbarService.getButtons()">
+          <mat-card class="speechbarText">
+            {{butt.getVocalization()}}
+          </mat-card>
+      </div>
+    </mat-card>
+  </ng-template>
 
   <div class="stackedButtonContainer">
     <button class="stackedButton" mat-raised-button (click)="speechbarService.backspace()"

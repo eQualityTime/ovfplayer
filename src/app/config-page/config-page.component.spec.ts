@@ -17,6 +17,7 @@ describe('ConfigPageComponent', () => {
     routerStub = {};
     configServiceStub = {
       getBoardURL: () => '',
+      shouldShowIconsInSpeechbar: () => false,
       getDisplayedButtons: () =>  {
         return {
           showSpeakButton: false,

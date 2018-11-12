@@ -8,10 +8,20 @@
   flex-wrap: wrap;
   overflow-y: scroll;
   flex-grow: 1;
+  padding: 0;
 }
 
-.speechbarItem {
+.speechbarTextItem {
   flex-shrink: 1;
+}
+
+.speechbarButtonItem {
+  flex: 1 1 10%;
+  min-height: 33%;
+  max-width: 20%;
+}
+
+.speechbarText {
   padding: 12px;
 }
 

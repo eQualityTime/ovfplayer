@@ -15,6 +15,9 @@
     <mat-card><mat-checkbox [(ngModel)]="displayedButtons.showClearButton">Clear button always shown</mat-checkbox></mat-card>
     <mat-card><mat-checkbox [(ngModel)]="displayedButtons.showHomeButton">Home button always shown</mat-checkbox></mat-card>
   </div>
+  <div class="formContainer">
+    <mat-card><mat-checkbox [(ngModel)]="showIconsInSpeechbar">Display button images and labels in speechbar (instead of vocalisation text)</mat-checkbox></mat-card>
+  </div>
   <div class="formButtons">
     <button mat-raised-button color="primary" (click)="save()">Save</button>
   </div>
