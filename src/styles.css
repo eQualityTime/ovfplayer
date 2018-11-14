@@ -8,7 +8,7 @@ body { margin: 0; font-family: 'Roboto', sans-serif; }
   html {
     transform: rotate(90deg);
     transform-origin: left top;
-    height: 50vw;
+    height: 100vw;
     width: 100vh;
     overflow-y: hidden;
     position: absolute;
