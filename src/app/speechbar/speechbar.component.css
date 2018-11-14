@@ -12,7 +12,7 @@
 }
 
 .speechbarTextItem {
-  flex-shrink: 1;
+  flex-shrink: 0;
 }
 
 .speechbarButtonItem {
@@ -23,6 +23,8 @@
 
 .speechbarText {
   padding: 12px;
+  height: 100%;
+  font-size: x-large;
 }
 
 .stackedButtonContainer {
