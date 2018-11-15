@@ -36,7 +36,7 @@ export class ObzService {
     this.observer = observer;
 
     // Decide if we're loading an obz or an obf
-    const urlSlug = new UrlUtils().getSlug(this.config.getBoardURL());
+    const urlSlug = new UrlUtils().getSlug(this.config.boardURL);
     this.log(`Parsed url ${urlSlug}`);
 
     if (urlSlug.toLowerCase().endsWith('.obf')) {
@@ -48,7 +48,7 @@ export class ObzService {
   }
 
   private loadOBFFile() {
-    this.http.get<OBFBoard>(this.config.getBoardURL()).subscribe({
+    this.http.get<OBFBoard>(this.config.boardURL).subscribe({
       next: (page) => {
         const boardSet = new OBZBoardSet();
         boardSet.rootBoardKey = 'root';
@@ -59,7 +59,7 @@ export class ObzService {
   }
 
   private getOBZFile(): Observable<Blob> {
-    return this.http.get(this.config.getBoardURL(), { responseType: 'blob' });
+    return this.http.get(this.config.boardURL, { responseType: 'blob' });
   }
 
   private loadOBZFile() {

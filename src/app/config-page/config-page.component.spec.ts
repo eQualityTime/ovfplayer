@@ -16,14 +16,13 @@ describe('ConfigPageComponent', () => {
   beforeEach(async(() => {
     routerStub = {};
     configServiceStub = {
-      getBoardURL: () => '',
-      getDisplayedButtons: () =>  {
-        return {
-          showSpeakButton: false,
-          showHomeButton: false,
-          showBackspaceButton: false,
-          showClearButton: false
-        };
+      boardURL: '',
+      showIconsInSpeechbar: false,
+      displayedButtons: {
+        showSpeakButton: false,
+        showHomeButton: false,
+        showBackspaceButton: false,
+        showClearButton: false
       }
     };
 

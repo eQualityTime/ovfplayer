@@ -22,6 +22,10 @@
   padding-right: 10px;
 }
 
+.formLabel {
+  white-space: normal;
+}
+
 .formButtons {
   padding-bottom: 5px;
   padding-right: 5px;

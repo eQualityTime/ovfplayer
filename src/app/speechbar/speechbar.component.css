@@ -5,14 +5,26 @@
 
 .speechbar {
   display: flex;
-  flex-wrap: wrap;
-  overflow-y: scroll;
+  overflow-x: scroll;
+  overflow-y: hidden;
   flex-grow: 1;
+  padding: 0;
 }
 
-.speechbarItem {
-  flex-shrink: 1;
+.speechbarTextItem {
+  flex-shrink: 0;
+}
+
+.speechbarButtonItem {
+  min-height: 33%;
+  max-width: 20%;
+  min-width: 10%;
+}
+
+.speechbarText {
   padding: 12px;
+  height: 100%;
+  font-size: x-large;
 }
 
 .stackedButtonContainer {

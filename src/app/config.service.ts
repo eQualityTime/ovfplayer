@@ -13,8 +13,9 @@ export interface ButtonDisplayConfig {
 })
 export class ConfigService {
 
-  @LocalStorage() boardURL = 'https://openboards.s3.amazonaws.com/examples/url_images.obf';
-  @LocalStorage() displayedButtons: ButtonDisplayConfig = {
+  @LocalStorage() _boardURL = 'https://openboards.s3.amazonaws.com/examples/url_images.obf';
+  @LocalStorage() _showIconsInSpeechbar = true;
+  @LocalStorage() _displayedButtons: ButtonDisplayConfig = {
     showSpeakButton: true,
     showBackspaceButton: true,
     showClearButton: true,
@@ -23,19 +24,27 @@ export class ConfigService {
 
   constructor() { }
 
-  getBoardURL(): string {
-    return this.boardURL;
+  get boardURL(): string {
+    return this._boardURL;
   }
 
-  getDisplayedButtons(): ButtonDisplayConfig {
-    return this.displayedButtons;
+  get displayedButtons(): ButtonDisplayConfig {
+    return this._displayedButtons;
   }
 
-  updateBoardURL(boardURL: string) {
-    this.boardURL = boardURL;
+  get showIconsInSpeechbar(): boolean {
+    return this._showIconsInSpeechbar;
   }
 
-  updateDisplayedButtons(displayedButtons: ButtonDisplayConfig) {
-    this.displayedButtons = displayedButtons;
+  set boardURL(boardURL: string) {
+    this._boardURL = boardURL;
+  }
+
+  set displayedButtons(displayedButtons: ButtonDisplayConfig) {
+    this._displayedButtons = displayedButtons;
+  }
+
+  set showIconsInSpeechbar(showIconsInSpeechbar: boolean) {
+    this._showIconsInSpeechbar = showIconsInSpeechbar;
   }
 }

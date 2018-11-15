@@ -21,6 +21,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { ConfigPageComponent } from './config-page/config-page.component';
 import { MainPageComponent } from './main-page/main-page.component';
 import { SafePipe } from './safe.pipe';
+import { ObfButtonComponent } from './obf-button/obf-button.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { SafePipe } from './safe.pipe';
     SpeechbarComponent,
     ConfigPageComponent,
     MainPageComponent,
-    SafePipe
+    SafePipe,
+    ObfButtonComponent
   ],
   imports: [
     BrowserModule,

@@ -1,20 +1,7 @@
 <div class="board" *ngIf="board; else noBoard">
   <div class="boardRow" [style.height]="calculateRowHeight()" *ngFor="let row of board.grid.order">
     <div class="boardButton" *ngFor="let cell of row">
-        <div class="buttonDiv" [style.background-color]="butt.backgroundColor" [style.border-color]="butt.borderColor"
-                                *ngIf="board.getButton(cell) as butt " (click)="handleButtonClick(butt)">
-          <div class="buttonImageDiv" *ngIf="board.getImage(butt.imageId) as image">
-            <ng-container *ngIf="board.getImage(butt.imageId) as image">
-              <div *ngIf="image.isSVG(); else normalImage" [innerHTML]="image.getSource() | safe">SVG Image</div>
-              <ng-template #normalImage>
-                <img class="buttonImage" [src]="image.getSource()" *ngIf="image.getSource()" />
-              </ng-template>
-            </ng-container>
-          </div>
-          <div class="buttonLabel">
-            {{butt.label}}
-          </div>
-        </div>
+        <app-obf-button *ngIf="board.getButton(cell) as butt" [butt]="butt" [clickHandler]="handleButtonClick.bind(this)"></app-obf-button>
     </div>
   </div>
 </div>

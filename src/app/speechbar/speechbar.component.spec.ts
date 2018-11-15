@@ -5,6 +5,8 @@ import { SpeechbarComponent } from './speechbar.component';
 import { ConfigService } from '../config.service';
 import { BoardService } from '../board.service';
 import { SpeechbarService } from '../speechbar.service';
+import { ObfButtonComponent } from '../obf-button/obf-button.component';
+import { SafePipe } from '../safe.pipe';
 
 describe('SpeechbarComponent', () => {
   let component: SpeechbarComponent;
@@ -15,14 +17,13 @@ describe('SpeechbarComponent', () => {
 
   beforeEach(async(() => {
     configServiceStub = {
-      getDisplayedButtons: () => {
-        return {
-          showSpeakButton: false,
-          showHomeButton: false,
-          showBackspaceButton: false,
-          showClearButton: false
-        };
-      }
+      displayedButtons: {
+        showSpeakButton: false,
+        showHomeButton: false,
+        showBackspaceButton: false,
+        showClearButton: false
+      },
+      showIconsInSpeechbar: false
     };
     boardServiceStub = {};
     speechbarServiceStub = {
@@ -30,7 +31,7 @@ describe('SpeechbarComponent', () => {
     };
 
     TestBed.configureTestingModule({
-      declarations: [ SpeechbarComponent ],
+      declarations: [ SpeechbarComponent, ObfButtonComponent, SafePipe ],
       providers: [
         {provide: ConfigService, useValue: configServiceStub},
         {provide: BoardService, useValue: boardServiceStub},
