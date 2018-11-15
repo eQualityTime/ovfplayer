@@ -23,7 +23,7 @@ module.exports = function (config) {
     },
     reporters: ['progress', 'kjhtml', 'junit'],
     junitReporter: {
-      outputDir: 'test-results',
+      outputDir: '../test-results',
       outputFile: 'junit.xml',
       useBrowserName: false
     },
