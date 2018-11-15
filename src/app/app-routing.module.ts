@@ -6,14 +6,15 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/main', pathMatch: 'full' },
   { path: 'main',   component: MainPageComponent, canActivate: [ConfigGuardService] },
-  { path: 'config', component: ConfigPageComponent }
+  { path: 'config', component: ConfigPageComponent },
+  { path: '', redirectTo: '/main', pathMatch: 'full' },
+  { path: '**', component: MainPageComponent, canActivate: [ConfigGuardService] }
 ];
 
 @NgModule({
   imports: [
-    RouterModule.forRoot(routes),
+    RouterModule.forRoot(routes, {useHash: true}),
     CommonModule
   ],
   exports: [
