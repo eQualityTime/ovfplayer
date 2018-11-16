@@ -10,15 +10,22 @@ import { BoardService } from '../board.service';
   styleUrls: ['./speechbar.component.css']
 })
 export class SpeechbarComponent implements OnInit {
-  private displayedButtons: ButtonDisplayConfig;
-  private showIconsInSpeechbar: boolean;
+  private _displayedButtons: ButtonDisplayConfig;
+  private _showIconsInSpeechbar: boolean;
 
   constructor(private speechbarService: SpeechbarService, private config: ConfigService,
               private boardService: BoardService) { }
 
   ngOnInit() {
-    this.displayedButtons = this.config.displayedButtons;
-    this.showIconsInSpeechbar = this.config.showIconsInSpeechbar;
+    this._displayedButtons = this.config.displayedButtons;
+    this._showIconsInSpeechbar = this.config.showIconsInSpeechbar;
   }
 
+  get displayedButtons() : ButtonDisplayConfig {
+    return this._displayedButtons;
+  }
+
+  get showIconsInSpeechbar() : boolean {
+    return this._showIconsInSpeechbar;
+  }
 }
