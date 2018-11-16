@@ -22,8 +22,7 @@ describe('SpeechbarComponent', () => {
         showHomeButton: false,
         showBackspaceButton: false,
         showClearButton: false
-      },
-      showIconsInSpeechbar: false
+      }
     };
     boardServiceStub = {};
     speechbarServiceStub = {

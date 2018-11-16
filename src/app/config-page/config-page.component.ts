@@ -9,8 +9,9 @@ import { ConfigService, ButtonDisplayConfig } from '../config.service';
 })
 export class ConfigPageComponent implements OnInit {
 
-  @Input() boardURL = '';
-  @Input() showIconsInSpeechbar = false;
+  @Input() boardURL: string;
+  @Input() showIconsInSpeechbar: boolean;
+  @Input() speakOnSpeechbarClick: boolean;
   @Input() displayedButtons: ButtonDisplayConfig;
 
   constructor(private configService: ConfigService, private router: Router) { }
@@ -19,12 +20,14 @@ export class ConfigPageComponent implements OnInit {
     this.boardURL = this.configService.boardURL;
     this.displayedButtons = this.configService.displayedButtons;
     this.showIconsInSpeechbar = this.configService.showIconsInSpeechbar;
+    this.speakOnSpeechbarClick = this.configService.speakOnSpeechbarClick;
   }
 
   save() {
     this.configService.boardURL = this.boardURL;
     this.configService.displayedButtons = this.displayedButtons;
     this.configService.showIconsInSpeechbar = this.showIconsInSpeechbar;
+    this.configService.speakOnSpeechbarClick = this.speakOnSpeechbarClick;
     // TODO: some kind of validation
     this.router.navigate(['/main']);
   }

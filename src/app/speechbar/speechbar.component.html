@@ -6,7 +6,7 @@
               *ngIf="displayedButtons.showHomeButton">Home</button>
   </div>
 
-  <mat-card class="speechbar" *ngIf="showIconsInSpeechbar; else vocalization" >
+  <mat-card class="speechbar" *ngIf="showIconsInSpeechbar; else vocalization" (click)="speechbarClick()">
     <div class="speechbarButtonItem" *ngFor="let butt of speechbarService.getButtons()">
       <app-obf-button [butt]="butt"></app-obf-button>
     </div>
