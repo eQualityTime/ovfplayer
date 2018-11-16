@@ -3,29 +3,61 @@
 # Add steps that analyze code, save build artifacts, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
 
-pool:
-  vmImage: 'Ubuntu 16.04'
+jobs:
+- job: BuildAndTest
+  pool:
+    vmImage: 'Ubuntu 16.04'
 
-steps:
-- task: NodeTool@0
-  inputs:
-    versionSpec: '8.x'
-  displayName: 'Install Node.js'
+  condition: ne(variables['Build.SourceBranch'], 'refs/heads/gh-pages')
 
-- script: |
-    npm install -g @angular/cli
-    npm install
-  displayName: 'npm install'
+  steps:
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '8.x'
+    displayName: 'Install Node.js'
 
-- script: |
-    ng build --prod
-  displayName: 'build distribution'
+  - script: |
+      echo 'Team Project:'
+      echo $SYSTEM_TEAMPROJECT
+      npm install -g @angular/cli
+      npm install
+    displayName: 'npm install'
 
-- script: |
-    ng test --watch=false --browsers ChromeHeadless
-  displayName: 'execute tests'
+  - script: |
+      ng build --prod
+    displayName: 'build distribution'
 
-- task: PublishTestResults@2
-  inputs:
-    testRunner: JUnit
-    testResultsFiles: ./test-results/junit.xml
+  - script: |
+      ng test --watch=false --browsers ChromeHeadless
+    displayName: 'execute tests'
+
+  - task: PublishTestResults@2
+    inputs:
+      testRunner: JUnit
+      testResultsFiles: ./test-results/junit.xml
+
+- job: Deploy
+  dependsOn: BuildAndTest
+  pool:
+    vmImage: 'Ubuntu 16.04'
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+
+  steps:
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '8.x'
+    displayName: 'Install Node.js'
+
+  - script: |
+      npm install -g @angular/cli
+      npm install
+      npm i angular-cli-ghpages --save-dev
+    displayName: 'npm install'
+
+  - script: |
+      ng build --prod --base-href "https://equalitytime.github.io/Pageset-Reader/"
+    displayName: 'build with correct HREF'
+
+  - script: |
+      npx ngh --dir=dist/open-voice-factory --repo=https://GH_TOKEN@github.com/eQualityTime/Pageset-Reader.git --name="psi77" --email="simon@smith77.co.uk"
+    displayName: 'deploy to gh-pages'
