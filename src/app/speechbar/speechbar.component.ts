@@ -1,4 +1,3 @@
-import { Button } from '../obfboard';
 import { Component, OnInit } from '@angular/core';
 import { ConfigService, ButtonDisplayConfig } from '../config.service';
 import { SpeechbarService } from '../speechbar.service';
@@ -27,5 +26,11 @@ export class SpeechbarComponent implements OnInit {
 
   get showIconsInSpeechbar() : boolean {
     return this._showIconsInSpeechbar;
+  }
+
+  speechbarClick(): void {
+    if (this.config.speakOnSpeechbarClick) {
+      this.speechbarService.speak();
+    }
   }
 }

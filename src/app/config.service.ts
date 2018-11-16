@@ -15,6 +15,7 @@ export class ConfigService {
 
   @LocalStorage() _boardURL = 'https://openboards.s3.amazonaws.com/examples/url_images.obf';
   @LocalStorage() _showIconsInSpeechbar = true;
+  @LocalStorage() _speakOnSpeechbarClick = true;
   @LocalStorage() _displayedButtons: ButtonDisplayConfig = {
     showSpeakButton: true,
     showBackspaceButton: true,
@@ -36,6 +37,10 @@ export class ConfigService {
     return this._showIconsInSpeechbar;
   }
 
+  get speakOnSpeechbarClick(): boolean {
+    return this._speakOnSpeechbarClick;
+  }
+
   set boardURL(boardURL: string) {
     this._boardURL = boardURL;
   }
@@ -46,5 +51,8 @@ export class ConfigService {
 
   set showIconsInSpeechbar(showIconsInSpeechbar: boolean) {
     this._showIconsInSpeechbar = showIconsInSpeechbar;
+  }
+  set speakOnSpeechbarClick(speakOnSpeechbarClick: boolean) {
+    this._speakOnSpeechbarClick = speakOnSpeechbarClick;
   }
 }

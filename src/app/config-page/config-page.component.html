@@ -11,6 +11,13 @@
   </div>
   <div class="formContainer">
     <mat-card>
+      <mat-checkbox [(ngModel)]="speakOnSpeechbarClick">
+        <span class="formLabel">Speak when speechbar is clicked</span>
+      </mat-checkbox>
+    </mat-card>
+  </div>
+  <div class="formContainer">
+    <mat-card>
       <mat-checkbox [(ngModel)]="displayedButtons.showSpeakButton">
           <span class="formLabel">Speak button always shown</span>
         </mat-checkbox>
