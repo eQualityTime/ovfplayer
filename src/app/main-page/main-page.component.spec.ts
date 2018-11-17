@@ -7,6 +7,7 @@ import { SpeechbarComponent } from '../speechbar/speechbar.component';
 import { ButtonPageComponent } from '../button-page/button-page.component';
 import { SafePipe } from '../safe.pipe';
 import { ObfButtonComponent } from '../obf-button/obf-button.component';
+import { PageTurnerDirective } from '../page-turner.directive';
 
 describe('MainPageComponent', () => {
   let component: MainPageComponent;
@@ -19,7 +20,8 @@ describe('MainPageComponent', () => {
         SpeechbarComponent,
         ButtonPageComponent,
         SafePipe,
-        ObfButtonComponent
+        ObfButtonComponent,
+        PageTurnerDirective
       ],
       imports: [ MatCardModule, HttpClientTestingModule, MatRippleModule ]
     })

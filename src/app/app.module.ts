@@ -19,6 +19,7 @@ import { ButtonPageComponent } from './button-page/button-page.component';
 import { ConfigPageComponent } from './config-page/config-page.component';
 import { MainPageComponent } from './main-page/main-page.component';
 import { ObfButtonComponent } from './obf-button/obf-button.component';
+import { PageTurnerDirective } from './page-turner.directive';
 import { SpeechbarComponent } from './speechbar/speechbar.component';
 import { SafePipe } from './safe.pipe';
 
@@ -30,7 +31,8 @@ import { SafePipe } from './safe.pipe';
     ConfigPageComponent,
     MainPageComponent,
     SafePipe,
-    ObfButtonComponent
+    ObfButtonComponent,
+    PageTurnerDirective
   ],
   imports: [
     BrowserModule,
