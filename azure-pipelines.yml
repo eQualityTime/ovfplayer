@@ -54,9 +54,9 @@ jobs:
     displayName: 'npm install'
 
   - script: |
-      ng build --prod --base-href "https://equalitytime.github.io/Pageset-Reader/"
+      ng build --prod --base-href "https://equalitytime.github.io/ovfplayer/"
     displayName: 'build with correct HREF'
 
   - script: |
-      npx ngh --dir=dist/open-voice-factory --repo=https://GH_TOKEN@github.com/eQualityTime/Pageset-Reader.git --name="psi77" --email="simon@smith77.co.uk"
+      npx ngh --dir=dist/open-voice-factory --repo=https://GH_TOKEN@github.com/eQualityTime/ovfplayer.git --name="psi77" --email="simon@smith77.co.uk"
     displayName: 'deploy to gh-pages'
