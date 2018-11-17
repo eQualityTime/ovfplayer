@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { MatCardModule } from '@angular/material';
+import { MatCardModule, MatRippleModule } from '@angular/material';
 
 import { MainPageComponent } from './main-page.component';
 import { SpeechbarComponent } from '../speechbar/speechbar.component';
@@ -14,8 +14,14 @@ describe('MainPageComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MainPageComponent, SpeechbarComponent, ButtonPageComponent, SafePipe, ObfButtonComponent ],
-      imports: [ MatCardModule, HttpClientTestingModule ]
+      declarations: [
+        MainPageComponent,
+        SpeechbarComponent,
+        ButtonPageComponent,
+        SafePipe,
+        ObfButtonComponent
+      ],
+      imports: [ MatCardModule, HttpClientTestingModule, MatRippleModule ]
     })
     .compileComponents();
   }));

@@ -30,6 +30,7 @@ jobs:
     displayName: 'execute tests'
 
   - task: PublishTestResults@2
+    condition: always()
     inputs:
       testRunner: JUnit
       testResultsFiles: ./test-results/junit.xml

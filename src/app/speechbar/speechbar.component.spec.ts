@@ -7,6 +7,7 @@ import { BoardService } from '../board.service';
 import { SpeechbarService } from '../speechbar.service';
 import { ObfButtonComponent } from '../obf-button/obf-button.component';
 import { SafePipe } from '../safe.pipe';
+import { MatRippleModule } from '@angular/material';
 
 describe('SpeechbarComponent', () => {
   let component: SpeechbarComponent;
@@ -36,7 +37,7 @@ describe('SpeechbarComponent', () => {
         {provide: BoardService, useValue: boardServiceStub},
         {provide: SpeechbarService, useValue: speechbarServiceStub}
       ],
-      imports: [MatCardModule]
+      imports: [ MatCardModule, MatRippleModule ]
     })
     .compileComponents();
   }));

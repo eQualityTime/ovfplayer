@@ -1,5 +1,5 @@
 <div [class]="'buttonDiv' + (clickHandler ? ' ripple' : '')" [style.background-color]="butt.backgroundColor" [style.border-color]="butt.borderColor"
-                      (click)="clickHandler && clickHandler(butt)">
+      mat-ripple [matRippleDisabled]="!clickHandler" (click)="clickHandler && clickHandler(butt)">
   <div class="buttonImageDiv" *ngIf="butt.getImage() as image">
     <div *ngIf="image.isSVG(); else normalImage" [innerHTML]="image.getSource() | safe">SVG Image</div>
     <ng-template #normalImage>
