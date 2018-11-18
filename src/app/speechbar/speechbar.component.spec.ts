@@ -9,6 +9,7 @@ import { ObfButtonComponent } from '../obf-button/obf-button.component';
 import { SafePipe } from '../safe.pipe';
 import { PageTurnerDirective } from '../page-turner.directive';
 import { MatRippleModule } from '@angular/material';
+import { ChangeDetectorRef } from '@angular/core';
 
 describe('SpeechbarComponent', () => {
   let component: SpeechbarComponent;
@@ -16,6 +17,7 @@ describe('SpeechbarComponent', () => {
   let configServiceStub: Partial<ConfigService>;
   let boardServiceStub: Partial<BoardService>;
   let speechbarServiceStub: Partial<SpeechbarService>;
+  let cdRefStub: Partial<ChangeDetectorRef>;
 
   beforeEach(async(() => {
     configServiceStub = {
@@ -29,6 +31,9 @@ describe('SpeechbarComponent', () => {
     boardServiceStub = {};
     speechbarServiceStub = {
       getButtons: () => []
+    };
+    cdRefStub = {
+      detectChanges: () => {}
     };
 
     TestBed.configureTestingModule({
