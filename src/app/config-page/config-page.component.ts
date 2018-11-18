@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { ConfigService, ButtonDisplayConfig } from '../config.service';
 
 @Component({
@@ -14,13 +14,19 @@ export class ConfigPageComponent implements OnInit {
   @Input() speakOnSpeechbarClick: boolean;
   @Input() displayedButtons: ButtonDisplayConfig;
 
-  constructor(private configService: ConfigService, private router: Router) { }
+  constructor(private configService: ConfigService, private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit() {
     this.boardURL = this.configService.boardURL;
     this.displayedButtons = this.configService.displayedButtons;
     this.showIconsInSpeechbar = this.configService.showIconsInSpeechbar;
     this.speakOnSpeechbarClick = this.configService.speakOnSpeechbarClick;
+
+    const configURLParam = this.route.snapshot.queryParamMap.get('boardURL');
+    if (configURLParam) {
+      this.boardURL = configURLParam;
+      this.save();
+    }
   }
 
   save() {
