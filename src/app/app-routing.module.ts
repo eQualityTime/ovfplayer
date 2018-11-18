@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
-  { path: 'main',   component: MainPageComponent, canActivate: [ConfigGuardService] },
+  { path: 'main', component: MainPageComponent, canActivate: [ConfigGuardService] },
   { path: 'config', component: ConfigPageComponent },
   { path: '', redirectTo: '/main', pathMatch: 'full' },
   { path: '**', component: MainPageComponent, canActivate: [ConfigGuardService] }

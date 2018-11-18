@@ -32,3 +32,12 @@
   display: flex;
   justify-content: flex-end;
 }
+
+.clickable {
+  cursor: pointer;
+}
+
+.clickable, i {
+  position: relative;
+  top: 6px;
+}
