@@ -106,16 +106,18 @@ export class ObzService {
     const log = this.log;
     function loader(observer: Observer<ParsedImage>) {
       const promises = [];
-      Object.entries(images).forEach(([key, value]) => {
-        // log(`Image key ${key} path ${value}`);
-        const encoding = value.toString().toLowerCase().endsWith('.svg') ? 'text' : 'base64';
-        promises.push(zip.file(value).async(encoding).then(function (contents) {
-          observer.next({
-            path: value.toString(),
-            imageData: contents
-          });
-        }));
-      });
+      if (images) {
+        Object.entries(images).forEach(([key, value]) => {
+          // log(`Image key ${key} path ${value}`);
+          const encoding = value.toString().toLowerCase().endsWith('.svg') ? 'text' : 'base64';
+          promises.push(zip.file(value).async(encoding).then(function (contents) {
+            observer.next({
+              path: value.toString(),
+              imageData: contents
+            });
+          }));
+        });
+      }
       Promise.all(promises).then(() => {
         observer.complete();
       });
