@@ -17,7 +17,6 @@ describe('SpeechbarComponent', () => {
   let configServiceStub: Partial<ConfigService>;
   let boardServiceStub: Partial<BoardService>;
   let speechbarServiceStub: Partial<SpeechbarService>;
-  let cdRefStub: Partial<ChangeDetectorRef>;
 
   beforeEach(async(() => {
     configServiceStub = {
@@ -32,9 +31,6 @@ describe('SpeechbarComponent', () => {
     speechbarServiceStub = {
       getButtons: () => [],
       getSpeaking: () => new Observable(() => {})
-    };
-    cdRefStub = {
-      detectChanges: () => {}
     };
 
     TestBed.configureTestingModule({
