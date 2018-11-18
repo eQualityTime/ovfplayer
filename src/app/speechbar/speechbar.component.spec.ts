@@ -10,6 +10,7 @@ import { SafePipe } from '../safe.pipe';
 import { PageTurnerDirective } from '../page-turner.directive';
 import { MatRippleModule } from '@angular/material';
 import { ChangeDetectorRef } from '@angular/core';
+import { Observable } from 'rxjs';
 
 describe('SpeechbarComponent', () => {
   let component: SpeechbarComponent;
@@ -30,7 +31,8 @@ describe('SpeechbarComponent', () => {
     };
     boardServiceStub = {};
     speechbarServiceStub = {
-      getButtons: () => []
+      getButtons: () => [],
+      getSpeaking: () => new Observable(() => {})
     };
     cdRefStub = {
       detectChanges: () => {}
