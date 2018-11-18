@@ -3,7 +3,6 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ObfButtonComponent } from './obf-button.component';
 import { SafePipe } from '../safe.pipe';
 import { Button, OBFBoard } from '../obfboard';
-import { PageTurnerDirective } from '../page-turner.directive';
 import { MatRippleModule } from '@angular/material';
 
 describe('ObfButtonComponent', () => {
@@ -28,7 +27,7 @@ describe('ObfButtonComponent', () => {
 
     TestBed.configureTestingModule({
       imports: [ MatRippleModule ],
-      declarations: [ ObfButtonComponent, SafePipe, PageTurnerDirective ]
+      declarations: [ ObfButtonComponent, SafePipe ]
     })
     .compileComponents();
   }));
