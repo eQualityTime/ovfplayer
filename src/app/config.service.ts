@@ -13,7 +13,7 @@ export interface ButtonDisplayConfig {
 })
 export class ConfigService {
 
-  @LocalStorage() _boardURL = 'https://openboards.s3.amazonaws.com/examples/url_images.obf';
+  @LocalStorage() _boardURL = 'https://openboards.s3.amazonaws.com/examples/communikate-20.obz';
   @LocalStorage() _showIconsInSpeechbar = true;
   @LocalStorage() _speakOnSpeechbarClick = true;
   @LocalStorage() _displayedButtons: ButtonDisplayConfig = {
