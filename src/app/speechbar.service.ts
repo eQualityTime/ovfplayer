@@ -7,6 +7,7 @@ import { Button } from './obfboard';
 export class SpeechbarService {
 
   private buttons: Button[] = [];
+  private speechSynthesizer: SpeechSynthesis = (<any>window).speechSynthesis;
 
   constructor() { }
 
@@ -24,10 +25,13 @@ export class SpeechbarService {
   }
 
   speak() {
-    const msg = new SpeechSynthesisUtterance();
-    const vocalizations = this.buttons.map(button => button.getVocalization());
-    msg.text = vocalizations.join(' ');
-    (<any>window).speechSynthesis.speak(msg);
+    // don't queue up multiple speak actions
+    if (!this.speechSynthesizer.speaking) {
+      const msg = new SpeechSynthesisUtterance();
+      const vocalizations = this.buttons.map(button => button.getVocalization());
+      msg.text = vocalizations.join(' ');
+      this.speechSynthesizer.speak(msg);
+    }
   }
 
   getButtons() {
