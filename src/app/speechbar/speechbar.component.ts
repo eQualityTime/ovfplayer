@@ -11,6 +11,7 @@ import { BoardService } from '../board.service';
 export class SpeechbarComponent implements OnInit {
   private _displayedButtons: ButtonDisplayConfig;
   private _showIconsInSpeechbar: boolean;
+  speaking: boolean;
 
   constructor(private speechbarService: SpeechbarService, private config: ConfigService,
               private boardService: BoardService) { }
@@ -18,6 +19,7 @@ export class SpeechbarComponent implements OnInit {
   ngOnInit() {
     this._displayedButtons = this.config.displayedButtons;
     this._showIconsInSpeechbar = this.config.showIconsInSpeechbar;
+    this.speechbarService.getSpeaking().subscribe(this.updateSpeaking);
   }
 
   get displayedButtons() : ButtonDisplayConfig {
@@ -26,6 +28,10 @@ export class SpeechbarComponent implements OnInit {
 
   get showIconsInSpeechbar() : boolean {
     return this._showIconsInSpeechbar;
+  }
+
+  private updateSpeaking = (speaking: boolean) => {
+    this.speaking = speaking;
   }
 
   speechbarClick(): void {

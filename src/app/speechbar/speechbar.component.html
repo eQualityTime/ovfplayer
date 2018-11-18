@@ -1,6 +1,7 @@
 <div class="speechbarContainer">
   <div class="stackedButtonContainer">
       <button class="stackedButton" mat-raised-button (click)="speechbarService.speak()"
+              [disabled]="speaking"
               *ngIf="displayedButtons.showSpeakButton">Speak</button>
       <button class="stackedButton" mat-raised-button (click)="boardService.home()"
               *ngIf="displayedButtons.showHomeButton">Home</button>
