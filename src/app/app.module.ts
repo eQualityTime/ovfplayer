@@ -10,6 +10,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatMenuModule, MatIconModule, MatButtonModule, MatInputModule, MatRippleModule } from '@angular/material';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { WebStorageModule } from 'ngx-store';
 
@@ -47,6 +48,7 @@ import { SafePipe } from './safe.pipe';
     MatIconModule,
     MatInputModule,
     MatButtonModule,
+    MatSnackBarModule,
     LayoutModule,
     AppRoutingModule,
     WebStorageModule,
