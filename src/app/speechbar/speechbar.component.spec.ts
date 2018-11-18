@@ -8,6 +8,8 @@ import { SpeechbarService } from '../speechbar.service';
 import { ObfButtonComponent } from '../obf-button/obf-button.component';
 import { SafePipe } from '../safe.pipe';
 import { MatRippleModule } from '@angular/material';
+import { ChangeDetectorRef } from '@angular/core';
+import { Observable } from 'rxjs';
 
 describe('SpeechbarComponent', () => {
   let component: SpeechbarComponent;
@@ -27,7 +29,8 @@ describe('SpeechbarComponent', () => {
     };
     boardServiceStub = {};
     speechbarServiceStub = {
-      getButtons: () => []
+      getButtons: () => [],
+      getSpeaking: () => new Observable(() => {})
     };
 
     TestBed.configureTestingModule({

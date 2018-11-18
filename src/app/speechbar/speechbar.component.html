@@ -1,9 +1,10 @@
 <div class="speechbarContainer">
   <div class="stackedButtonContainer">
-      <button class="stackedButton" mat-raised-button (click)="speechbarService.speak()"
-              *ngIf="displayedButtons.showSpeakButton">Speak</button>
-      <button class="stackedButton" mat-raised-button (click)="boardService.home()"
-              *ngIf="displayedButtons.showHomeButton">Home</button>
+    <button class="stackedButton" mat-raised-button (click)="speechbarService.speak()"
+            [disabled]="speaking"
+            *ngIf="displayedButtons.showSpeakButton">Speak</button>
+    <button class="stackedButton" mat-raised-button (click)="boardService.home()"
+            *ngIf="displayedButtons.showHomeButton">Home</button>
   </div>
 
   <mat-card class="speechbar" *ngIf="showIconsInSpeechbar; else vocalization" (click)="speechbarClick()">
@@ -14,9 +15,9 @@
   <ng-template #vocalization>
     <mat-card class="speechbar">
       <div class="speechbarTextItem" *ngFor="let butt of speechbarService.getButtons()">
-          <mat-card class="speechbarText">
-            {{butt.getVocalization()}}
-          </mat-card>
+        <mat-card class="speechbarText">
+          {{butt.getVocalization()}}
+        </mat-card>
       </div>
     </mat-card>
   </ng-template>
