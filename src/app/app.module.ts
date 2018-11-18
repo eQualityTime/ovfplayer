@@ -10,6 +10,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatMenuModule, MatIconModule, MatButtonModule, MatInputModule, MatRippleModule } from '@angular/material';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { WebStorageModule } from 'ngx-store';
 
@@ -19,7 +20,6 @@ import { ButtonPageComponent } from './button-page/button-page.component';
 import { ConfigPageComponent } from './config-page/config-page.component';
 import { MainPageComponent } from './main-page/main-page.component';
 import { ObfButtonComponent } from './obf-button/obf-button.component';
-import { PageTurnerDirective } from './page-turner.directive';
 import { SpeechbarComponent } from './speechbar/speechbar.component';
 import { SafePipe } from './safe.pipe';
 
@@ -31,8 +31,7 @@ import { SafePipe } from './safe.pipe';
     ConfigPageComponent,
     MainPageComponent,
     SafePipe,
-    ObfButtonComponent,
-    PageTurnerDirective
+    ObfButtonComponent
   ],
   imports: [
     BrowserModule,
@@ -47,6 +46,7 @@ import { SafePipe } from './safe.pipe';
     MatIconModule,
     MatInputModule,
     MatButtonModule,
+    MatSnackBarModule,
     LayoutModule,
     AppRoutingModule,
     WebStorageModule,
