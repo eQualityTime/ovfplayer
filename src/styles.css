@@ -3,18 +3,3 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: 'Roboto', sans-serif; }
-
-.pageTurn:before {
-  content: '';
-  position: absolute;
-  top: 0;
-  --turn-size: 16px;
-  left: calc(100% - var(--turn-size));
-  border-width: 0 var(--turn-size) var(--turn-size) 0;
-  border-style: solid;
-  border-color: #fff #fff #658E15 #658E15;
-  background: #658E15;
-  box-shadow: 0 1px 1px rgba(0,0,0,0.3), -1px 1px 1px rgba(0,0,0,0.2);
-  display: block;
-  width: 0;
-}

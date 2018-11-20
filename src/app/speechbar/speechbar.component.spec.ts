@@ -7,8 +7,9 @@ import { BoardService } from '../board.service';
 import { SpeechbarService } from '../speechbar.service';
 import { ObfButtonComponent } from '../obf-button/obf-button.component';
 import { SafePipe } from '../safe.pipe';
-import { PageTurnerDirective } from '../page-turner.directive';
 import { MatRippleModule } from '@angular/material';
+import { ChangeDetectorRef } from '@angular/core';
+import { Observable } from 'rxjs';
 
 describe('SpeechbarComponent', () => {
   let component: SpeechbarComponent;
@@ -28,11 +29,12 @@ describe('SpeechbarComponent', () => {
     };
     boardServiceStub = {};
     speechbarServiceStub = {
-      getButtons: () => []
+      getButtons: () => [],
+      getSpeaking: () => new Observable(() => {})
     };
 
     TestBed.configureTestingModule({
-      declarations: [ SpeechbarComponent, ObfButtonComponent, SafePipe, PageTurnerDirective ],
+      declarations: [ SpeechbarComponent, ObfButtonComponent, SafePipe ],
       providers: [
         {provide: ConfigService, useValue: configServiceStub},
         {provide: BoardService, useValue: boardServiceStub},

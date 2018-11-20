@@ -7,6 +7,7 @@
       <mat-form-field class="formInputField">
         <input [(ngModel)]="boardURL" matInput placeholder="URL for obf/obz file" class="formInputUrl">
       </mat-form-field>
+      <div class="clickable" (click)="copyToClipboard()"><i class="material-icons">link</i>&nbsp;Create link</div>
     </mat-card>
   </div>
   <div class="formContainer">
