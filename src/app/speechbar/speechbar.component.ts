@@ -2,6 +2,8 @@ import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { ConfigService, ButtonDisplayConfig } from '../config.service';
 import { SpeechbarService } from '../speechbar.service';
 import { Subscription } from 'rxjs';
+import { BoardService } from '../board.service';
+import { Button } from '../obfboard';
 
 @Component({
   selector: 'app-speechbar',
@@ -13,8 +15,10 @@ export class SpeechbarComponent implements OnInit, OnDestroy {
   private _showIconsInSpeechbar: boolean;
   private speakingSubscription: Subscription;
   speaking: boolean;
+  buttons: Button[];
 
   constructor(
+    private boardService: BoardService,
     private speechbarService: SpeechbarService,
     private config: ConfigService,
     private cdRef: ChangeDetectorRef
@@ -26,6 +30,9 @@ export class SpeechbarComponent implements OnInit, OnDestroy {
     this.speakingSubscription = this.speechbarService.getSpeaking().subscribe(speaking => {
       this.speaking = speaking;
       this.cdRef.detectChanges();
+    });
+    this.speechbarService.getButtons().subscribe(buttons => {
+      this.buttons = buttons;
     });
   }
 
@@ -45,5 +52,21 @@ export class SpeechbarComponent implements OnInit, OnDestroy {
     if (this.config.speakOnSpeechbarClick) {
       this.speechbarService.speak();
     }
+  }
+
+  speak() {
+    this.speechbarService.speak();
+  }
+
+  home() {
+    this.boardService.home();
+  }
+
+  backspace() {
+    this.speechbarService.backspace();
+  }
+
+  clear() {
+    this.speechbarService.clear();
   }
 }
