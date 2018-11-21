@@ -18,6 +18,11 @@ interface ParsedImage {
   imageData: string;
 }
 
+interface ParsedSound {
+  path: string;
+  soundData: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -70,6 +75,7 @@ export class ObzService {
 
       const parseBoards = this.parseBoards;
       const parseImages = this.parseImages;
+      const parseSounds = this.parseSounds;
       const observer    = this.observer;
 
       log(`Got some data of size ${blob.size}`);
@@ -91,7 +97,14 @@ export class ObzService {
                   boardSet.setImage(ret.path, ret.imageData);
                 },
                 complete() {
-                  observer.next(boardSet);
+                  parseSounds(zip, manifestJSON.paths.sounds).subscribe({
+                    next(ret: ParsedSound) {
+                      boardSet.setSound(ret.path, ret.soundData);
+                    },
+                    complete() {
+                      observer.next(boardSet);
+                    }
+                  });
                 }
               });
             }
@@ -114,6 +127,29 @@ export class ObzService {
             observer.next({
               path: value.toString(),
               imageData: contents
+            });
+          }));
+        });
+      }
+      Promise.all(promises).then(() => {
+        observer.complete();
+      });
+    }
+    return new Observable(loader);
+  }
+
+  private parseSounds = (zip, sounds): Observable<ParsedSound> => {
+    this.log('Parsing sounds');
+    const log = this.log;
+    function loader(observer: Observer<ParsedSound>) {
+      const promises = [];
+      if (sounds) {
+        Object.entries(sounds).forEach(([key, value]) => {
+          // log(`Sound key ${key} path ${value}`);
+          promises.push(zip.file(value).async('base64').then(function (contents) {
+            observer.next({
+              path: value.toString(),
+              soundData: contents
             });
           }));
         });
