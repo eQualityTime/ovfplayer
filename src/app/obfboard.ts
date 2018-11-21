@@ -1,4 +1,5 @@
 import { ImageResolver } from './image-resolver';
+import { SoundResolver } from './sound-resolver';
 
 export class Grid {
   rows: number;
@@ -132,15 +133,29 @@ export class Sound {
   id: string;
   data: string;
   url: string;
+  path: string;
+  contentType: string;
   duration: number;
+  parent: OBFBoard;
 
-  deserialize(input: any): Sound {
+  deserialize(input: any, parent: OBFBoard): Sound {
     this.id = String(input.id);
     this.data = input.data;
     this.url = input.url;
+    this.path = input.path;
+    this.contentType = input.content_type;
     this.duration = input.duration;
+    this.parent = parent;
 
     return this;
+  }
+
+  getSource(): string {
+    if (this.path && this.parent.soundResolver) {
+      const soundData = this.parent.soundResolver.getSoundData(this.path);
+      return `data:${this.contentType};base64,${soundData}`;
+    }
+    return this.data || this.url;
   }
 }
 
@@ -156,6 +171,7 @@ export class OBFBoard {
   images: Image[];
   sounds: Sound[];
   imageResolver: ImageResolver;
+  soundResolver: SoundResolver;
 
   deserialize(input: any): OBFBoard {
     this.format = input.format;
@@ -166,13 +182,17 @@ export class OBFBoard {
     this.grid = new Grid().deserialize(input.grid);
     this.buttons = input.buttons.map(button => new Button().deserialize(button, this));
     this.images = input.images.map(image => new Image().deserialize(image, this));
-    this.sounds = input.sounds.map(sound => new Sound().deserialize(sound));
+    this.sounds = input.sounds.map(sound => new Sound().deserialize(sound, this));
 
     return this;
   }
 
   setImageResolver(imageResolver: ImageResolver) {
     this.imageResolver = imageResolver;
+  }
+
+  setSoundResolver(soundResolver: SoundResolver) {
+    this.soundResolver = soundResolver;
   }
 
   getButton(id: string): Button {
