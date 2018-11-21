@@ -29,7 +29,7 @@ describe('SpeechbarComponent', () => {
     };
     boardServiceStub = {};
     speechbarServiceStub = {
-      getButtons: () => [],
+      getButtons: () => new Observable(() => {}),
       getSpeaking: () => new Observable(() => {})
     };
 
