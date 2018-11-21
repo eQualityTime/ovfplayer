@@ -1,3 +1,3 @@
-export abstract class ImageResolver {
-  abstract getImageData(imagePath: string): string;
+export interface ImageResolver {
+  getImageData(imagePath: string): string;
 }

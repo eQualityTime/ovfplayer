@@ -37,9 +37,13 @@ export class ButtonPageComponent implements OnInit {
     if (button.soundId) {
       const sound = this.board.getSound(button.soundId);
 
-      if (sound && (sound.data || sound.url)) {
-        const audioSound = new Audio(sound.data || sound.url);
-        audioSound.play();
+      if (sound) {
+        const soundSource = sound.getSource();
+
+        if (soundSource) {
+          const audioSound = new Audio(soundSource);
+          audioSound.play();
+        }
       }
     }
 
