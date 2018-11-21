@@ -10,20 +10,23 @@ export class SpeechbarService {
   private buttons: Button[] = [];
   private speechSynthesizer: SpeechSynthesis = (<any>window).speechSynthesis;
   private listener: Observer<boolean>;
+  private buttonObserver: Observer<Button[]>;
 
   constructor() { }
 
   addButton(button: Button) {
     this.buttons.push(button);
-    console.log(button.label);  // TODO : remove
+    this.notifyButtonObserver();
   }
 
   clear() {
     this.buttons = [];
+    this.notifyButtonObserver();
   }
 
   backspace() {
     this.buttons.pop();
+    this.notifyButtonObserver();
   }
 
   speak() {
@@ -35,16 +38,24 @@ export class SpeechbarService {
       msg.onstart = () => this.listener.next(true);
       msg.onend = () => this.listener.next(false);
       this.speechSynthesizer.speak(msg);
-
     }
   }
 
-  getButtons() {
-    return this.buttons;
+  private notifyButtonObserver() {
+    this.buttonObserver.next(this.buttons);
+  }
+
+  getButtons(): Observable<Button[]> {
+    return new Observable<Button[]>(this.addButtonObserver);
   }
 
   getSpeaking(): Observable<boolean> {
     return new Observable<boolean>(this.addListener);
+  }
+
+  addButtonObserver = (observer: Observer<Button[]>) => {
+    this.buttonObserver = observer;
+    this.buttonObserver.next(this.buttons);
   }
 
   addListener = (listener: Observer<boolean>) => {

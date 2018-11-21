@@ -1,20 +1,20 @@
 <div class="speechbarContainer">
   <div class="stackedButtonContainer">
-    <button class="stackedButton" mat-raised-button (click)="speechbarService.speak()"
+    <button class="stackedButton" mat-raised-button (click)="speak()"
             [disabled]="speaking"
             *ngIf="displayedButtons.showSpeakButton">Speak</button>
-    <button class="stackedButton" mat-raised-button (click)="boardService.home()"
+    <button class="stackedButton" mat-raised-button (click)="home()"
             *ngIf="displayedButtons.showHomeButton">Home</button>
   </div>
 
   <mat-card class="speechbar" *ngIf="showIconsInSpeechbar; else vocalization" (click)="speechbarClick()">
-    <div class="speechbarButtonItem" *ngFor="let butt of speechbarService.getButtons()">
+    <div class="speechbarButtonItem" *ngFor="let butt of buttons">
       <app-obf-button [butt]="butt"></app-obf-button>
     </div>
   </mat-card>
   <ng-template #vocalization>
     <mat-card class="speechbar">
-      <div class="speechbarTextItem" *ngFor="let butt of speechbarService.getButtons()">
+      <div class="speechbarTextItem" *ngFor="let butt of buttons">
         <mat-card class="speechbarText">
           {{butt.getVocalization()}}
         </mat-card>
@@ -23,9 +23,9 @@
   </ng-template>
 
   <div class="stackedButtonContainer">
-    <button class="stackedButton" mat-raised-button (click)="speechbarService.backspace()"
+    <button class="stackedButton" mat-raised-button (click)="backspace()"
             *ngIf="displayedButtons.showBackspaceButton">Backspace</button>
-    <button class="stackedButton" mat-raised-button (click)="speechbarService.clear()"
+    <button class="stackedButton" mat-raised-button (click)="clear()"
             *ngIf="displayedButtons.showClearButton">Clear</button>
   </div>
 </div>
