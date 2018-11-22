@@ -23,6 +23,7 @@ import { ObfButtonComponent } from './obf-button/obf-button.component';
 import { SpeechbarComponent } from './speechbar/speechbar.component';
 import { SafePipe } from './safe.pipe';
 import { GlobalErrorHandlerService } from './global-error-handler.service';
+import { ErrorPageComponent } from './error-page/error-page.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { GlobalErrorHandlerService } from './global-error-handler.service';
     ConfigPageComponent,
     MainPageComponent,
     SafePipe,
-    ObfButtonComponent
+    ObfButtonComponent,
+    ErrorPageComponent
   ],
   imports: [
     BrowserModule,
