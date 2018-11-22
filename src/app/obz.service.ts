@@ -7,6 +7,7 @@ import { OBZBoardSet } from './obzboard-set';
 import { OBFBoard } from './obfboard';
 
 import * as JSZip from 'jszip';
+import { FatalOpenVoiceFactoryError } from './errors';
 
 interface ParsedBoard {
   path: string;
@@ -37,23 +38,25 @@ export class ObzService {
   }
 
   addObserver = (observer: Observer<OBZBoardSet>) => {
+
+    const boardURL = this.config.boardURL;
     // TODO: test if we already have an observer and error?
     this.observer = observer;
 
     // Decide if we're loading an obz or an obf
-    const urlSlug = new UrlUtils().getSlug(this.config.boardURL);
+    const urlSlug = new UrlUtils().getSlug(boardURL);
     this.log(`Parsed url ${urlSlug}`);
 
     if (urlSlug.toLowerCase().endsWith('.obf')) {
-      this.loadOBFFile();
+      this.loadOBFFile(boardURL);
     } else {
       // assume obz by default. For now.
-      this.loadOBZFile();
+      this.loadOBZFile(boardURL);
     }
   }
 
-  private loadOBFFile() {
-    this.http.get<OBFBoard>(this.config.boardURL).subscribe({
+  private loadOBFFile(boardURL: string) {
+    this.http.get<OBFBoard>(boardURL).subscribe({
       next: (page) => {
         const boardSet = new OBZBoardSet();
         boardSet.rootBoardKey = 'root';
@@ -63,15 +66,15 @@ export class ObzService {
     });
   }
 
-  private getOBZFile(): Observable<Blob> {
-    return this.http.get(this.config.boardURL, { responseType: 'blob' });
+  private getOBZFile(boardURL: string): Observable<Blob> {
+    return this.http.get(boardURL, { responseType: 'blob' });
   }
 
-  private loadOBZFile() {
+  private loadOBZFile(boardURL: string) {
 
     const log = this.log;
 
-    this.getOBZFile().subscribe(blob => {
+    this.getOBZFile(boardURL).subscribe(blob => {
 
       const parseBoards = this.parseBoards;
       const parseImages = this.parseImages;
@@ -91,15 +94,24 @@ export class ObzService {
             next(ret: ParsedBoard) {
               boardSet.setBoard(ret.path, ret.board);
             },
+            error(error: any) {
+              // TODO: error parsing a board
+            },
             complete() {
               parseImages(zip, manifestJSON.paths.images).subscribe({
                 next(ret: ParsedImage) {
                   boardSet.setImage(ret.path, ret.imageData);
                 },
+                error(error: any) {
+                  // TODO: error loading images
+                },
                 complete() {
                   parseSounds(zip, manifestJSON.paths.sounds).subscribe({
                     next(ret: ParsedSound) {
                       boardSet.setSound(ret.path, ret.soundData);
+                    },
+                    error(error: any) {
+                      // TODO: error loading sounds
                     },
                     complete() {
                       observer.next(boardSet);
@@ -110,11 +122,13 @@ export class ObzService {
             }
           });
         });
+      }).catch(error => {
+        // TODO: error loading zip file
       });
     },
     error => {
-      // TODO: throw one of our fatal errors
-      throw error;
+      // error downloading file
+      throw new FatalOpenVoiceFactoryError(`Failed to load file ${boardURL}`, error);
     });
   }
 
@@ -132,11 +146,15 @@ export class ObzService {
               path: value.toString(),
               imageData: contents
             });
+          }).catch(error => {
+            // TODO: error loading image file
           }));
         });
       }
       Promise.all(promises).then(() => {
         observer.complete();
+      }).catch(error => {
+        // TODO: error waiting for images to load
       });
     }
     return new Observable(loader);
@@ -155,11 +173,15 @@ export class ObzService {
               path: value.toString(),
               soundData: contents
             });
+          }).catch(error => {
+            // TODO: error loading sound file
           }));
         });
       }
       Promise.all(promises).then(() => {
         observer.complete();
+      }).catch(error => {
+        // TODO: error waiting for sounds to load
       });
     }
     return new Observable(loader);
@@ -177,11 +199,15 @@ export class ObzService {
             path: value.toString(),
             board: new OBFBoard().deserialize(JSON.parse(contents))
           });
+        }).catch(error => {
+          // TODO: error loading board
         }));
       });
 
       Promise.all(promises).then(() => {
         observer.complete();
+      }).catch(error => {
+        // TODO: error waiting for boards to load
       });
     }
     return new Observable(loader);
@@ -191,4 +217,3 @@ export class ObzService {
     console.log(`ObzService: ${message}`);
   }
 }
-
