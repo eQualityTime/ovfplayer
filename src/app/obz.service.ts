@@ -111,6 +111,10 @@ export class ObzService {
           });
         });
       });
+    },
+    error => {
+      // TODO: throw one of our fatal errors
+      throw error;
     });
   }
 
