@@ -11,7 +11,7 @@ export class GlobalErrorHandlerService implements ErrorHandler {
     const router = this.injector.get(Router);
 
     // TODO: buffer logs
-    console.log(`Error at ${router.url}: ${error.message}`);
+    console.log(`Error on page ${router.url}: ${error.message}`);
 
     if (error.rejection) {
       error = error.rejection;

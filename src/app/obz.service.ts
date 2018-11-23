@@ -41,10 +41,6 @@ export class ObzService {
   addObserver = (observer: Observer<OBZBoardSet>) => {
 
     const boardURL = this.config.boardURL;
-    // test if we already have an observer and error
-    if (this.observer) {
-      throw new OpenVoiceFactoryError('observer was already set!');
-    }
     this.observer = observer;
 
     // Decide if we're loading an obz or an obf
