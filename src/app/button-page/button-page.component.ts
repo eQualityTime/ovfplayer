@@ -16,7 +16,8 @@ export class ButtonPageComponent implements OnInit {
     ':clear' : this.speechbarService.clear.bind(this.speechbarService),
     ':backspace' : this.speechbarService.backspace.bind(this.speechbarService),
     ':speak' : this.speechbarService.speak.bind(this.speechbarService),
-    ':home' : this.boardService.home.bind(this.boardService)
+    ':home' : this.boardService.home.bind(this.boardService),
+    ':space': this.speechbarService.space.bind(this.speechbarService)
   };
 
   constructor(private boardService: BoardService, private speechbarService: SpeechbarService) { }
@@ -49,7 +50,7 @@ export class ButtonPageComponent implements OnInit {
 
     let addToSpeechBar = true;
     if (button.actions.length > 0) {
-      button.actions.forEach(action => this.performAction(action));
+      button.actions.forEach(action => this.performAction(button, action));
       addToSpeechBar = false;
     }
 
@@ -80,13 +81,18 @@ export class ButtonPageComponent implements OnInit {
     }
   }
 
-  performAction(action: string) {
-    const actionPerformer = this.actionPerformers[action];
+  performAction(button: Button, action: string) {
 
-    if (actionPerformer) {
-      actionPerformer();
+    if (action.startsWith('+')) {
+      this.speechbarService.appendButton(button, action);
     } else {
-      console.log('Unsupported action: ' + action);
+      const actionPerformer = this.actionPerformers[action];
+
+      if (actionPerformer) {
+        actionPerformer();
+      } else {
+        console.log('Unsupported action: ' + action);
+      }
     }
   }
 
