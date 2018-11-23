@@ -4,7 +4,7 @@ import { SpeechbarService, ButtonFacade } from './speechbar.service';
 import { Button } from './obfboard';
 import { ExpectedConditions } from 'protractor';
 
-fdescribe('SpeechbarService', () => {
+describe('SpeechbarService', () => {
 
   const mockButton = new Button().deserialize({
     id: 1,
