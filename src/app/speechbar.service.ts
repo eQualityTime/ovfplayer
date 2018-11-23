@@ -6,12 +6,10 @@ export class ButtonFacade extends Button {
 
   private button: Button;
   private appendages: string[] = [];
-  private labelOverride: string;
 
-  constructor(button: Button, labelOverride?: string) {
+  constructor(button: Button) {
     super();
     this.button = button;
-    this.labelOverride = labelOverride;
   }
 
   append(appendage: string) {
@@ -35,17 +33,10 @@ export class ButtonFacade extends Button {
   }
 
   get label(): string {
-    if (this.labelOverride) {
-      return this.augment(this.labelOverride);
-    } else {
-      return this.augment(this.button.label);
-    }
+    return this.augment(this.button.label);
   }
 
   get vocalization(): string {
-    if (this.labelOverride) {
-      return null;
-    }
     return this.button.vocalization ? this.augment(this.button.vocalization) : this.button.vocalization;
   }
 
@@ -121,9 +112,10 @@ export class SpeechbarService {
 
   appendButton(button: Button, action: string) {
     if (this.buttons.length === 0 || this.spaceJustPressed) {
-      // TODO: put directly here in case we need to facade the label to get rid of the +
       this.spaceJustPressed = false;
-      this.buttons.push(new ButtonFacade(button, action.substr(1)));
+      const appendBut = new Button();
+      appendBut.label = action.substr(1);
+      this.buttons.push(new ButtonFacade(appendBut));
       this.notifyButtonObserver();
     } else {
       this.spaceJustPressed = false;
@@ -154,7 +146,6 @@ export class SpeechbarService {
   }
 
   addListener = (listener: Observer<boolean>) => {
-    // TODO: check if we already have one and error?
     this.listener = listener;
     this.listener.next(this.speechSynthesizer && this.speechSynthesizer.speaking);
   }

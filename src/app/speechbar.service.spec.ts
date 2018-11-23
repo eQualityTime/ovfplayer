@@ -73,13 +73,13 @@ describe('SpeechbarService', () => {
             // should now have single button
             expect(buttons.length).toBe(1);
             expect(buttons[0].label).toBe('less');
-            expect(buttons[0].vocalization).toBe(null);
+            expect(buttons[0].vocalization).toBe(undefined);
             break;
           case 3:
             // single button with 'less' appended
             expect(buttons.length).toBe(1);
             expect(buttons[0].label).toBe('lessless');
-            expect(buttons[0].vocalization).toBe(null);
+            expect(buttons[0].vocalization).toBe(undefined);
             done();
             break;
           default:
@@ -123,7 +123,7 @@ describe('SpeechbarService', () => {
             expect(buttons[0].label).toBe('helloless');
             expect(buttons[0].vocalization).toBe('vocalless');
             expect(buttons[1].label).toBe('less');
-            expect(buttons[1].vocalization).toBe(null);
+            expect(buttons[1].vocalization).toBe(undefined);
             done();
             break;
           default:
@@ -157,13 +157,13 @@ describe('SpeechbarService', () => {
             // should now have single button
             expect(buttons.length).toBe(1);
             expect(buttons[0].label).toBe('less');
-            expect(buttons[0].vocalization).toBe(null);
+            expect(buttons[0].vocalization).toBe(undefined);
             break;
           case 3:
             // two buttons
             expect(buttons.length).toBe(2);
             expect(buttons[0].label).toBe('less');
-            expect(buttons[0].vocalization).toBe(null);
+            expect(buttons[0].vocalization).toBe(undefined);
             expect(buttons[1].label).toBe('hello');
             expect(buttons[1].vocalization).toBe('vocal');
             break;
@@ -171,7 +171,7 @@ describe('SpeechbarService', () => {
             // two buttons; 'happy' & 'happyless'
             expect(buttons.length).toBe(2);
             expect(buttons[0].label).toBe('less');
-            expect(buttons[0].vocalization).toBe(null);
+            expect(buttons[0].vocalization).toBe(undefined);
             expect(buttons[1].label).toBe('helloless');
             expect(buttons[1].vocalization).toBe('vocalless');
             done();
@@ -215,20 +215,5 @@ describe('SpeechbarService.ButtonFacade', () => {
     expect(fb.id).toBe('1');
     expect(fb.label).toBe('helloa');
     expect(fb.vocalization).toBe('vocala');
-  });
-
-  it('should override label', () => {
-    const fb = new ButtonFacade(mockButton, 'less');
-    expect(fb.id).toBe('1');
-    expect(fb.label).toBe('less');
-    expect(fb.vocalization).toBe(null);
-  });
-
-  it('should override label and append', () => {
-    const fb = new ButtonFacade(mockButton, 'less');
-    fb.append('less');
-    expect(fb.id).toBe('1');
-    expect(fb.label).toBe('lessless');
-    expect(fb.vocalization).toBe(null);
   });
 });
