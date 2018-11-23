@@ -70,13 +70,13 @@ describe('SpeechbarService', () => {
             expect(buttons.length).toBe(0);
             break;
           case 2:
-            // should now have single button
+            // should now have single 'append' button
             expect(buttons.length).toBe(1);
             expect(buttons[0].label).toBe('less');
             expect(buttons[0].vocalization).toBe(undefined);
             break;
           case 3:
-            // single button with 'less' appended
+            // single 'append' button with 'less' appended
             expect(buttons.length).toBe(1);
             expect(buttons[0].label).toBe('lessless');
             expect(buttons[0].vocalization).toBe(undefined);
@@ -118,7 +118,7 @@ describe('SpeechbarService', () => {
             expect(buttons[0].vocalization).toBe('vocalless');
             break;
           case 4:
-            // two buttons; 'happyless' & 'happy'
+            // two buttons; 'happyless' & 'less'
             expect(buttons.length).toBe(2);
             expect(buttons[0].label).toBe('helloless');
             expect(buttons[0].vocalization).toBe('vocalless');
@@ -154,7 +154,7 @@ describe('SpeechbarService', () => {
             expect(buttons.length).toBe(0);
             break;
           case 2:
-            // should now have single button
+            // should now have single 'append' button
             expect(buttons.length).toBe(1);
             expect(buttons[0].label).toBe('less');
             expect(buttons[0].vocalization).toBe(undefined);
