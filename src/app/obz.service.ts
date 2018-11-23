@@ -7,7 +7,8 @@ import { OBZBoardSet } from './obzboard-set';
 import { OBFBoard } from './obfboard';
 
 import * as JSZip from 'jszip';
-import { FatalOpenVoiceFactoryError } from './errors';
+import { FatalOpenVoiceFactoryError, OpenVoiceFactoryError } from './errors';
+import { AssertionError } from 'assert';
 
 interface ParsedBoard {
   path: string;
@@ -40,7 +41,10 @@ export class ObzService {
   addObserver = (observer: Observer<OBZBoardSet>) => {
 
     const boardURL = this.config.boardURL;
-    // TODO: test if we already have an observer and error?
+    // test if we already have an observer and error
+    if (this.observer) {
+      throw new OpenVoiceFactoryError('observer was already set!');
+    }
     this.observer = observer;
 
     // Decide if we're loading an obz or an obf
@@ -95,7 +99,8 @@ export class ObzService {
               boardSet.setBoard(ret.path, ret.board);
             },
             error(error: any) {
-              // TODO: error parsing a board
+              // error parsing a board
+              throw new FatalOpenVoiceFactoryError(`Error parsing boards for ${boardURL}`, error);
             },
             complete() {
               parseImages(zip, manifestJSON.paths.images).subscribe({
@@ -103,7 +108,8 @@ export class ObzService {
                   boardSet.setImage(ret.path, ret.imageData);
                 },
                 error(error: any) {
-                  // TODO: error loading images
+                  // error loading images
+                  throw new FatalOpenVoiceFactoryError(`Error loading images for ${boardURL}`, error);
                 },
                 complete() {
                   parseSounds(zip, manifestJSON.paths.sounds).subscribe({
@@ -111,7 +117,8 @@ export class ObzService {
                       boardSet.setSound(ret.path, ret.soundData);
                     },
                     error(error: any) {
-                      // TODO: error loading sounds
+                      // error loading sounds
+                      throw new FatalOpenVoiceFactoryError(`Error loading sounds for ${boardURL}`, error);
                     },
                     complete() {
                       observer.next(boardSet);
@@ -123,7 +130,8 @@ export class ObzService {
           });
         });
       }).catch(error => {
-        // TODO: error loading zip file
+        // error loading zip file
+        throw new FatalOpenVoiceFactoryError(`Could not parse ${boardURL} as a zip file`, error);
       });
     },
     error => {
@@ -147,14 +155,13 @@ export class ObzService {
               imageData: contents
             });
           }).catch(error => {
-            // TODO: error loading image file
+            // error loading image file
+            throw new FatalOpenVoiceFactoryError(`Error loading image file ${value.toString()}`, error);
           }));
         });
       }
       Promise.all(promises).then(() => {
         observer.complete();
-      }).catch(error => {
-        // TODO: error waiting for images to load
       });
     }
     return new Observable(loader);
@@ -174,14 +181,13 @@ export class ObzService {
               soundData: contents
             });
           }).catch(error => {
-            // TODO: error loading sound file
+            // error loading sound file
+            throw new FatalOpenVoiceFactoryError(`Error loading sound file ${value.toString()}`, error);
           }));
         });
       }
       Promise.all(promises).then(() => {
         observer.complete();
-      }).catch(error => {
-        // TODO: error waiting for sounds to load
       });
     }
     return new Observable(loader);
@@ -200,14 +206,13 @@ export class ObzService {
             board: new OBFBoard().deserialize(JSON.parse(contents))
           });
         }).catch(error => {
-          // TODO: error loading board
+          // error loading board
+          throw new FatalOpenVoiceFactoryError(`Error loading board ${value.toString}`, error);
         }));
       });
 
       Promise.all(promises).then(() => {
         observer.complete();
-      }).catch(error => {
-        // TODO: error waiting for boards to load
       });
     }
     return new Observable(loader);
