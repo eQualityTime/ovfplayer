@@ -2,7 +2,6 @@ import { TestBed, inject } from '@angular/core/testing';
 
 import { SpeechbarService, ButtonFacade } from './speechbar.service';
 import { Button } from './obfboard';
-import { ExpectedConditions } from 'protractor';
 
 describe('SpeechbarService', () => {
 
