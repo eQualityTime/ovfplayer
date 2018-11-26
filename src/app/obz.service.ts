@@ -40,20 +40,24 @@ export class ObzService {
     // TODO: test if we already have an observer and error?
     this.observer = observer;
 
+    this.loadBoardSet(this.config.boardURL);
+  }
+
+  public loadBoardSet(boardURL: string) {
     // Decide if we're loading an obz or an obf
-    const urlSlug = new UrlUtils().getSlug(this.config.boardURL);
+    const urlSlug = new UrlUtils().getSlug(boardURL);
     this.log(`Parsed url ${urlSlug}`);
 
     if (urlSlug.toLowerCase().endsWith('.obf')) {
-      this.loadOBFFile();
+      this.loadOBFFile(boardURL);
     } else {
       // assume obz by default. For now.
-      this.loadOBZFile();
+      this.loadOBZFile(boardURL);
     }
   }
 
-  private loadOBFFile() {
-    this.http.get<OBFBoard>(this.config.boardURL).subscribe({
+  private loadOBFFile(boardURL: string) {
+    this.http.get<OBFBoard>(boardURL).subscribe({
       next: (page) => {
         const boardSet = new OBZBoardSet();
         boardSet.rootBoardKey = 'root';
@@ -63,15 +67,15 @@ export class ObzService {
     });
   }
 
-  private getOBZFile(): Observable<Blob> {
-    return this.http.get(this.config.boardURL, { responseType: 'blob' });
+  private getOBZFile(boardURL: string): Observable<Blob> {
+    return this.http.get(boardURL, { responseType: 'blob' });
   }
 
-  private loadOBZFile() {
+  private loadOBZFile(boardURL: string) {
 
     const log = this.log;
 
-    this.getOBZFile().subscribe(blob => {
+    this.getOBZFile(boardURL).subscribe(blob => {
 
       const parseBoards = this.parseBoards;
       const parseImages = this.parseImages;

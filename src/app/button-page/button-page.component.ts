@@ -60,10 +60,7 @@ export class ButtonPageComponent implements OnInit {
       if (loadBoardAction.path) {
         this.boardService.navigateToBoard(loadBoardAction.path);
       } else if (loadBoardAction.dataUrl) {
-        // TODO: fix this back up!
-        // this.pageService.setPage(loadBoardAction.dataUrl);
-        // TODO: shouldn't need to call loadPage anymore!
-        // this.loadPage();
+        this.boardService.navigateToExternalBoard(loadBoardAction.dataUrl);
       } else if (loadBoardAction.url) {
         // TODO: redirect whole page to site!
       }
