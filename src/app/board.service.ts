@@ -40,6 +40,10 @@ export class BoardService {
     this.observer.next(board);
   }
 
+  navigateToExternalBoard(boardKey: string) {
+    this.obzService.loadBoardSet(boardKey);
+  }
+
   home() {
     this.navigateToBoard(this.boardSet.rootBoardKey);
   }
