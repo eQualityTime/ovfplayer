@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, Observer } from 'rxjs';
 import { ConfigService } from './config.service';
 import { UrlUtils } from './url-utils';
@@ -8,7 +8,6 @@ import { OBFBoard } from './obfboard';
 
 import * as JSZip from 'jszip';
 import { FatalOpenVoiceFactoryError, OpenVoiceFactoryError } from './errors';
-import { AssertionError } from 'assert';
 
 interface ParsedBoard {
   path: string;
@@ -62,6 +61,9 @@ export class ObzService {
         boardSet.rootBoardKey = 'root';
         boardSet.setBoard('root', new OBFBoard().deserialize(page));
         this.observer.next(boardSet);
+      },
+      error: (err) => {
+        this.observer.error(new FatalOpenVoiceFactoryError(`Failed to load obf from ${boardURL}`, err));
       }
     });
   }
@@ -96,7 +98,7 @@ export class ObzService {
             },
             error(error: any) {
               // error parsing a board
-              throw new FatalOpenVoiceFactoryError(`Error parsing boards for ${boardURL}`, error);
+              observer.error(new FatalOpenVoiceFactoryError(`Error parsing boards for ${boardURL}`, error));
             },
             complete() {
               parseImages(zip, manifestJSON.paths.images).subscribe({
@@ -105,7 +107,7 @@ export class ObzService {
                 },
                 error(error: any) {
                   // error loading images
-                  throw new FatalOpenVoiceFactoryError(`Error loading images for ${boardURL}`, error);
+                  observer.error(new FatalOpenVoiceFactoryError(`Error loading images for ${boardURL}`, error));
                 },
                 complete() {
                   parseSounds(zip, manifestJSON.paths.sounds).subscribe({
@@ -114,7 +116,7 @@ export class ObzService {
                     },
                     error(error: any) {
                       // error loading sounds
-                      throw new FatalOpenVoiceFactoryError(`Error loading sounds for ${boardURL}`, error);
+                      observer.error(new FatalOpenVoiceFactoryError(`Error loading sounds for ${boardURL}`, error));
                     },
                     complete() {
                       observer.next(boardSet);
@@ -127,12 +129,12 @@ export class ObzService {
         });
       }).catch(error => {
         // error loading zip file
-        throw new FatalOpenVoiceFactoryError(`Could not parse ${boardURL} as a zip file`, error);
+        observer.error(new FatalOpenVoiceFactoryError(`Could not parse ${boardURL} as a zip file`, error));
       });
     },
-    error => {
+    (error: HttpErrorResponse) => {
       // error downloading file
-      throw new FatalOpenVoiceFactoryError(`Failed to load file ${boardURL}`, error);
+      this.observer.error(new FatalOpenVoiceFactoryError(`Failed to load file ${boardURL}: ${error.message}`));
     });
   }
 
@@ -152,7 +154,7 @@ export class ObzService {
             });
           }).catch(error => {
             // error loading image file
-            throw new FatalOpenVoiceFactoryError(`Error loading image file ${value.toString()}`, error);
+            observer.error(new FatalOpenVoiceFactoryError(`Error loading image file ${value.toString()}`, error));
           }));
         });
       }
@@ -178,7 +180,7 @@ export class ObzService {
             });
           }).catch(error => {
             // error loading sound file
-            throw new FatalOpenVoiceFactoryError(`Error loading sound file ${value.toString()}`, error);
+            observer.error(new FatalOpenVoiceFactoryError(`Error loading sound file ${value.toString()}`, error));
           }));
         });
       }
@@ -203,7 +205,7 @@ export class ObzService {
           });
         }).catch(error => {
           // error loading board
-          throw new FatalOpenVoiceFactoryError(`Error loading board ${value.toString}`, error);
+          observer.error(new FatalOpenVoiceFactoryError(`Error loading board ${value.toString}`, error));
         }));
       });
 

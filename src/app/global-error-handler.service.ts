@@ -13,13 +13,14 @@ export class GlobalErrorHandlerService implements ErrorHandler {
     // TODO: buffer logs
     console.log(`Error on page ${router.url}: ${error.message}`);
 
+    // Pull reason out of a promise error if it is one
     if (error.rejection) {
       error = error.rejection;
     }
 
     let cause = error.cause;
     while (cause) {
-      console.log(`Caused by: ${cause}`);
+      console.log(`Caused by: ${cause.toString()}`);
       cause = cause.cause;
       // TODO: decent stack trace?
     }
