@@ -42,6 +42,10 @@ export class ObzService {
     const boardURL = this.config.boardURL;
     this.observer = observer;
 
+    this.loadBoardSet(this.config.boardURL);
+  }
+
+  public loadBoardSet(boardURL: string) {
     // Decide if we're loading an obz or an obf
     const urlSlug = new UrlUtils().getSlug(boardURL);
     this.log(`Parsed url ${urlSlug}`);

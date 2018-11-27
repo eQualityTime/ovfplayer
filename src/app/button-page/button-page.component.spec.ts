@@ -34,7 +34,8 @@ describe('ButtonPageComponent', () => {
     speechbarServiceStub = {
       clear: () => {},
       backspace: () => {},
-      speak: () => {}
+      speak: () => {},
+      space: () => {}
     };
 
     TestBed.configureTestingModule({
