@@ -1,3 +1,17 @@
 <p>
   error-page works!
 </p>
+<table *ngIf="error">
+  <tr>
+    <td>Location</td>
+    <td><pre>{{error.location}}</pre></td>
+  </tr>
+  <tr>
+    <td>Message</td>
+    <td><pre>{{error.message}}</pre></td>
+  </tr>
+  <tr>
+    <td>Cause</td>
+    <td><pre>{{error.causeChain}}</pre></td>
+  </tr>
+</table>
