@@ -1,17 +1,23 @@
-<p>
-  error-page works!
-</p>
-<table *ngIf="error">
-  <tr>
-    <td>Location</td>
-    <td><pre>{{error.location}}</pre></td>
-  </tr>
-  <tr>
-    <td>Message</td>
-    <td><pre>{{error.message}}</pre></td>
-  </tr>
-  <tr>
-    <td>Cause</td>
-    <td><pre>{{error.causeChain}}</pre></td>
-  </tr>
-</table>
+<app-obfpage>
+  <mat-card class="errorCard">
+    <h2>
+      Oh no! Something went wrong!
+    </h2>
+    <table *ngIf="error">
+      <tr>
+        <td class="label">Location</td>
+        <td><pre class="message">{{error.location}}</pre></td>
+      </tr>
+      <tr>
+        <td class="label">Message</td>
+        <td><pre class="message">{{error.message}}</pre></td>
+      </tr>
+      <tr>
+        <td class="label">Cause</td>
+        <td><pre class="message">{{error.causeChain}}</pre></td>
+      </tr>
+    </table>
+    <p>If you need help resolving this issue or believe it may be an issue on our side, please don't hesitate to contact us.</p>
+    <a [href]="errorHRef" target="_top" mat-raised-button>Send error report</a>
+  </mat-card>
+</app-obfpage>

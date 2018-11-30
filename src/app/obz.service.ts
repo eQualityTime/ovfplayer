@@ -152,12 +152,10 @@ export class ObzService {
           // log(`Image key ${key} path ${value}`);
           const encoding = value.toString().toLowerCase().endsWith('.svg') ? 'text' : 'base64';
           promises.push(zip.file(value).async(encoding).then(function (contents) {
-            // TODO: remove
-            throw new TypeError('bum');
-            // observer.next({
-            //   path: value.toString(),
-            //   imageData: contents
-            // });
+            observer.next({
+              path: value.toString(),
+              imageData: contents
+            });
           }).catch(error => {
             // error loading image file
             observer.error(new FatalOpenVoiceFactoryError(`Error loading image file ${value.toString()}`, error));
