@@ -1,52 +1,54 @@
-<mat-card class="formCard">
-  <div class="formTitle">
-    Configuration
-  </div>
-  <div class="formContainer">
-    <mat-card>
-      <mat-form-field class="formInputField">
-        <input [(ngModel)]="boardURL" matInput placeholder="URL for obf/obz file" class="formInputUrl">
-      </mat-form-field>
-      <div class="clickable" (click)="copyToClipboard()"><i class="material-icons">link</i>&nbsp;Create link</div>
-    </mat-card>
-  </div>
-  <div class="formContainer">
-    <mat-card>
-      <mat-checkbox [(ngModel)]="speakOnSpeechbarClick">
-        <span class="formLabel">Speak when speechbar is clicked</span>
-      </mat-checkbox>
-    </mat-card>
-  </div>
-  <div class="formContainer">
-    <mat-card>
-      <mat-checkbox [(ngModel)]="displayedButtons.showSpeakButton">
-          <span class="formLabel">Speak button always shown</span>
+<app-obfpage>
+  <mat-card class="formCard">
+    <div class="formTitle">
+      Configuration
+    </div>
+    <div class="formContainer">
+      <mat-card>
+        <mat-form-field class="formInputField">
+          <input [(ngModel)]="boardURL" matInput placeholder="URL for obf/obz file" class="formInputUrl">
+        </mat-form-field>
+        <div class="clickable" (click)="copyToClipboard()"><i class="material-icons">link</i>&nbsp;Create link</div>
+      </mat-card>
+    </div>
+    <div class="formContainer">
+      <mat-card>
+        <mat-checkbox [(ngModel)]="speakOnSpeechbarClick">
+          <span class="formLabel">Speak when speechbar is clicked</span>
         </mat-checkbox>
-    </mat-card>
-    <mat-card>
-      <mat-checkbox [(ngModel)]="displayedButtons.showBackspaceButton">
-          <span class="formLabel">Backspace button always shown</span>
-        </mat-checkbox>
-    </mat-card>
-    <mat-card>
-      <mat-checkbox [(ngModel)]="displayedButtons.showClearButton">
-          <span class="formLabel">Clear button always shown</span>
-        </mat-checkbox>
-    </mat-card>
-    <mat-card>
-      <mat-checkbox [(ngModel)]="displayedButtons.showHomeButton">
-          <span class="formLabel">Home button always shown</span>
+      </mat-card>
+    </div>
+    <div class="formContainer">
+      <mat-card>
+        <mat-checkbox [(ngModel)]="displayedButtons.showSpeakButton">
+            <span class="formLabel">Speak button always shown</span>
           </mat-checkbox>
-    </mat-card>
-  </div>
-  <div class="formContainer">
-    <mat-card>
-      <mat-checkbox [(ngModel)]="showIconsInSpeechbar">
-        <span class="formLabel">Display button images and labels in speechbar (instead of vocalisation text)</span>
-      </mat-checkbox>
-    </mat-card>
-  </div>
-  <div class="formButtons">
-    <button mat-raised-button color="primary" (click)="save()">Save</button>
-  </div>
-</mat-card>
+      </mat-card>
+      <mat-card>
+        <mat-checkbox [(ngModel)]="displayedButtons.showBackspaceButton">
+            <span class="formLabel">Backspace button always shown</span>
+          </mat-checkbox>
+      </mat-card>
+      <mat-card>
+        <mat-checkbox [(ngModel)]="displayedButtons.showClearButton">
+            <span class="formLabel">Clear button always shown</span>
+          </mat-checkbox>
+      </mat-card>
+      <mat-card>
+        <mat-checkbox [(ngModel)]="displayedButtons.showHomeButton">
+            <span class="formLabel">Home button always shown</span>
+            </mat-checkbox>
+      </mat-card>
+    </div>
+    <div class="formContainer">
+      <mat-card>
+        <mat-checkbox [(ngModel)]="showIconsInSpeechbar">
+          <span class="formLabel">Display button images and labels in speechbar (instead of vocalisation text)</span>
+        </mat-checkbox>
+      </mat-card>
+    </div>
+    <div class="formButtons">
+      <button mat-raised-button color="primary" (click)="save()">Save</button>
+    </div>
+  </mat-card>
+</app-obfpage>
