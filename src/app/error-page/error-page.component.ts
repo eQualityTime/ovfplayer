@@ -8,7 +8,7 @@ import { ErrorService, ErrorDetails } from '../error.service';
 })
 export class ErrorPageComponent implements OnInit {
 
-  private error: ErrorDetails;
+  error: ErrorDetails;
 
   constructor(private errorService: ErrorService) { }
 
