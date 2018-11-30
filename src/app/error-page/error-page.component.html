@@ -18,6 +18,6 @@
       </tr>
     </table>
     <p>If you need help resolving this issue or believe it may be an issue on our side, please don't hesitate to contact us.</p>
-    <a [href]="errorHRef" target="_top" mat-raised-button>Send error report</a>
+    <a *ngIf="error" [href]="errorHRef" target="_top" mat-raised-button>Send error report</a>
   </mat-card>
 </app-obfpage>

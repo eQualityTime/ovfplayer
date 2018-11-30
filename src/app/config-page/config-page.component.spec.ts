@@ -8,6 +8,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Router, ActivatedRoute, ActivatedRouteSnapshot, UrlSegment, Params, Data, Route, ParamMap } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Type } from '@angular/core';
+import { OBFPageComponent } from '../obfpage/obfpage.component';
 
 export class MockActivatedRoute implements ActivatedRoute {
   snapshot: ActivatedRouteSnapshot;
@@ -77,7 +78,7 @@ describe('ConfigPageComponent', () => {
     };
 
     TestBed.configureTestingModule({
-      declarations: [ ConfigPageComponent ],
+      declarations: [ ConfigPageComponent, OBFPageComponent ],
       providers: [
         {provide: Router, useValue: routerStub},
         {provide: ConfigService, useValue: configServiceStub},
