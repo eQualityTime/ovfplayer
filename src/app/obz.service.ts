@@ -7,22 +7,7 @@ import { OBZBoardSet } from './obzboard-set';
 import { OBFBoard } from './obfboard';
 
 import * as JSZip from 'jszip';
-import { FatalOpenVoiceFactoryError, OpenVoiceFactoryError } from './errors';
-
-interface ParsedBoard {
-  path: string;
-  board: OBFBoard;
-}
-
-interface ParsedImage {
-  path: string;
-  imageData: string;
-}
-
-interface ParsedSound {
-  path: string;
-  soundData: string;
-}
+import { FatalOpenVoiceFactoryError } from './errors';
 
 @Injectable({
   providedIn: 'root'
@@ -38,8 +23,6 @@ export class ObzService {
   }
 
   addObserver = (observer: Observer<OBZBoardSet>) => {
-
-    const boardURL = this.config.boardURL;
     this.observer = observer;
 
     this.loadBoardSet(this.config.boardURL);
@@ -77,147 +60,89 @@ export class ObzService {
   }
 
   private loadOBZFile(boardURL: string) {
-
-    const log = this.log;
-
-    this.getOBZFile(boardURL).subscribe(blob => {
-
-      const parseBoards = this.parseBoards;
-      const parseImages = this.parseImages;
-      const parseSounds = this.parseSounds;
-      const observer    = this.observer;
-
-      log(`Got some data of size ${blob.size}`);
-      const zipper = new JSZip();
-      zipper.loadAsync(blob).then(function(zip) {
-        zip.file('manifest.json').async('text').then(function (manifest: string) {
-          // log(`Manifest contents: ${manifest}`);
-          const manifestJSON = JSON.parse(manifest);
-          const boardSet     = new OBZBoardSet();
-          boardSet.rootBoardKey = manifestJSON.root;
-
-          parseBoards(zip, manifestJSON.paths.boards).subscribe({
-            next(ret: ParsedBoard) {
-              boardSet.setBoard(ret.path, ret.board);
-            },
-            error(error: any) {
-              // error parsing a board
-              observer.error(new FatalOpenVoiceFactoryError(`Error parsing boards for ${boardURL}`, error));
-            },
-            complete() {
-              parseImages(zip, manifestJSON.paths.images).subscribe({
-                next(ret: ParsedImage) {
-                  boardSet.setImage(ret.path, ret.imageData);
-                },
-                error(error: any) {
-                  // error loading images
-                  observer.error(new FatalOpenVoiceFactoryError(`Error loading images for ${boardURL}`, error));
-                },
-                complete() {
-                  parseSounds(zip, manifestJSON.paths.sounds).subscribe({
-                    next(ret: ParsedSound) {
-                      boardSet.setSound(ret.path, ret.soundData);
-                    },
-                    error(error: any) {
-                      // error loading sounds
-                      observer.error(new FatalOpenVoiceFactoryError(`Error loading sounds for ${boardURL}`, error));
-                    },
-                    complete() {
-                      observer.next(boardSet);
-                    }
-                  });
-                }
-              });
-            }
-          });
+    this.getOBZFile(boardURL).subscribe(
+      (blob: Blob) => {
+        this.parseOBZFile(blob).then(boardSet => {
+          this.observer.next(boardSet);
+        }).catch(error => {
+          // error loading zip file
+          throw new FatalOpenVoiceFactoryError(`Could not parse ${boardURL} as a zip file`, error);
         });
+      },
+      (error: HttpErrorResponse) => {
+        // error downloading file
+        this.observer.error(new FatalOpenVoiceFactoryError(`Failed to load file ${boardURL}: ${error.message}`));
+      }
+    );
+  }
+
+  parseOBZFile(blob: Blob): Promise<OBZBoardSet> {
+    const parseBoard = this.parseBoard;
+    const parseImage = this.parseImage;
+    const parseSound = this.parseSound;
+    const zipper = new JSZip();
+
+    return zipper.loadAsync(blob).then(function(zip) {
+      return zip.file('manifest.json').async('text').then(function (manifest: string) {
+        // log(`Manifest contents: ${manifest}`);
+        const manifestJSON = JSON.parse(manifest);
+        const boardSet     = new OBZBoardSet();
+        boardSet.rootBoardKey = manifestJSON.root;
+
+        let promises = [];
+        promises = promises.concat(Object.values(manifestJSON.paths.boards).map(board => parseBoard(zip, board.toString(), boardSet)));
+
+        if (manifestJSON.paths.images) {
+          promises = promises.concat(Object.values(manifestJSON.paths.images).map(image => parseImage(zip, image.toString(), boardSet)));
+        }
+
+        if (manifestJSON.paths.sounds) {
+          promises = promises.concat(Object.values(manifestJSON.paths.sounds).map(sound => parseSound(zip, sound.toString(), boardSet)));
+        }
+
+        return Promise.all(promises).then(() => boardSet);
       }).catch(error => {
-        // error loading zip file
-        observer.error(new FatalOpenVoiceFactoryError(`Could not parse ${boardURL} as a zip file`, error));
+        // error loading manifest
+        throw new FatalOpenVoiceFactoryError(`Could not load manifest.json`, error);
       });
-    },
-    (error: HttpErrorResponse) => {
-      // error downloading file
-      this.observer.error(new FatalOpenVoiceFactoryError(`Failed to load file ${boardURL}: ${error.message}`));
+    }).catch(error => {
+      // error loading zip file
+      throw new FatalOpenVoiceFactoryError(`Could not parse zip file`, error);
     });
   }
 
-  private parseImages = (zip, images): Observable<ParsedImage> => {
-    this.log('Parsing images');
-    const log = this.log;
-    function loader(observer: Observer<ParsedImage>) {
-      const promises = [];
-      if (images) {
-        Object.entries(images).forEach(([key, value]) => {
-          // log(`Image key ${key} path ${value}`);
-          const encoding = value.toString().toLowerCase().endsWith('.svg') ? 'text' : 'base64';
-          promises.push(zip.file(value).async(encoding).then(function (contents) {
-            observer.next({
-              path: value.toString(),
-              imageData: contents
-            });
-          }).catch(error => {
-            // error loading image file
-            observer.error(new FatalOpenVoiceFactoryError(`Error loading image file ${value.toString()}`, error));
-          }));
-        });
-      }
-      Promise.all(promises).then(() => {
-        observer.complete();
-      });
-    }
-    return new Observable(loader);
+  private parseImage = (zip, image: string, boardSet: OBZBoardSet): Promise<void> => {
+    const encoding = image.toLowerCase().endsWith('.svg') ? 'text' : 'base64';
+    const imagePromise = zip.file(image).async(encoding).then(function (contents) {
+      boardSet.setImage(image, contents);
+    }).catch(error => {
+      // error loading image file
+      throw new FatalOpenVoiceFactoryError(`Error loading image file ${image}`, error);
+    });
+
+    return imagePromise;
   }
 
-  private parseSounds = (zip, sounds): Observable<ParsedSound> => {
-    this.log('Parsing sounds');
-    const log = this.log;
-    function loader(observer: Observer<ParsedSound>) {
-      const promises = [];
-      if (sounds) {
-        Object.entries(sounds).forEach(([key, value]) => {
-          // log(`Sound key ${key} path ${value}`);
-          promises.push(zip.file(value).async('base64').then(function (contents) {
-            observer.next({
-              path: value.toString(),
-              soundData: contents
-            });
-          }).catch(error => {
-            // error loading sound file
-            observer.error(new FatalOpenVoiceFactoryError(`Error loading sound file ${value.toString()}`, error));
-          }));
-        });
-      }
-      Promise.all(promises).then(() => {
-        observer.complete();
-      });
-    }
-    return new Observable(loader);
+  private parseSound = (zip, sound: string, boardSet: OBZBoardSet): Promise<void> => {
+    const soundPromise = zip.file(sound).async('base64').then(function (contents) {
+      boardSet.setSound(sound, contents);
+    }).catch(error => {
+      // error loading sound file
+      throw new FatalOpenVoiceFactoryError(`Error loading sound file ${sound}`, error);
+    });
+
+    return soundPromise;
   }
 
-  private parseBoards = (zip, boards): Observable<ParsedBoard> => {
-    this.log('Parsing boards');
-    const log = this.log;
-    function loader(observer: Observer<ParsedBoard>) {
-      const promises = [];
-      Object.entries(boards).forEach(([key, value]) => {
-        // log(`Board key ${key} path ${value}`);
-        promises.push(zip.file(value).async('text').then(function (contents) {
-          observer.next({
-            path: value.toString(),
-            board: new OBFBoard().deserialize(JSON.parse(contents))
-          });
-        }).catch(error => {
-          // error loading board
-          observer.error(new FatalOpenVoiceFactoryError(`Error loading board ${value.toString}`, error));
-        }));
-      });
+  private parseBoard = (zip, board: string, boardSet: OBZBoardSet): Promise<void> => {
+    const boardPromise = zip.file(board).async('text').then(function (contents) {
+      boardSet.setBoard(board, new OBFBoard().deserialize(JSON.parse(contents)));
+    }).catch(error => {
+      // error loading board
+      throw new FatalOpenVoiceFactoryError(`Error loading board ${board}`, error);
+    });
 
-      Promise.all(promises).then(() => {
-        observer.complete();
-      });
-    }
-    return new Observable(loader);
+    return boardPromise;
   }
 
   private log(message: string) {
