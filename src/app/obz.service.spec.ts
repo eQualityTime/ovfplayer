@@ -19,6 +19,9 @@ describe('ObzService', () => {
   it('parseOBZFile should throw error if no manifest', (done) => {
 
     inject([ObzService], (service: ObzService) => {
+
+      // TODO: extract to useful method
+      // ------------------------------
       // pull fixture
       const fixtures = window['__obz__'];
       const noManifest = fixtures['nomanifest'];
@@ -33,8 +36,7 @@ describe('ObzService', () => {
       }
       const byteArray = new Uint8Array(byteNumbers);
       const blob = new Blob([byteArray], { type: 'application/octet-stream' });
-
-      console.log(blob);
+      // ------------------------------
 
       // test parseOBZFile
       const promise = service.parseOBZFile(blob);
@@ -48,6 +50,8 @@ describe('ObzService', () => {
           console.log(t);
           t = t.cause;
         }
+        // TODO: actually test for correct reason
+        // TODO: add error codes to exceptions!
         done();
       });
     })();
