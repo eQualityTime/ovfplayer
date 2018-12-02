@@ -83,8 +83,11 @@ export class ObzService {
     const zipper = new JSZip();
 
     return zipper.loadAsync(blob).then(function(zip) {
-      return zip.file('manifest.json').async('text').then(function (manifest: string) {
-        // log(`Manifest contents: ${manifest}`);
+      const manifestFile = zip.file('manifest.json');
+      if (!manifestFile) {
+        throw new FatalOpenVoiceFactoryError('No manifest file!');
+      }
+      return manifestFile.async('text').then(function (manifest: string) {
         const manifestJSON = JSON.parse(manifest);
         const boardSet     = new OBZBoardSet();
         boardSet.rootBoardKey = manifestJSON.root;
@@ -101,13 +104,13 @@ export class ObzService {
         }
 
         return Promise.all(promises).then(() => boardSet);
-      }).catch(error => {
+      }, function (fail) {
         // error loading manifest
-        throw new FatalOpenVoiceFactoryError(`Could not load manifest.json`, error);
+        throw new FatalOpenVoiceFactoryError(`Could not load manifest.json`, fail);
       });
-    }).catch(error => {
+    }, function (fail) {
       // error loading zip file
-      throw new FatalOpenVoiceFactoryError(`Could not parse zip file`, error);
+      throw new FatalOpenVoiceFactoryError(`Could not parse zip file`, fail);
     });
   }
 
