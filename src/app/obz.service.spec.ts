@@ -1,6 +1,6 @@
-import { TestBed, inject, ComponentFixture } from '@angular/core/testing';
+import { TestBed, inject } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-
+import { OBZFixture } from '../test-utils/OBZFixture';
 import { ObzService } from './obz.service';
 
 describe('ObzService', () => {
@@ -20,23 +20,7 @@ describe('ObzService', () => {
 
     inject([ObzService], (service: ObzService) => {
 
-      // TODO: extract to useful method
-      // ------------------------------
-      // pull fixture
-      const fixtures = window['__obz__'];
-      const noManifest = fixtures['nomanifest'];
-      const contents = JSON.parse(noManifest);
-
-      console.log(`Data ${contents.data}`);
-      // convert base64 fixture data to blob
-      const byteCharacters = atob(contents.data);
-      const byteNumbers = new Array(byteCharacters.length);
-      for (let i = 0; i < byteCharacters.length; i++) {
-        byteNumbers[i] = byteCharacters.charCodeAt(i);
-      }
-      const byteArray = new Uint8Array(byteNumbers);
-      const blob = new Blob([byteArray], { type: 'application/octet-stream' });
-      // ------------------------------
+      const blob = OBZFixture.load('nomanifest');
 
       // test parseOBZFile
       const promise = service.parseOBZFile(blob);
