@@ -16,10 +16,40 @@ describe('ObzService', () => {
     expect(service).toBeTruthy();
   }));
 
-  it('should load a fixture', function () {
-    const fixtures = window['__obz__'];
-    const noManifest = fixtures['nomanifest'];
-    const contents = JSON.parse(noManifest);
-    expect(contents.name).toBe('Simon');
+  it('parseOBZFile should throw error if no manifest', (done) => {
+
+    inject([ObzService], (service: ObzService) => {
+      // pull fixture
+      const fixtures = window['__obz__'];
+      const noManifest = fixtures['nomanifest'];
+      const contents = JSON.parse(noManifest);
+
+      console.log(`Data ${contents.data}`);
+      // convert base64 fixture data to blob
+      const byteCharacters = atob(contents.data);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      const blob = new Blob([byteArray], { type: 'application/octet-stream' });
+
+      console.log(blob);
+
+      // test parseOBZFile
+      const promise = service.parseOBZFile(blob);
+      promise.then(function () {
+        // just don't call done and test will fail with timeout...
+        // throw new Error('Manifest error should have been thrown');
+      }, function (reason) {
+        console.log(reason);
+        let t = reason.cause;
+        while (t) {
+          console.log(t);
+          t = t.cause;
+        }
+        done();
+      });
+    })();
   });
 });
