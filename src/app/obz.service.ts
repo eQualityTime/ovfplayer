@@ -7,7 +7,7 @@ import { OBZBoardSet } from './obzboard-set';
 import { OBFBoard } from './obfboard';
 
 import * as JSZip from 'jszip';
-import { FatalOpenVoiceFactoryError } from './errors';
+import { FatalOpenVoiceFactoryError, ErrorCodes } from './errors';
 
 @Injectable({
   providedIn: 'root'
@@ -50,7 +50,7 @@ export class ObzService {
         this.observer.next(boardSet);
       },
       error: (err) => {
-        this.observer.error(new FatalOpenVoiceFactoryError(`Failed to load obf from ${boardURL}`, err));
+        this.observer.error(new FatalOpenVoiceFactoryError(ErrorCodes.OBF_LOAD_ERROR, `Failed to load obf from ${boardURL}`, err));
       }
     });
   }
@@ -66,12 +66,14 @@ export class ObzService {
           this.observer.next(boardSet);
         }).catch(error => {
           // error loading zip file
-          throw new FatalOpenVoiceFactoryError(`Could not parse ${boardURL} as a zip file`, error);
+          throw new FatalOpenVoiceFactoryError(ErrorCodes.OBZ_PARSE_ERROR, `Could not parse ${boardURL} as a zip file`, error);
         });
       },
       (error: HttpErrorResponse) => {
         // error downloading file
-        this.observer.error(new FatalOpenVoiceFactoryError(`Failed to load file ${boardURL}: ${error.message}`));
+        this.observer.error(
+          new FatalOpenVoiceFactoryError(ErrorCodes.OBZ_DOWNLOAD_ERROR, `Failed to download file ${boardURL}: ${error.message}`)
+        );
       }
     );
   }
@@ -85,7 +87,7 @@ export class ObzService {
     return zipper.loadAsync(blob).then(function(zip) {
       const manifestFile = zip.file('manifest.json');
       if (!manifestFile) {
-        throw new FatalOpenVoiceFactoryError('No manifest file!');
+        throw new FatalOpenVoiceFactoryError(ErrorCodes.MISSING_MANIFEST, 'No manifest file!');
       }
       return manifestFile.async('text').then(function (manifest: string) {
         const manifestJSON = JSON.parse(manifest);
@@ -106,11 +108,11 @@ export class ObzService {
         return Promise.all(promises).then(() => boardSet);
       }, function (fail) {
         // error loading manifest
-        throw new FatalOpenVoiceFactoryError(`Could not load manifest.json`, fail);
+        throw new FatalOpenVoiceFactoryError(ErrorCodes.MANIFEST_LOAD_ERROR, `Could not load manifest.json`, fail);
       });
     }, function (fail) {
       // error loading zip file
-      throw new FatalOpenVoiceFactoryError(`Could not parse zip file`, fail);
+      throw new FatalOpenVoiceFactoryError(ErrorCodes.ZIP_PARSE_ERROR, `Could not parse zip file`, fail);
     });
   }
 
@@ -120,7 +122,7 @@ export class ObzService {
       boardSet.setImage(image, contents);
     }).catch(error => {
       // error loading image file
-      throw new FatalOpenVoiceFactoryError(`Error loading image file ${image}`, error);
+      throw new FatalOpenVoiceFactoryError(ErrorCodes.IMAGE_LOAD_ERROR, `Error loading image file ${image}`, error);
     });
 
     return imagePromise;
@@ -131,7 +133,7 @@ export class ObzService {
       boardSet.setSound(sound, contents);
     }).catch(error => {
       // error loading sound file
-      throw new FatalOpenVoiceFactoryError(`Error loading sound file ${sound}`, error);
+      throw new FatalOpenVoiceFactoryError(ErrorCodes.SOUND_LOAD_ERROR, `Error loading sound file ${sound}`, error);
     });
 
     return soundPromise;
@@ -142,7 +144,7 @@ export class ObzService {
       boardSet.setBoard(board, new OBFBoard().deserialize(JSON.parse(contents)));
     }).catch(error => {
       // error loading board
-      throw new FatalOpenVoiceFactoryError(`Error loading board ${board}`, error);
+      throw new FatalOpenVoiceFactoryError(ErrorCodes.BOARD_LOAD_ERROR, `Error loading board ${board}`, error);
     });
 
     return boardPromise;

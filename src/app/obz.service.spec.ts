@@ -2,6 +2,7 @@ import { TestBed, inject } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { OBZFixture } from '../test-utils/OBZFixture';
 import { ObzService } from './obz.service';
+import { ErrorCodes } from './errors';
 
 describe('ObzService', () => {
 
@@ -26,16 +27,8 @@ describe('ObzService', () => {
       const promise = service.parseOBZFile(blob);
       promise.then(function () {
         // just don't call done and test will fail with timeout...
-        // throw new Error('Manifest error should have been thrown');
       }, function (reason) {
-        console.log(reason);
-        let t = reason.cause;
-        while (t) {
-          console.log(t);
-          t = t.cause;
-        }
-        // TODO: actually test for correct reason
-        // TODO: add error codes to exceptions!
+        expect(reason.errorCode).toBe(ErrorCodes.MISSING_MANIFEST);
         done();
       });
     })();
