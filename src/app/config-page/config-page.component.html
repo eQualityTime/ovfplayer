@@ -2,6 +2,8 @@
   <div class="formTitle">
     Configuration
   </div>
+  <mat-tab-group>
+    <mat-tab label="Board URL">
   <div class="formContainer">
     <mat-card>
       <mat-form-field class="formInputField">
@@ -10,13 +12,22 @@
       <div class="clickable" (click)="copyToClipboard()"><i class="material-icons">link</i>&nbsp;Create link</div>
     </mat-card>
   </div>
+  </mat-tab>
+  <mat-tab label="Speechbar behaviour">
   <div class="formContainer">
     <mat-card>
       <mat-checkbox [(ngModel)]="speakOnSpeechbarClick">
         <span class="formLabel">Speak when speechbar is clicked</span>
       </mat-checkbox>
     </mat-card>
+    <mat-card>
+      <mat-checkbox [(ngModel)]="showIconsInSpeechbar">
+        <span class="formLabel">Display button images and labels in speechbar (instead of vocalisation text)</span>
+      </mat-checkbox>
+    </mat-card>
   </div>
+  </mat-tab>
+  <mat-tab label="Permanent buttons">
   <div class="formContainer">
     <mat-card>
       <mat-checkbox [(ngModel)]="displayedButtons.showSpeakButton">
@@ -39,13 +50,8 @@
           </mat-checkbox>
     </mat-card>
   </div>
-  <div class="formContainer">
-    <mat-card>
-      <mat-checkbox [(ngModel)]="showIconsInSpeechbar">
-        <span class="formLabel">Display button images and labels in speechbar (instead of vocalisation text)</span>
-      </mat-checkbox>
-    </mat-card>
-  </div>
+  </mat-tab>
+  </mat-tab-group>
   <div class="formButtons">
     <button mat-raised-button color="primary" (click)="save()">Save</button>
   </div>
