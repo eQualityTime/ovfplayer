@@ -14,6 +14,7 @@ export class SpeechbarComponent implements OnInit, OnDestroy {
   private _displayedButtons: ButtonDisplayConfig;
   private _showIconsInSpeechbar: boolean;
   private speakingSubscription: Subscription;
+  private buttonsSubscription: Subscription;
   speaking: boolean;
   buttons: Button[];
 
@@ -31,13 +32,14 @@ export class SpeechbarComponent implements OnInit, OnDestroy {
       this.speaking = speaking;
       this.cdRef.detectChanges();
     });
-    this.speechbarService.getButtons().subscribe(buttons => {
+    this.buttonsSubscription = this.speechbarService.getButtons().subscribe(buttons => {
       this.buttons = buttons;
     });
   }
 
   ngOnDestroy() {
     this.speakingSubscription.unsubscribe();
+    this.buttonsSubscription.unsubscribe();
   }
 
   get displayedButtons(): ButtonDisplayConfig {
