@@ -11,7 +11,8 @@ module.exports = function (config) {
       require('karma-jasmine-html-reporter'),
       require('karma-coverage-istanbul-reporter'),
       require('karma-junit-reporter'),
-      require('@angular-devkit/build-angular/plugins/karma')
+      require('@angular-devkit/build-angular/plugins/karma'),
+      require('./karma-obz-preprocessor')
     ],
     client: {
       clearContext: false // leave Jasmine Spec Runner output visible in browser
@@ -21,6 +22,12 @@ module.exports = function (config) {
       reports: ['html', 'lcovonly'],
       fixWebpackSourcePaths: true
     },
+    preprocessors: {
+      '../test/fixtures/obz/*.obz': ['obz']
+    },
+    files: [
+      '../test/fixtures/obz/*.obz'
+    ],
     reporters: ['progress', 'kjhtml', 'junit'],
     junitReporter: {
       outputDir: '../test-results',
