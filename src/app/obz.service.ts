@@ -90,8 +90,14 @@ export class ObzService {
         throw new FatalOpenVoiceFactoryError(ErrorCodes.MISSING_MANIFEST, 'No manifest file!');
       }
       return manifestFile.async('text').then(function (manifest: string) {
-        const manifestJSON = JSON.parse(manifest);
-        const boardSet     = new OBZBoardSet();
+
+        let manifestJSON = null;
+        try {
+          manifestJSON = JSON.parse(manifest);
+        } catch (error) {
+          throw new FatalOpenVoiceFactoryError(ErrorCodes.MANIFEST_JSON_ERROR, 'manifest.json is not json', error);
+        }
+        const boardSet = new OBZBoardSet();
         boardSet.rootBoardKey = manifestJSON.root;
 
         let promises = [];
@@ -108,17 +114,21 @@ export class ObzService {
         return Promise.all(promises).then(() => boardSet);
       }, function (fail) {
         // error loading manifest
-        throw new FatalOpenVoiceFactoryError(ErrorCodes.MANIFEST_LOAD_ERROR, `Could not load manifest.json`, fail);
+        throw new FatalOpenVoiceFactoryError(ErrorCodes.MANIFEST_LOAD_ERROR, 'Could not load manifest.json', fail);
       });
     }, function (fail) {
       // error loading zip file
-      throw new FatalOpenVoiceFactoryError(ErrorCodes.ZIP_PARSE_ERROR, `Could not parse zip file`, fail);
+      throw new FatalOpenVoiceFactoryError(ErrorCodes.ZIP_PARSE_ERROR, 'Could not parse zip file', fail);
     });
   }
 
   private parseImage = (zip, image: string, boardSet: OBZBoardSet): Promise<void> => {
     const encoding = image.toLowerCase().endsWith('.svg') ? 'text' : 'base64';
-    const imagePromise = zip.file(image).async(encoding).then(function (contents) {
+    const ifl = zip.file(image);
+    if (!ifl) {
+      throw new FatalOpenVoiceFactoryError(ErrorCodes.IMAGE_NOT_THERE, `Image ${image} is not present in obz`);
+    }
+    const imagePromise = ifl.async(encoding).then(function (contents) {
       boardSet.setImage(image, contents);
     }).catch(error => {
       // error loading image file
@@ -129,7 +139,11 @@ export class ObzService {
   }
 
   private parseSound = (zip, sound: string, boardSet: OBZBoardSet): Promise<void> => {
-    const soundPromise = zip.file(sound).async('base64').then(function (contents) {
+    const sf = zip.file(sound);
+    if (!sf) {
+      throw new FatalOpenVoiceFactoryError(ErrorCodes.SOUND_NOT_THERE, `Sound ${sound} is not present in obz`);
+    }
+    const soundPromise = sf.async('base64').then(function (contents) {
       boardSet.setSound(sound, contents);
     }).catch(error => {
       // error loading sound file
@@ -140,11 +154,15 @@ export class ObzService {
   }
 
   private parseBoard = (zip, board: string, boardSet: OBZBoardSet): Promise<void> => {
-    const boardPromise = zip.file(board).async('text').then(function (contents) {
+    const bf = zip.file(board);
+    if (!bf) {
+      throw new FatalOpenVoiceFactoryError(ErrorCodes.BOARD_NOT_THERE, `Board ${board} is not present in obz`);
+    }
+    const boardPromise = bf.async('text').then(function (contents) {
       boardSet.setBoard(board, new OBFBoard().deserialize(JSON.parse(contents)));
     }).catch(error => {
       // error loading board
-      throw new FatalOpenVoiceFactoryError(ErrorCodes.BOARD_LOAD_ERROR, `Error loading board ${board}`, error);
+      throw new FatalOpenVoiceFactoryError(ErrorCodes.BOARD_PARSE_ERROR, `Error parsing board ${board}`, error);
     });
 
     return boardPromise;

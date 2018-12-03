@@ -29,5 +29,9 @@ export class ErrorCodes {
   static ZIP_PARSE_ERROR     = 5;
   static IMAGE_LOAD_ERROR    = 6;
   static SOUND_LOAD_ERROR    = 7;
-  static BOARD_LOAD_ERROR    = 8;
+  static BOARD_PARSE_ERROR   = 8;
+  static MANIFEST_JSON_ERROR = 9;
+  static BOARD_NOT_THERE     = 10;
+  static SOUND_NOT_THERE     = 11;
+  static IMAGE_NOT_THERE     = 12;
 }
