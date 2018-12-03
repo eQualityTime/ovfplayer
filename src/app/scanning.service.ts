@@ -26,10 +26,18 @@ export class Scannable {
   set type(type: string) {
     this._type = type;
   }
+
+  hasChildren(): boolean {
+    return false;
+  }
 }
 
 export class ScannableCollection extends Scannable {
   private children: Scannable[] = [];
+
+  hasChildren(): boolean {
+    return this.children.length > 0;
+  }
 
   getChildren(): Scannable[] {
     return this.children;
@@ -94,10 +102,7 @@ export class ScanningService {
 
     this.topLevelScannables.getChildren().push(...observer.getScannableCollections());
     this.topLevelScannables.sortChildren();
-
-    if (this.observers.length === 1 && this.configService.scanningConfig.enabled) {
-      this.intervalId = setInterval(this.updateHighlighted, this.configService.scanningConfig.time);
-    }
+    this.startScanning();
 
     return new Subscription(() => this._unsubscribe(observer));
   }
@@ -113,6 +118,13 @@ export class ScanningService {
     }
   }
 
+  startScanning() {
+    if (this.observers.length === 1 && this.configService.scanningConfig.enabled) {
+      this.currentSelectedIndex = 0;
+      this.intervalId = setInterval(this.updateHighlighted, this.configService.scanningConfig.time);
+    }
+  }
+
   updateHighlighted = () => {
     if (this.currentSelectedIndex >= this.currentCollection.getChildren().length) {
       this.currentSelectedIndex = 0;
@@ -120,6 +132,33 @@ export class ScanningService {
 
     this.scanningModel.currentHighlight = this.currentCollection.getChild(this.currentSelectedIndex++);
     this.observers.forEach(observer => observer.next(this.scanningModel));
+  }
+
+  updateSelected = () => {
+    const current = this.scanningModel.currentHighlight;
+    this.scanningModel.currentSelection = current;
+    this.scanningModel.currentHighlight = undefined;
+    this.observers.forEach(observer => observer.next(this.scanningModel));
+    clearInterval(this.intervalId);
+    this.intervalId = undefined;
+
+    setTimeout(() => {
+      this.scanningModel.currentSelection = undefined;
+      this.observers.forEach(observer => observer.next(this.scanningModel));
+      this.startScanning();
+    }, this.configService.scanningConfig.time);
+  }
+
+  selectCurrent() {
+    if (this.scanningModel.currentHighlight) {
+      this.updateSelected();
+
+      if (this.scanningModel.currentSelection.hasChildren()) {
+        this.currentCollection = <ScannableCollection> this.scanningModel.currentSelection;
+      } else {
+        this.currentCollection = this.topLevelScannables;
+      }
+    }
   }
 
 }

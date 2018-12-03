@@ -4,6 +4,7 @@ import { SpeechbarService } from '../speechbar.service';
 import { OBFBoard, Button, LoadBoardAction } from '../obfboard';
 import { Subscription, Subscriber } from 'rxjs';
 import { ScanningService, ScanningModel, ScannableCollectionProvider, ScannableCollection, Scannable } from '../scanning.service';
+import { ThrowStmt } from '@angular/compiler';
 
 @Component({
   selector: 'app-button-page',
@@ -53,6 +54,11 @@ export class ButtonPageComponent implements OnInit, OnDestroy {
 
   private updateScanning = (scanningModel: ScanningModel) => {
     this.scanningModel = scanningModel;
+
+    if (this.scanningModel.currentSelection && this.scanningModel.currentSelection.type === ScannableButton.TYPE) {
+      const button = this.board.getButton((<ScannableButton> this.scanningModel.currentSelection).buttonId);
+      this.handleButtonClick(button);
+    }
   }
 
   handleButtonClick(button: Button) {
@@ -118,7 +124,7 @@ export class ButtonPageComponent implements OnInit, OnDestroy {
     return (100 / this.board.grid.rows).toString() + '%';
   }
 
-  currentScanRow(row: string[]): boolean {
+  currentScanHighlightRow(row: string[]): boolean {
     const highlight = this.scanningModel && this.scanningModel.currentHighlight;
     if (highlight && highlight.type === ScannableButtonRow.TYPE) {
       return row === (<ScannableButtonRow> highlight).row;
@@ -127,10 +133,28 @@ export class ButtonPageComponent implements OnInit, OnDestroy {
     }
   }
 
-  currentScanCell(cell: string): boolean {
+  currentScanSelectRow(row: string[]): boolean {
+    const selection = this.scanningModel && this.scanningModel.currentSelection;
+    if (selection && selection.type === ScannableButtonRow.TYPE) {
+      return row === (<ScannableButtonRow> selection).row;
+    } else {
+      return false;
+    }
+  }
+
+  currentScanHighlightCell(cell: string): boolean {
     const highlight = this.scanningModel && this.scanningModel.currentHighlight;
     if (highlight && highlight.type === ScannableButton.TYPE) {
       return cell === (<ScannableButton> highlight).buttonId;
+    } else {
+      return false;
+    }
+  }
+
+  currentScanSelectCell(cell: string): boolean {
+    const selection = this.scanningModel && this.scanningModel.currentSelection;
+    if (selection && selection.type === ScannableButton.TYPE) {
+      return cell === (<ScannableButton> selection).buttonId;
     } else {
       return false;
     }

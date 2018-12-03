@@ -1,3 +1,4 @@
-
-<div class="speechbar"><app-speechbar></app-speechbar></div>
-<div class="buttonPage"><app-button-page></app-button-page></div>
+<div class="scanRegion" *ngIf="scanningEnabled()" (click)="selectCurrentScan()">
+  <div class="speechbar"><app-speechbar></app-speechbar></div>
+  <div class="buttonPage"><app-button-page></app-button-page></div>
+</div>
