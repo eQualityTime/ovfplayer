@@ -6,7 +6,6 @@
 
 .formCard {
   padding: 0px;
-  margin: 20px;
 }
 
 .formContainer {
@@ -27,8 +26,7 @@
 }
 
 .formButtons {
-  padding-bottom: 5px;
-  padding-right: 5px;
+  padding: 5px;
   display: flex;
   justify-content: flex-end;
 }

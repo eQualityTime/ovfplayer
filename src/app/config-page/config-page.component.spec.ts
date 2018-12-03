@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 
 import { ConfigPageComponent } from './config-page.component';
 import { ConfigService } from '../config.service';
-import { MatFormFieldModule, MatCardModule, MatCheckboxModule, MatInputModule, MatSnackBar } from '@angular/material';
+import { MatFormFieldModule, MatCardModule, MatCheckboxModule, MatInputModule, MatSnackBar, MatTabsModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Router, ActivatedRoute, ActivatedRouteSnapshot, UrlSegment, Params, Data, Route, ParamMap } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -85,7 +85,7 @@ describe('ConfigPageComponent', () => {
         {provide: ActivatedRoute, useValue: mockActivatedRoute},
         {provide: MatSnackBar, useValue: snackbarStub }
       ],
-      imports: [ FormsModule, MatFormFieldModule, MatCardModule, MatCheckboxModule, MatInputModule, BrowserAnimationsModule ]
+      imports: [ FormsModule, MatFormFieldModule, MatCardModule, MatCheckboxModule, MatInputModule, BrowserAnimationsModule, MatTabsModule ]
     }).compileComponents();
   }));
 

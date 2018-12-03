@@ -1,16 +1,18 @@
-import { Component, OnInit, Output } from '@angular/core';
+import { Component, OnInit, Output, OnDestroy } from '@angular/core';
 import { BoardService } from '../board.service';
 import { SpeechbarService } from '../speechbar.service';
 import { OBFBoard, Button, LoadBoardAction } from '../obfboard';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-button-page',
   templateUrl: './button-page.component.html',
   styleUrls: ['./button-page.component.css']
 })
-export class ButtonPageComponent implements OnInit {
+export class ButtonPageComponent implements OnInit, OnDestroy {
 
   @Output() board: OBFBoard;
+  private subscription: Subscription;
 
   actionPerformers: {[key: string]: () => void} = {
     ':clear' : this.speechbarService.clear.bind(this.speechbarService),
@@ -26,8 +28,12 @@ export class ButtonPageComponent implements OnInit {
     this.loadBoard();
   }
 
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
+
   loadBoard(): void {
-    this.boardService.getBoard().subscribe(this.setBoard);
+    this.subscription = this.boardService.getBoard().subscribe(this.setBoard);
   }
 
   private setBoard = (board: OBFBoard) => {

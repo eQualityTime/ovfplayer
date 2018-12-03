@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <app-obfpage>
   <mat-card class="formCard">
     <div class="formTitle">
@@ -15,6 +16,45 @@
       <mat-card>
         <mat-checkbox [(ngModel)]="speakOnSpeechbarClick">
           <span class="formLabel">Speak when speechbar is clicked</span>
+=======
+<mat-card class="formCard">
+  <div class="formTitle">
+    Configuration
+  </div>
+  <div class="formButtons">
+    <button mat-raised-button color="primary" (click)="save()">Save</button>
+  </div>
+  <mat-tab-group>
+    <mat-tab label="Board URL">
+  <div class="formContainer">
+    <mat-card>
+      <mat-form-field class="formInputField">
+        <input [(ngModel)]="boardURL" matInput placeholder="URL for obf/obz file" class="formInputUrl">
+      </mat-form-field>
+      <div class="clickable" (click)="copyToClipboard()"><i class="material-icons">link</i>&nbsp;Create link</div>
+    </mat-card>
+  </div>
+  </mat-tab>
+  <mat-tab label="Speechbar behaviour">
+  <div class="formContainer">
+    <mat-card>
+      <mat-checkbox [(ngModel)]="speakOnSpeechbarClick">
+        <span class="formLabel">Speak when speechbar is clicked</span>
+      </mat-checkbox>
+    </mat-card>
+    <mat-card>
+      <mat-checkbox [(ngModel)]="showIconsInSpeechbar">
+        <span class="formLabel">Display button images and labels in speechbar (instead of vocalisation text)</span>
+      </mat-checkbox>
+    </mat-card>
+  </div>
+  </mat-tab>
+  <mat-tab label="Permanent buttons">
+  <div class="formContainer">
+    <mat-card>
+      <mat-checkbox [(ngModel)]="displayedButtons.showSpeakButton">
+          <span class="formLabel">Speak button always shown</span>
+>>>>>>> 71aa3aafc0bf44b45be43e1b4f8a8eac9a0ab302
         </mat-checkbox>
       </mat-card>
     </div>
@@ -28,6 +68,7 @@
         <mat-checkbox [(ngModel)]="displayedButtons.showBackspaceButton">
             <span class="formLabel">Backspace button always shown</span>
           </mat-checkbox>
+<<<<<<< HEAD
       </mat-card>
       <mat-card>
         <mat-checkbox [(ngModel)]="displayedButtons.showClearButton">
@@ -52,3 +93,10 @@
     </div>
   </mat-card>
 </app-obfpage>
+=======
+    </mat-card>
+  </div>
+  </mat-tab>
+  </mat-tab-group>
+</mat-card>
+>>>>>>> 71aa3aafc0bf44b45be43e1b4f8a8eac9a0ab302
