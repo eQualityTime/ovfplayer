@@ -5,12 +5,8 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { LayoutModule } from '@angular/cdk/layout';
 
-import { MatGridListModule } from '@angular/material/grid-list';
-import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatMenuModule, MatIconModule, MatButtonModule, MatInputModule, MatRippleModule } from '@angular/material';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatMenuModule, MatIconModule, MatButtonModule, MatInputModule, MatRippleModule, MatGridListModule, MatCardModule,
+  MatFormFieldModule, MatCheckboxModule, MatSnackBarModule, MatTabsModule } from '@angular/material';
 
 import { WebStorageModule } from 'ngx-store';
 
@@ -47,6 +43,7 @@ import { SafePipe } from './safe.pipe';
     MatInputModule,
     MatButtonModule,
     MatSnackBarModule,
+    MatTabsModule,
     LayoutModule,
     AppRoutingModule,
     WebStorageModule,

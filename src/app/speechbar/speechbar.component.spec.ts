@@ -1,5 +1,4 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatCardModule } from '@angular/material/card';
 
 import { SpeechbarComponent } from './speechbar.component';
 import { ConfigService } from '../config.service';
@@ -7,8 +6,7 @@ import { BoardService } from '../board.service';
 import { SpeechbarService } from '../speechbar.service';
 import { ObfButtonComponent } from '../obf-button/obf-button.component';
 import { SafePipe } from '../safe.pipe';
-import { MatRippleModule } from '@angular/material';
-import { ChangeDetectorRef } from '@angular/core';
+import { MatRippleModule, MatCardModule } from '@angular/material';
 import { Observable } from 'rxjs';
 
 describe('SpeechbarComponent', () => {
