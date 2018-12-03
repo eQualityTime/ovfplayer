@@ -88,4 +88,32 @@ describe('ObzService', () => {
       });
     })();
   });
+
+  it('parseOBZFile should throw error if image is not in obz', done => {
+    inject([ObzService], (service: ObzService) => {
+      const blob = OBZFixture.load('missingimage');
+      // test parseOBZFile
+      const promise = service.parseOBZFile(blob);
+      promise.then(function() {
+          // just don't call done and test will fail with timeout...
+        }, function(reason) {
+          expect(reason.errorCode).toBe(ErrorCodes.IMAGE_NOT_THERE);
+          done();
+        });
+    })();
+  });
+
+  it('parseOBZFile should throw error if sound is not in obz', done => {
+    inject([ObzService], (service: ObzService) => {
+      const blob = OBZFixture.load('missingsound');
+      // test parseOBZFile
+      const promise = service.parseOBZFile(blob);
+      promise.then(function () {
+        // just don't call done and test will fail with timeout...
+      }, function (reason) {
+        expect(reason.errorCode).toBe(ErrorCodes.SOUND_NOT_THERE);
+        done();
+      });
+    })();
+  });
 });
