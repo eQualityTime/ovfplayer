@@ -8,6 +8,11 @@ export interface ButtonDisplayConfig {
   showHomeButton: boolean;
 }
 
+export interface ScanningConfig {
+  enabled: boolean;
+  time: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -21,6 +26,10 @@ export class ConfigService {
     showBackspaceButton: true,
     showClearButton: true,
     showHomeButton: false
+  };
+  @LocalStorage() _scanningConfig: ScanningConfig = {
+    enabled: true,
+    time: 1000,
   };
 
   constructor() { }
@@ -41,6 +50,10 @@ export class ConfigService {
     return this._speakOnSpeechbarClick;
   }
 
+  get scanningConfig(): ScanningConfig {
+    return this._scanningConfig;
+  }
+
   set boardURL(boardURL: string) {
     this._boardURL = boardURL;
   }
@@ -54,5 +67,9 @@ export class ConfigService {
   }
   set speakOnSpeechbarClick(speakOnSpeechbarClick: boolean) {
     this._speakOnSpeechbarClick = speakOnSpeechbarClick;
+  }
+
+  set scanningConfig(scanningConfig: ScanningConfig) {
+    this._scanningConfig = scanningConfig;
   }
 }
