@@ -6,8 +6,8 @@ export class OBZFixture {
   static load = (fixtureName) => {
     // pull fixture from window.__obz__ array
     const fixtures = window['__obz__'];
-    const noManifest = fixtures[fixtureName];
-    const contents = JSON.parse(noManifest);
+    const fixture  = fixtures[fixtureName];
+    const contents = JSON.parse(fixture);
     // convert base64 fixture data to blob
     const byteCharacters = atob(contents.data);
     const byteNumbers = new Array(byteCharacters.length);

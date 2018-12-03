@@ -125,11 +125,11 @@ export class ObzService {
 
   private parseImage = (zip, image: string, boardSet: OBZBoardSet): Promise<void> => {
     const encoding = image.toLowerCase().endsWith('.svg') ? 'text' : 'base64';
-    const ifl = zip.file(image);
-    if (!ifl) {
+    const imageFile = zip.file(image);
+    if (!imageFile) {
       throw new FatalOpenVoiceFactoryError(ErrorCodes.IMAGE_NOT_THERE, `Image ${image} is not present in obz`);
     }
-    const imagePromise = ifl.async(encoding).then(function (contents) {
+    const imagePromise = imageFile.async(encoding).then(function (contents) {
       boardSet.setImage(image, contents);
     }).catch(error => {
       // error loading image file
@@ -140,11 +140,11 @@ export class ObzService {
   }
 
   private parseSound = (zip, sound: string, boardSet: OBZBoardSet): Promise<void> => {
-    const sf = zip.file(sound);
-    if (!sf) {
+    const soundFile = zip.file(sound);
+    if (!soundFile) {
       throw new FatalOpenVoiceFactoryError(ErrorCodes.SOUND_NOT_THERE, `Sound ${sound} is not present in obz`);
     }
-    const soundPromise = sf.async('base64').then(function (contents) {
+    const soundPromise = soundFile.async('base64').then(function (contents) {
       boardSet.setSound(sound, contents);
     }).catch(error => {
       // error loading sound file
@@ -155,11 +155,11 @@ export class ObzService {
   }
 
   private parseBoard = (zip, board: string, boardSet: OBZBoardSet): Promise<void> => {
-    const bf = zip.file(board);
-    if (!bf) {
+    const boardFile = zip.file(board);
+    if (!boardFile) {
       throw new FatalOpenVoiceFactoryError(ErrorCodes.BOARD_NOT_THERE, `Board ${board} is not present in obz`);
     }
-    const boardPromise = bf.async('text').then(function (contents) {
+    const boardPromise = boardFile.async('text').then(function (contents) {
       boardSet.setBoard(board, new OBFBoard().deserialize(JSON.parse(contents)));
     }).catch(error => {
       // error loading board
