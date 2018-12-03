@@ -34,23 +34,37 @@
       <div class="formContainer">
         <mat-card>
           <mat-checkbox [(ngModel)]="displayedButtons.showSpeakButton">
-              <span class="formLabel">Speak button always shown</span>
-            </mat-checkbox>
+            <span class="formLabel">Speak button always shown</span>
+          </mat-checkbox>
         </mat-card>
         <mat-card>
           <mat-checkbox [(ngModel)]="displayedButtons.showBackspaceButton">
-              <span class="formLabel">Backspace button always shown</span>
-            </mat-checkbox>
+            <span class="formLabel">Backspace button always shown</span>
+          </mat-checkbox>
         </mat-card>
         <mat-card>
           <mat-checkbox [(ngModel)]="displayedButtons.showClearButton">
-              <span class="formLabel">Clear button always shown</span>
-            </mat-checkbox>
+            <span class="formLabel">Clear button always shown</span>
+          </mat-checkbox>
         </mat-card>
         <mat-card>
           <mat-checkbox [(ngModel)]="displayedButtons.showHomeButton">
-              <span class="formLabel">Home button always shown</span>
-              </mat-checkbox>
+            <span class="formLabel">Home button always shown</span>
+          </mat-checkbox>
+        </mat-card>
+      </div>
+    </mat-tab>
+    <mat-tab label="Scanning">
+      <div class="formContainer">
+        <mat-card>
+          <mat-checkbox [(ngModel)]="scanningConfig.enabled">
+            <span class="formLabel">Enable scanning</span>
+          </mat-checkbox>
+        </mat-card>
+        <mat-card>
+          <mat-form-field class="formInputField">
+            <input [(ngModel)]="scanningConfig.time" matInput placeholder="Time to stay on each scanned item">
+          </mat-form-field>
         </mat-card>
       </div>
     </mat-tab>

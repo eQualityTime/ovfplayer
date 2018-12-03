@@ -87,8 +87,6 @@ export class ScanningService {
     this.currentCollection = this.topLevelScannables;
     this.scanningModel = new ScanningModel();
     this.observers = [];
-    // TODO : REMOVE!!!!
-    this.configService.scanningConfig.enabled = true;
   }
 
   getScanningModel(): Observable<ScanningModel> {
@@ -109,18 +107,24 @@ export class ScanningService {
 
   _unsubscribe(observer: ScannableCollectionProvider) {
     this.observers.splice(this.observers.indexOf(observer), 1);
+    observer.getScannableCollections().forEach(scannable => {
+      const collection = <ScannableCollection> scannable;
+      this.topLevelScannables.getChildren().splice(this.topLevelScannables.getChildren().indexOf(collection), 1);
+    });
+
+    this.currentCollection = this.topLevelScannables;
 
     if (this.observers.length === 0) {
       clearInterval(this.intervalId);
       this.intervalId = undefined;
       this.scanningModel = new ScanningModel();
-      this.currentSelectedIndex = 0;
     }
   }
 
   startScanning() {
+    this.currentSelectedIndex = 0;
+
     if (this.observers.length === 1 && this.configService.scanningConfig.enabled) {
-      this.currentSelectedIndex = 0;
       this.intervalId = setInterval(this.updateHighlighted, this.configService.scanningConfig.time);
     }
   }

@@ -42,6 +42,9 @@ export class ButtonPageComponent implements OnInit, OnDestroy {
   }
 
   private setBoard = (board: OBFBoard) => {
+    if (this.scanningSubscription) {
+      this.scanningSubscription.unsubscribe();
+    }
     this.board = board;
     this.registerWithScanner();
   }

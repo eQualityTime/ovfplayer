@@ -28,7 +28,7 @@ export class ConfigService {
     showHomeButton: false
   };
   @LocalStorage() _scanningConfig: ScanningConfig = {
-    enabled: true,
+    enabled: false,
     time: 1000,
   };
 
