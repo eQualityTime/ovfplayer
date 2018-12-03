@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgModule } from '@angular/core';
+import { NgModule, ErrorHandler } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { LayoutModule } from '@angular/cdk/layout';
@@ -18,6 +18,9 @@ import { MainPageComponent } from './main-page/main-page.component';
 import { ObfButtonComponent } from './obf-button/obf-button.component';
 import { SpeechbarComponent } from './speechbar/speechbar.component';
 import { SafePipe } from './safe.pipe';
+import { GlobalErrorHandlerService } from './global-error-handler.service';
+import { ErrorPageComponent } from './error-page/error-page.component';
+import { OBFPageComponent } from './obfpage/obfpage.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +30,9 @@ import { SafePipe } from './safe.pipe';
     ConfigPageComponent,
     MainPageComponent,
     SafePipe,
-    ObfButtonComponent
+    ObfButtonComponent,
+    ErrorPageComponent,
+    OBFPageComponent
   ],
   imports: [
     BrowserModule,
@@ -49,7 +54,11 @@ import { SafePipe } from './safe.pipe';
     WebStorageModule,
     MatRippleModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: ErrorHandler, useClass: GlobalErrorHandlerService
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
