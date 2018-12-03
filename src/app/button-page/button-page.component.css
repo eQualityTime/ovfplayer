@@ -17,5 +17,15 @@
 }
 
 .scanHighlight {
-  border: green solid 2px;
+  position: relative;
+}
+
+.scanHighlight:after {
+  border: greenyellow solid 5px;
+  content: " ";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }

@@ -79,6 +79,7 @@ export class ScanningService {
     this.currentCollection = this.topLevelScannables;
     this.scanningModel = new ScanningModel();
     this.observers = [];
+    // TODO : REMOVE!!!!
     this.configService.scanningConfig.enabled = true;
   }
 
