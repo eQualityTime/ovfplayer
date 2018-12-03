@@ -66,7 +66,6 @@ export class ScanningModel {
 }
 
 export interface ScannableCollectionProvider extends Subscriber<ScanningModel> {
-  // TODO: make this observable so the button page can refresh its buttons?
   getScannableCollections(): ScannableCollection[];
 }
 
@@ -124,7 +123,7 @@ export class ScanningService {
   startScanning() {
     this.currentSelectedIndex = 0;
 
-    if (this.observers.length === 1 && this.configService.scanningConfig.enabled) {
+    if (this.intervalId === undefined && this.observers.length >= 1 && this.configService.scanningConfig.enabled) {
       this.intervalId = setInterval(this.updateHighlighted, this.configService.scanningConfig.time);
     }
   }

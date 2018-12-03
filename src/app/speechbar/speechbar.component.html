@@ -1,13 +1,20 @@
-<div class="speechbarContainer">
+<div class="speechbarContainer"
+    [class.scanHighlight]="containerScanHighlight()"
+    [class.scanSelect]="containerScanSelect()">
   <div class="stackedButtonContainer">
-    <button class="stackedButton" mat-raised-button (click)="speak()"
-            [disabled]="speaking"
+    <button class="stackedButton" mat-raised-button (click)="speak()" [disabled]="speaking"
+            [class.scanHighlight]="buttonScanHighlight('speak')"
+            [class.scanSelect]="buttonScanSelect('speak')"
             *ngIf="displayedButtons.showSpeakButton">Speak</button>
     <button class="stackedButton" mat-raised-button (click)="home()"
+            [class.scanHighlight]="buttonScanHighlight('home')"
+            [class.scanSelect]="buttonScanSelect('home')"
             *ngIf="displayedButtons.showHomeButton">Home</button>
   </div>
 
-  <mat-card class="speechbar" *ngIf="showIconsInSpeechbar; else vocalization" (click)="speechbarClick()">
+  <mat-card class="speechbar" *ngIf="showIconsInSpeechbar; else vocalization" (click)="speechbarClick()"
+            [class.scanHighlight]="buttonScanHighlight('speechbar')"
+            [class.scanSelect]="buttonScanSelect('speechbar')">
     <div class="speechbarButtonItem" *ngFor="let butt of buttons">
       <app-obf-button [butt]="butt"></app-obf-button>
     </div>
@@ -24,8 +31,12 @@
 
   <div class="stackedButtonContainer">
     <button class="stackedButton" mat-raised-button (click)="backspace()"
+            [class.scanHighlight]="buttonScanHighlight('backspace')"
+            [class.scanSelect]="buttonScanSelect('backspace')"
             *ngIf="displayedButtons.showBackspaceButton">Backspace</button>
     <button class="stackedButton" mat-raised-button (click)="clear()"
+            [class.scanHighlight]="buttonScanHighlight('clear')"
+            [class.scanSelect]="buttonScanSelect('clear')"
             *ngIf="displayedButtons.showClearButton">Clear</button>
   </div>
 </div>

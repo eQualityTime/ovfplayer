@@ -35,3 +35,31 @@
 .stackedButton {
   flex-grow: 1;
 }
+
+.scanHighlight {
+  position: relative;
+}
+
+.scanHighlight:after {
+  border: greenyellow solid 5px;
+  content: " ";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.scanSelect {
+  position: relative;
+}
+
+.scanSelect:after {
+  border: blue solid 5px;
+  content: " ";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}

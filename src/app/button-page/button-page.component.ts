@@ -4,7 +4,6 @@ import { SpeechbarService } from '../speechbar.service';
 import { OBFBoard, Button, LoadBoardAction } from '../obfboard';
 import { Subscription, Subscriber } from 'rxjs';
 import { ScanningService, ScanningModel, ScannableCollectionProvider, ScannableCollection, Scannable } from '../scanning.service';
-import { ThrowStmt } from '@angular/compiler';
 
 @Component({
   selector: 'app-button-page',
@@ -169,7 +168,7 @@ class ScannableButtonRowProvider extends Subscriber<ScanningModel> implements Sc
 
   constructor(rawRows: string[][], next: (ScanningModel) => void) {
     super(next);
-    this.rows = rawRows.map((row, index) => new ScannableButtonRow(row, index));
+    this.rows = rawRows.map((row, index) => new ScannableButtonRow(row, index + 1));
   }
 
   getScannableCollections(): ScannableCollection[] {
