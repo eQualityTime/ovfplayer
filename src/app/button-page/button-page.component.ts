@@ -1,7 +1,7 @@
 import { Component, OnInit, Output, OnDestroy } from '@angular/core';
 import { BoardService } from '../board.service';
 import { SpeechbarService } from '../speechbar.service';
-import { OBFBoard, Button, LoadBoardAction } from '../obfboard';
+import { OBFBoard, Button, LoadBoardAction, Grid } from '../obfboard';
 import { Subscription, Subscriber } from 'rxjs';
 import { ScanningService, ScanningModel, ScannableCollectionProvider, ScannableCollection, Scannable } from '../scanning.service';
 
@@ -16,6 +16,7 @@ export class ButtonPageComponent implements OnInit, OnDestroy {
   private scanningModel: ScanningModel;
   private boardSubscription: Subscription;
   private scanningSubscription: Subscription;
+  private buttonProvider: ScannableButtonRowProvider;
 
   actionPerformers: {[key: string]: () => void} = {
     ':clear' : this.speechbarService.clear.bind(this.speechbarService),
@@ -49,16 +50,15 @@ export class ButtonPageComponent implements OnInit, OnDestroy {
   }
 
   registerWithScanner(): void {
-    this.scanningSubscription = this.scanningService.getScanningModel().subscribe(
-      new ScannableButtonRowProvider(this.board.grid.order, this.updateScanning)
-    );
+    this.buttonProvider = new ScannableButtonRowProvider(this.board, this.updateScanning);
+    this.scanningSubscription = this.scanningService.getScanningModel().subscribe(this.buttonProvider);
   }
 
   private updateScanning = (scanningModel: ScanningModel) => {
     this.scanningModel = scanningModel;
 
     if (this.scanningModel.currentSelection && this.scanningModel.currentSelection.type === ScannableButton.TYPE) {
-      const button = this.board.getButton((<ScannableButton> this.scanningModel.currentSelection).buttonId);
+      const button = (<ScannableButton> this.scanningModel.currentSelection).button;
       this.handleButtonClick(button);
     }
   }
@@ -125,50 +125,14 @@ export class ButtonPageComponent implements OnInit, OnDestroy {
   calculateRowHeight(): string {
     return (100 / this.board.grid.rows).toString() + '%';
   }
-
-  currentScanHighlightRow(row: string[]): boolean {
-    const highlight = this.scanningModel && this.scanningModel.currentHighlight;
-    if (highlight && highlight.type === ScannableButtonRow.TYPE) {
-      return row === (<ScannableButtonRow> highlight).row;
-    } else {
-      return false;
-    }
-  }
-
-  currentScanSelectRow(row: string[]): boolean {
-    const selection = this.scanningModel && this.scanningModel.currentSelection;
-    if (selection && selection.type === ScannableButtonRow.TYPE) {
-      return row === (<ScannableButtonRow> selection).row;
-    } else {
-      return false;
-    }
-  }
-
-  currentScanHighlightCell(cell: string): boolean {
-    const highlight = this.scanningModel && this.scanningModel.currentHighlight;
-    if (highlight && highlight.type === ScannableButton.TYPE) {
-      return cell === (<ScannableButton> highlight).buttonId;
-    } else {
-      return false;
-    }
-  }
-
-  currentScanSelectCell(cell: string): boolean {
-    const selection = this.scanningModel && this.scanningModel.currentSelection;
-    if (selection && selection.type === ScannableButton.TYPE) {
-      return cell === (<ScannableButton> selection).buttonId;
-    } else {
-      return false;
-    }
-  }
 }
 
 class ScannableButtonRowProvider extends Subscriber<ScanningModel> implements ScannableCollectionProvider {
   private rows: ScannableButtonRow[];
 
-  constructor(rawRows: string[][], next: (ScanningModel) => void) {
-    super(next);
-    this.rows = rawRows.map((row, index) => new ScannableButtonRow(row, index + 1));
+  constructor(board: OBFBoard, nextHandler: (ScanningModel) => void) {
+    super(nextHandler);
+    this.rows = board.grid.order.map((row, index) => new ScannableButtonRow(board, row, index + 1));
   }
 
   getScannableCollections(): ScannableCollection[] {
@@ -178,39 +142,37 @@ class ScannableButtonRowProvider extends Subscriber<ScanningModel> implements Sc
 
 class ScannableButtonRow extends ScannableCollection {
   static TYPE = 'OBFButtonRow';
-  private _row: string[];
+  displayButtons = [];
 
-  constructor(row: string[], priority: number) {
+  constructor(board: OBFBoard, row: string[], priority: number) {
     super(priority, ScannableButtonRow.TYPE);
-    this._row = row;
-    this._row.forEach((buttonId, index) => {
-      this.addChild(new ScannableButton(buttonId, index));
+
+    row.forEach((buttonId, index) => {
+      if (buttonId) {
+        const button = new ScannableButton(board.getButton(buttonId), index);
+        this.addChild(button);
+        this.displayButtons.push(button);
+      } else {
+        this.displayButtons.push(undefined);
+      }
     });
-  }
-
-  get row(): string[] {
-    return this._row;
-  }
-
-  set row(row: string[]) {
-    this._row = row;
   }
 }
 
 class ScannableButton extends Scannable {
   static TYPE = 'OBFButton';
-  private _buttonId: string;
+  private _button: Button;
 
-  constructor(buttonId: string, priority: number) {
+  constructor(button: Button, priority: number) {
     super(priority, ScannableButton.TYPE);
-    this._buttonId = buttonId;
+    this._button = button;
   }
 
-  get buttonId(): string {
-    return this._buttonId;
+  get button(): Button {
+    return this._button;
   }
 
-  set buttonId(buttonId: string) {
-    this._buttonId = buttonId;
+  set button(button: Button) {
+    this._button = button;
   }
 }
