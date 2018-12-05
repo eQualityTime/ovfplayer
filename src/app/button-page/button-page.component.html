@@ -1,14 +1,14 @@
 <div class="board" *ngIf="board; else noBoard">
   <div class="boardRow"
+      *ngFor="let row of buttonProvider.getScannableCollections()"
       [class.scanHighlight]="scanningModel && scanningModel.currentHighlight === row"
       [class.scanSelect]="scanningModel && scanningModel.currentSelection === row"
-      [style.height]="calculateRowHeight()"
-      *ngFor="let row of buttonProvider.getScannableCollections()">
+      [style.height]="calculateRowHeight()">
     <div class="boardButton"
+        *ngFor="let butt of row.displayButtons"
         [class.scanHighlight]="butt && scanningModel && scanningModel.currentHighlight === butt"
-        [class.scanSelect]="butt && scanningModel && scanningModel.currentSelection === butt"
-        *ngFor="let butt of row.displayButtons">
-        <app-obf-button *ngIf="butt" [butt]="butt.button" [clickHandler]="handleButtonClick.bind(this)"></app-obf-button>
+        [class.scanSelect]="butt && scanningModel && scanningModel.currentSelection === butt">
+      <app-obf-button *ngIf="butt" [butt]="butt.button" [clickHandler]="handleButtonClick.bind(this)"></app-obf-button>
     </div>
   </div>
 </div>
