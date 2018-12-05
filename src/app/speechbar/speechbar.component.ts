@@ -43,9 +43,15 @@ export class SpeechbarComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.speakingSubscription.unsubscribe();
-    this.buttonsSubscription.unsubscribe();
-    this.scanningSubscription.unsubscribe();
+    if (this.speakingSubscription) {
+      this.speakingSubscription.unsubscribe();
+    }
+    if (this.buttonsSubscription) {
+      this.buttonsSubscription.unsubscribe();
+    }
+    if (this.scanningSubscription) {
+      this.scanningSubscription.unsubscribe();
+    }
   }
 
   get displayedButtons(): ButtonDisplayConfig {

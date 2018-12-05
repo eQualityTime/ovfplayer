@@ -33,8 +33,13 @@ export class ButtonPageComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.boardSubscription.unsubscribe();
-    this.scanningSubscription.unsubscribe();
+    if (this.boardSubscription) {
+      this.boardSubscription.unsubscribe();
+    }
+
+    if (this.scanningSubscription) {
+      this.scanningSubscription.unsubscribe();
+    }
   }
 
   loadBoard(): void {
