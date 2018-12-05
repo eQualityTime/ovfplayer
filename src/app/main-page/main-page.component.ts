@@ -18,8 +18,8 @@ export class MainPageComponent implements OnInit {
     return this.configService.scanningConfig.enabled;
   }
 
-  selectCurrentScan() {
-    this.scanningService.selectCurrent();
+  handleClick() {
+    this.scanningService.handleInteraction();
   }
 
 }

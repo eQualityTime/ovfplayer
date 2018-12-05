@@ -49,6 +49,7 @@ export class ScannableCollection extends Scannable {
 
   addChild(child: Scannable) {
     this.children.push(child);
+    this.sortChildren();
   }
 
   sortChildren() {
@@ -86,6 +87,10 @@ export class ScanningService {
     this.currentCollection = this.topLevelScannables;
     this.scanningModel = new ScanningModel();
     this.observers = [];
+
+    if (this.configService.scanningConfig.enabled) {
+      document.onkeydown = this.handleInteraction.bind(this);
+    }
   }
 
   getScanningModel(): Observable<ScanningModel> {
@@ -95,8 +100,6 @@ export class ScanningService {
   registerScannable = (observer: ScannableCollectionProvider): Subscription => {
     this.observers.push(observer);
 
-    observer.getScannableCollections().forEach(col => col.sortChildren());
-
     this.topLevelScannables.getChildren().push(...observer.getScannableCollections());
     this.topLevelScannables.sortChildren();
     this.startScanning();
@@ -105,10 +108,15 @@ export class ScanningService {
   }
 
   _unsubscribe(observer: ScannableCollectionProvider) {
-    this.observers.splice(this.observers.indexOf(observer), 1);
+    if (this.observers.includes(observer)) {
+      this.observers.splice(this.observers.indexOf(observer), 1);
+    }
     observer.getScannableCollections().forEach(scannable => {
       const collection = <ScannableCollection> scannable;
-      this.topLevelScannables.getChildren().splice(this.topLevelScannables.getChildren().indexOf(collection), 1);
+      const index = this.topLevelScannables.getChildren().indexOf(collection);
+      if (index >= 0) {
+        this.topLevelScannables.getChildren().splice(index, 1);
+      }
     });
 
     this.currentCollection = this.topLevelScannables;
@@ -120,39 +128,7 @@ export class ScanningService {
     }
   }
 
-  startScanning() {
-    this.currentSelectedIndex = 0;
-
-    if (this.intervalId === undefined && this.observers.length >= 1 && this.configService.scanningConfig.enabled) {
-      this.intervalId = setInterval(this.updateHighlighted, this.configService.scanningConfig.time);
-    }
-  }
-
-  updateHighlighted = () => {
-    if (this.currentSelectedIndex >= this.currentCollection.getChildren().length) {
-      this.currentSelectedIndex = 0;
-    }
-
-    this.scanningModel.currentHighlight = this.currentCollection.getChild(this.currentSelectedIndex++);
-    this.observers.forEach(observer => observer.next(this.scanningModel));
-  }
-
-  updateSelected = () => {
-    const current = this.scanningModel.currentHighlight;
-    this.scanningModel.currentSelection = current;
-    this.scanningModel.currentHighlight = undefined;
-    this.observers.forEach(observer => observer.next(this.scanningModel));
-    clearInterval(this.intervalId);
-    this.intervalId = undefined;
-
-    setTimeout(() => {
-      this.scanningModel.currentSelection = undefined;
-      this.observers.forEach(observer => observer.next(this.scanningModel));
-      this.startScanning();
-    }, this.configService.scanningConfig.time);
-  }
-
-  selectCurrent() {
+  handleInteraction() {
     if (this.scanningModel.currentHighlight) {
       this.updateSelected();
 
@@ -164,4 +140,39 @@ export class ScanningService {
     }
   }
 
+  private startScanning() {
+    this.currentSelectedIndex = 0;
+
+    if (this.intervalId === undefined && this.observers.length >= 1 && this.configService.scanningConfig.enabled) {
+      this.intervalId = setInterval(this.updateHighlighted, this.configService.scanningConfig.time);
+    }
+  }
+
+  private updateHighlighted = () => {
+    if (this.currentSelectedIndex >= this.currentCollection.getChildren().length) {
+      this.currentSelectedIndex = 0;
+    }
+
+    this.scanningModel.currentHighlight = this.currentCollection.getChild(this.currentSelectedIndex++);
+    this.notifyObservers();
+  }
+
+  private updateSelected = () => {
+    const current = this.scanningModel.currentHighlight;
+    this.scanningModel.currentSelection = current;
+    this.scanningModel.currentHighlight = undefined;
+    this.notifyObservers();
+    clearInterval(this.intervalId);
+    this.intervalId = undefined;
+
+    setTimeout(() => {
+      this.scanningModel.currentSelection = undefined;
+      this.notifyObservers();
+      this.startScanning();
+    }, this.configService.scanningConfig.time);
+  }
+
+  private notifyObservers() {
+    this.observers.forEach(observer => observer.next(this.scanningModel));
+  }
 }

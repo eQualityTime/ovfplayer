@@ -1,4 +1,4 @@
-<div class="scanRegion" *ngIf="scanningEnabled(); else content;" (click)="selectCurrentScan()">
+<div class="scanRegion" *ngIf="scanningEnabled(); else content;" (click)="handleClick()">
     <ng-container *ngTemplateOutlet="content"></ng-container>
 </div>
 
