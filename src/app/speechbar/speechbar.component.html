@@ -20,7 +20,9 @@
     </div>
   </mat-card>
   <ng-template #vocalization>
-    <mat-card class="speechbar">
+    <mat-card class="speechbar"
+              [class.scanHighlight]="buttonScanHighlight('speechbar')"
+              [class.scanSelect]="buttonScanSelect('speechbar')">
       <div class="speechbarTextItem" *ngFor="let butt of buttons">
         <mat-card class="speechbarText">
           {{butt.getVocalization()}}
