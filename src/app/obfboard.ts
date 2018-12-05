@@ -1,25 +1,44 @@
+import { IsString, IsNotEmpty, IsOptional, IsDefined, IsInt, IsUrl, ValidateNested, validateSync, ValidationError } from 'class-validator';
 import { ImageResolver } from './image-resolver';
 import { SoundResolver } from './sound-resolver';
+import { FatalOpenVoiceFactoryError, ErrorCodes } from './errors';
 
 export class Grid {
+
+  @IsDefined()
+  @IsInt()
   rows: number;
+
+  @IsDefined()
+  @IsInt()
   columns: number;
+
   order: string[][];
 
   deserialize(input: any): Grid {
     this.rows = input.rows;
     this.columns = input.columns;
     this.order = input.order.map(row => row.map(cell => cell || cell === 0 ? String(cell) : undefined));
-
     return this;
   }
 }
 
 export class LoadBoardAction {
+
+  @IsNotEmpty()
+  @IsString()
   id: string;
+
   name: string;
+
+  @IsOptional()
+  @IsUrl()
   url: string;
+
+  @IsOptional()
+  @IsUrl()
   dataUrl: string;
+
   path: string;
 
   deserialize(input: any): LoadBoardAction {
@@ -34,15 +53,33 @@ export class LoadBoardAction {
 }
 
 export class Button {
+
+  @IsNotEmpty()
+  @IsString()
   id: string;
+
+  @IsNotEmpty()
+  @IsString()
   label: string;
+
+  @IsOptional()
+  @IsString()
   vocalization: string;
+
+  @IsOptional()
+  @IsString()
   imageId: string;
+
+  @IsOptional()
+  @IsString()
   soundId: string;
+
   backgroundColor: string;
   borderColor: string;
   actions: string[];
   loadBoardAction: LoadBoardAction;
+
+  @IsDefined()
   parent: OBFBoard;
 
   deserialize(input: any, parent: OBFBoard): Button {
@@ -79,14 +116,34 @@ export class Button {
 }
 
 export class Image {
+
+  @IsNotEmpty()
+  @IsString()
   id: string;
+
+  @IsOptional()
+  @IsInt()
   width: number;
+
+  @IsOptional()
+  @IsInt()
   height: number;
+
+  @IsOptional()
   data: string;
+
+  @IsOptional()
+  @IsUrl()
   url: string;
+
   path: string;
+
   contentType: string;
+
+  @IsDefined()
   parent: OBFBoard;
+
+  @IsOptional()
   svgData: string;
 
   deserialize(input: any, parent: OBFBoard): Image {
@@ -130,12 +187,26 @@ export class Image {
 }
 
 export class Sound {
+
+  @IsNotEmpty()
+  @IsString()
   id: string;
+
+  @IsOptional()
   data: string;
+
+  @IsOptional()
+  @IsUrl()
   url: string;
+
+  @IsOptional()
   path: string;
+
   contentType: string;
+
   duration: number;
+
+  @IsDefined()
   parent: OBFBoard;
 
   deserialize(input: any, parent: OBFBoard): Sound {
@@ -162,14 +233,39 @@ export class Sound {
 export class OBFBoard {
 
   format: string;
+
+  @IsNotEmpty()
+  @IsString()
   id: string;
+
   locale: string;
+
   name: string;
+
+  @IsOptional()
+  @IsString()
   descriptionHtml: string;
+
+  @ValidateNested()
+  @IsDefined()
   grid: Grid;
+
+  @ValidateNested({
+    each: true
+  })
+  @IsDefined()
   buttons: Button[];
+
+  @ValidateNested({
+    each: true
+  })
   images: Image[];
+
+  @ValidateNested({
+    each: true
+  })
   sounds: Sound[];
+
   imageResolver: ImageResolver;
   soundResolver: SoundResolver;
 
@@ -184,7 +280,27 @@ export class OBFBoard {
     this.images = input.images.map(image => new Image().deserialize(image, this));
     this.sounds = input.sounds.map(sound => new Sound().deserialize(sound, this));
 
+    const errors = validateSync(this);
+    if (errors && errors.length > 0) {
+      const all_errors: string[] = [];
+      errors.forEach(err => all_errors.push(...this.messagesFromError(err)));
+      console.log(all_errors.join('\n'));
+      throw new FatalOpenVoiceFactoryError(ErrorCodes.OBF_VALIDATION, all_errors.join('\n'));
+    }
+
     return this;
+  }
+
+  private messagesFromError(error: ValidationError): string[] {
+    const ret: string[] = [];
+    console.log(error);
+    if (error.constraints) {
+      ret.push(...Object.values(error.constraints));
+    }
+    if (error.children) {
+      error.children.forEach(err => ret.push(...this.messagesFromError(err)));
+    }
+    return ret;
   }
 
   setImageResolver(imageResolver: ImageResolver) {

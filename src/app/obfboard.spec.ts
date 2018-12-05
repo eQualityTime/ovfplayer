@@ -1,5 +1,3 @@
-import { TestBed, inject } from '@angular/core/testing';
-
 import { OBFBoard, Grid, Button, Image, Sound, LoadBoardAction } from './obfboard';
 
 describe('OBFBoard', () => {
@@ -29,13 +27,13 @@ describe('OBFBoard', () => {
     images: [
       {
         id: 1,
-        url: 'http://a.b'
+        url: 'http://example.com'
       }
     ],
     sounds: [
       {
         id: 1,
-        url: 'http://b.c'
+        url: 'http://another.com'
       }
     ]
   });
@@ -85,7 +83,7 @@ describe('OBFBoard', () => {
     const board = testBoard;
     const image = board.getImage('1');
     expect(image).toBeTruthy();
-    expect(image.url).toBe('http://a.b');
+    expect(image.url).toBe('http://example.com');
     expect(image.parent).toBe(board);
   });
 
@@ -93,7 +91,7 @@ describe('OBFBoard', () => {
     const board = testBoard;
     const sound = board.getSound('1');
     expect(sound).toBeTruthy();
-    expect(sound.url).toBe('http://b.c');
+    expect(sound.url).toBe('http://another.com');
   });
 });
 

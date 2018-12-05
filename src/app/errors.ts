@@ -34,4 +34,5 @@ export class ErrorCodes {
   static BOARD_NOT_THERE     = 10;
   static SOUND_NOT_THERE     = 11;
   static IMAGE_NOT_THERE     = 12;
+  static OBF_VALIDATION      = 13;
 }
