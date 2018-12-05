@@ -26,7 +26,10 @@ describe('ButtonPageComponent', () => {
           columns: 1,
           order: [['b1']]
         },
-        buttons: [],
+        buttons: [{
+          id: 'b1',
+          label: 'test'
+        }],
         images: [],
         sounds: []
       }))
