@@ -122,8 +122,7 @@ export class ScanningService {
     this.currentCollection = this.topLevelScannables;
 
     if (this.observers.length === 0) {
-      clearInterval(this.intervalId);
-      this.intervalId = undefined;
+      this.stopScanning();
       this.scanningModel = new ScanningModel();
     }
   }
@@ -148,6 +147,11 @@ export class ScanningService {
     }
   }
 
+  private stopScanning() {
+    clearInterval(this.intervalId);
+    this.intervalId = undefined;
+  }
+
   private updateHighlighted = () => {
     if (this.currentSelectedIndex >= this.currentCollection.getChildren().length) {
       this.currentSelectedIndex = 0;
@@ -158,13 +162,13 @@ export class ScanningService {
   }
 
   private updateSelected = () => {
+    this.stopScanning();
     const current = this.scanningModel.currentHighlight;
     this.scanningModel.currentSelection = current;
     this.scanningModel.currentHighlight = undefined;
     this.notifyObservers();
-    clearInterval(this.intervalId);
-    this.intervalId = undefined;
 
+    // stay on the selection for one [time] then clear selection and restart scanning
     setTimeout(() => {
       this.scanningModel.currentSelection = undefined;
       this.notifyObservers();
