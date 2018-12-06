@@ -16,7 +16,7 @@ describe('ScanningService', () => {
         showClearButton: false
       },
       scanningConfig: {
-        enabled: false,
+        enabled: true,
         time: 0
       }
     };
@@ -34,7 +34,8 @@ describe('ScanningService', () => {
   }));
 
   it('should not start if config has scanning disabled', done => {
-    inject([ScanningService], (service: ScanningService) => {
+    inject([ScanningService, ConfigService], (service: ScanningService, config: ConfigService) => {
+      config.scanningConfig.enabled = false;
       const sub = service.getScanningModel().subscribe(new TestProvider([],
         (scanningModel: ScanningModel) => {
           // just don't call done and it will error with a timeout
@@ -50,8 +51,7 @@ describe('ScanningService', () => {
   });
 
   it('should start if config has scanning enabled', done => {
-    inject([ScanningService, ConfigService], (service: ScanningService, config: ConfigService) => {
-      config.scanningConfig.enabled = true;
+    inject([ScanningService], (service: ScanningService) => {
       const sub = service.getScanningModel().subscribe(new TestProvider([],
         (scanningModel: ScanningModel) => {
           expect(scanningModel).toBeTruthy();
@@ -62,21 +62,20 @@ describe('ScanningService', () => {
     })();
   });
 
-  // it('should stop if no observers left', done => {
-  //   inject([ScanningService, ConfigService], (service: ScanningService, config: ConfigService) => {
-  //     config.scanningConfig.enabled = true;
-  //     service.getScanningModel().subscribe(new TestProvider([],
-  //       (scanningModel: ScanningModel) => {
-  //         expect(scanningModel).toBeTruthy();
-  //         done();
-  //       }
-  //     )).unsubscribe();
-  //   })();
-  // });
+  it('should stop if no observers left', done => {
+    inject([ScanningService], (service: ScanningService) => {
+      const serviceSpy = spyOn<any>(service, 'stopScanning').and.callThrough();
+      service.getScanningModel().subscribe(new TestProvider([],
+        (scanningModel: ScanningModel) => {
+        }
+      )).unsubscribe();
+      expect(serviceSpy).toHaveBeenCalled();
+      done();
+    })();
+  });
 
   it('should scan children in order', done => {
-    inject([ScanningService, ConfigService], (service: ScanningService, config: ConfigService) => {
-      config.scanningConfig.enabled = true;
+    inject([ScanningService], (service: ScanningService) => {
       let count = 0;
       const rows = [
         new ScannableCollection(0, 'a'),
@@ -96,8 +95,7 @@ describe('ScanningService', () => {
   });
 
   it('should order children by priority', done => {
-    inject([ScanningService, ConfigService], (service: ScanningService, config: ConfigService) => {
-      config.scanningConfig.enabled = true;
+    inject([ScanningService], (service: ScanningService) => {
       let count = 0;
       const rows = [
         new ScannableCollection(1, 'a'),
@@ -118,8 +116,7 @@ describe('ScanningService', () => {
   });
 
   it('should iterate over children repeatedly', done => {
-    inject([ScanningService, ConfigService], (service: ScanningService, config: ConfigService) => {
-      config.scanningConfig.enabled = true;
+    inject([ScanningService], (service: ScanningService) => {
       let count = 0;
       const rows = [
         new ScannableCollection(0, 'a'),
@@ -141,8 +138,7 @@ describe('ScanningService', () => {
   });
 
   it('should select an item on interaction', done => {
-    inject([ScanningService, ConfigService], (service: ScanningService, config: ConfigService) => {
-      config.scanningConfig.enabled = true;
+    inject([ScanningService], (service: ScanningService) => {
       let count = 0;
       const rows = [
         new ScannableCollection(0, 'a'),
@@ -169,8 +165,7 @@ describe('ScanningService', () => {
   });
 
   it('should clear selection on the next tick', done => {
-    inject([ScanningService, ConfigService], (service: ScanningService, config: ConfigService) => {
-      config.scanningConfig.enabled = true;
+    inject([ScanningService], (service: ScanningService) => {
       let count = 0;
       const rows = [
         new ScannableCollection(0, 'a'),
@@ -196,8 +191,7 @@ describe('ScanningService', () => {
   });
 
   it('should restart scanning if selection has no children', done => {
-    inject([ScanningService, ConfigService], (service: ScanningService, config: ConfigService) => {
-      config.scanningConfig.enabled = true;
+    inject([ScanningService], (service: ScanningService) => {
       let count = 0;
       const rows = [
         new ScannableCollection(0, 'a'),
@@ -225,8 +219,7 @@ describe('ScanningService', () => {
   });
 
   it('should scan children if selection has children', done => {
-    inject([ScanningService, ConfigService], (service: ScanningService, config: ConfigService) => {
-      config.scanningConfig.enabled = true;
+    inject([ScanningService], (service: ScanningService) => {
       let count = 0;
       const rows = [
         new ScannableCollection(0, 'a'),
@@ -257,8 +250,7 @@ describe('ScanningService', () => {
   });
 
   it('should iterate over children repeatedly', done => {
-    inject([ScanningService, ConfigService], (service: ScanningService, config: ConfigService) => {
-      config.scanningConfig.enabled = true;
+    inject([ScanningService], (service: ScanningService) => {
       let count = 0;
       const rows = [
         new ScannableCollection(0, 'a'),
@@ -281,6 +273,41 @@ describe('ScanningService', () => {
           }
 
           if (count > rows.length * 2) {
+            sub.unsubscribe();
+            done();
+          }
+        }
+      ));
+    })();
+  });
+
+  it('should go back to the top level when a child with no children is selected', done => {
+    inject([ScanningService], (service: ScanningService) => {
+      let count = 0;
+      const rows = [
+        new ScannableCollection(0, 'a'),
+        new ScannableCollection(1, 'b')
+      ];
+
+      rows[0].addChild(new Scannable(0, 'c'));
+      rows[0].addChild(new Scannable(1, 'd'));
+
+      const sub = service.getScanningModel().subscribe(new TestProvider(rows,
+        (scanningModel: ScanningModel) => {
+          if (count === 0 && ++count) { // inline for atomicity
+            service.handleInteraction();
+          } else {
+            if (scanningModel.currentHighlight !== undefined) {
+              if (count === 1 && ++count) { // inline for atomicity
+                service.handleInteraction();
+              } else {
+                expect(scanningModel.currentHighlight).toBe(rows[0]);
+                count++;
+              }
+            }
+          }
+
+          if (count === 3) {
             sub.unsubscribe();
             done();
           }
