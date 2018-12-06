@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ScanningService } from '../scanning.service';
+import { ConfigService } from '../config.service';
 
 @Component({
   selector: 'app-main-page',
@@ -7,9 +9,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MainPageComponent implements OnInit {
 
-  constructor() { }
+  constructor(private scanningService: ScanningService, private configService: ConfigService) { }
 
   ngOnInit() {
+  }
+
+  scanningEnabled(): boolean {
+    return this.configService.scanningConfig.enabled;
+  }
+
+  handleClick() {
+    this.scanningService.handleInteraction();
   }
 
 }

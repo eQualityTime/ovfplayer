@@ -50,6 +50,10 @@ describe('ConfigPageComponent', () => {
         showHomeButton: false,
         showBackspaceButton: false,
         showClearButton: false
+      },
+      scanningConfig: {
+        enabled: false,
+        time: 0
       }
     };
     snackbarStub = {};
