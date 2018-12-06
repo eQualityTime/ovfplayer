@@ -52,6 +52,20 @@ export class ScannableCollection extends Scannable {
     this.sortChildren();
   }
 
+  addChildren(newChildren: Scannable[]) {
+    this.children.push(...newChildren);
+    this.sortChildren();
+  }
+
+  removeChildren(oldChildren: Scannable[]) {
+    oldChildren.forEach(scannable => {
+      const index = this.children.indexOf(scannable);
+      if (index >= 0) {
+        this.children.splice(index, 1);
+      }
+    });
+  }
+
   sortChildren() {
     this.children.sort(this._sortScannables);
   }
@@ -100,8 +114,7 @@ export class ScanningService {
   registerScannable = (observer: ScannableCollectionProvider): Subscription => {
     this.observers.push(observer);
 
-    this.topLevelScannables.getChildren().push(...observer.getScannableCollections());
-    this.topLevelScannables.sortChildren();
+    this.topLevelScannables.addChildren(observer.getScannableCollections());
     this.startScanning();
 
     return new Subscription(() => this._unsubscribe(observer));
@@ -111,13 +124,7 @@ export class ScanningService {
     if (this.observers.includes(observer)) {
       this.observers.splice(this.observers.indexOf(observer), 1);
     }
-    observer.getScannableCollections().forEach(scannable => {
-      const collection = <ScannableCollection> scannable;
-      const index = this.topLevelScannables.getChildren().indexOf(collection);
-      if (index >= 0) {
-        this.topLevelScannables.getChildren().splice(index, 1);
-      }
-    });
+    this.topLevelScannables.removeChildren(observer.getScannableCollections());
 
     this.currentCollection = this.topLevelScannables;
 

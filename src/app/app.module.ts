@@ -54,11 +54,11 @@ import { OBFPageComponent } from './obfpage/obfpage.component';
     WebStorageModule,
     MatRippleModule
   ],
-  // providers: [
-  //   {
-  //     provide: ErrorHandler, useClass: GlobalErrorHandlerService
-  //   }
-  // ],
+  providers: [
+    {
+      provide: ErrorHandler, useClass: GlobalErrorHandlerService
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
