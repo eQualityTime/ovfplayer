@@ -1,28 +1,28 @@
 <div class="speechbarContainer"
-    [class.scanHighlight]="containerScanHighlight()"
-    [class.scanSelect]="containerScanSelect()">
+    [class.scanHighlight]="buttonRow.isHighlighted()"
+    [class.scanSelect]="buttonRow.isSelected()">
   <div class="stackedButtonContainer">
-    <button class="stackedButton" mat-raised-button (click)="speak()" [disabled]="speaking"
-            [class.scanHighlight]="buttonScanHighlight('speak')"
-            [class.scanSelect]="buttonScanSelect('speak')"
-            *ngIf="displayedButtons.showSpeakButton">Speak</button>
-    <button class="stackedButton" mat-raised-button (click)="home()"
-            [class.scanHighlight]="buttonScanHighlight('home')"
-            [class.scanSelect]="buttonScanSelect('home')"
-            *ngIf="displayedButtons.showHomeButton">Home</button>
+    <button class="stackedButton" mat-raised-button (click)="buttonRow.speak.handler()" [disabled]="speaking"
+            [class.scanHighlight]="buttonRow.speak.isHighlighted()"
+            [class.scanSelect]="buttonRow.speak.isSelected()"
+            *ngIf="buttonRow.speak">{{buttonRow.speak.label}}</button>
+    <button class="stackedButton" mat-raised-button (click)="buttonRow.home.handler()"
+            [class.scanHighlight]="buttonRow.home.isHighlighted()"
+            [class.scanSelect]="buttonRow.home.isSelected()"
+            *ngIf="buttonRow.home">{{buttonRow.home.label}}</button>
   </div>
 
-  <mat-card class="speechbar" *ngIf="showIconsInSpeechbar; else vocalization" (click)="speechbarClick()"
-            [class.scanHighlight]="buttonScanHighlight('speechbar')"
-            [class.scanSelect]="buttonScanSelect('speechbar')">
+  <mat-card class="speechbar" *ngIf="showIconsInSpeechbar; else vocalization" (click)="buttonRow.speechbar && buttonRow.speechbar.handler()"
+            [class.scanHighlight]="buttonRow.speechbar && buttonRow.speechbar.isHighlighted()"
+            [class.scanSelect]="buttonRow.speechbar && buttonRow.speechbar.isSelected()">
     <div class="speechbarButtonItem" *ngFor="let butt of buttons">
       <app-obf-button [butt]="butt"></app-obf-button>
     </div>
   </mat-card>
   <ng-template #vocalization>
-    <mat-card class="speechbar"
-              [class.scanHighlight]="buttonScanHighlight('speechbar')"
-              [class.scanSelect]="buttonScanSelect('speechbar')">
+    <mat-card class="speechbar" (click)="buttonRow.speechbar && buttonRow.speechbar.handler()"
+              [class.scanHighlight]="buttonRow.speechbar && buttonRow.speechbar.isHighlighted()"
+              [class.scanSelect]="buttonRow.speechbar && buttonRow.speechbar.isSelected()">
       <div class="speechbarTextItem" *ngFor="let butt of buttons">
         <mat-card class="speechbarText">
           {{butt.getVocalization()}}
@@ -32,13 +32,13 @@
   </ng-template>
 
   <div class="stackedButtonContainer">
-    <button class="stackedButton" mat-raised-button (click)="backspace()"
-            [class.scanHighlight]="buttonScanHighlight('backspace')"
-            [class.scanSelect]="buttonScanSelect('backspace')"
-            *ngIf="displayedButtons.showBackspaceButton">Backspace</button>
-    <button class="stackedButton" mat-raised-button (click)="clear()"
-            [class.scanHighlight]="buttonScanHighlight('clear')"
-            [class.scanSelect]="buttonScanSelect('clear')"
-            *ngIf="displayedButtons.showClearButton">Clear</button>
+    <button class="stackedButton" mat-raised-button (click)="buttonRow.backspace.handler()"
+            [class.scanHighlight]="buttonRow.backspace.isHighlighted()"
+            [class.scanSelect]="buttonRow.backspace.isSelected()"
+            *ngIf="buttonRow.backspace">{{buttonRow.backspace.label}}</button>
+    <button class="stackedButton" mat-raised-button (click)="buttonRow.clear.handler()"
+            [class.scanHighlight]="buttonRow.clear.isHighlighted()"
+            [class.scanSelect]="buttonRow.clear.isSelected()"
+            *ngIf="buttonRow.clear">{{buttonRow.clear.label}}</button>
   </div>
 </div>

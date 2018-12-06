@@ -20,6 +20,7 @@ export class SpeechbarComponent implements OnInit, OnDestroy {
   speaking: boolean;
   buttons: Button[];
   scanningModel: ScanningModel;
+  buttonRow: ScannableCollection;
 
   constructor(
     private boardService: BoardService,
@@ -32,6 +33,9 @@ export class SpeechbarComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this._displayedButtons = this.config.displayedButtons;
     this._showIconsInSpeechbar = this.config.showIconsInSpeechbar;
+    const provider = new ScannableSpeechbarProvider(this._displayedButtons, this.config.speakOnSpeechbarClick, this);
+    this.buttonRow = provider.getScannableCollections()[0];
+    this.scanningSubscription = this.scanningService.getScanningModel().subscribe(provider);
     this.speakingSubscription = this.speechbarService.getSpeaking().subscribe(speaking => {
       this.speaking = speaking;
       this.cdRef.detectChanges();
@@ -39,7 +43,6 @@ export class SpeechbarComponent implements OnInit, OnDestroy {
     this.buttonsSubscription = this.speechbarService.getButtons().subscribe(buttons => {
       this.buttons = buttons;
     });
-    this.registerWithScanner();
   }
 
   ngOnDestroy() {
@@ -83,74 +86,21 @@ export class SpeechbarComponent implements OnInit, OnDestroy {
   clear() {
     this.speechbarService.clear();
   }
-
-  registerWithScanner(): void {
-    const buttons: ScannableButton[] = [];
-
-    if (this._displayedButtons.showSpeakButton) {
-      buttons.push(new ScannableButton('speak', this.speak.bind(this), 0));
-    }
-    if (this._displayedButtons.showHomeButton) {
-      buttons.push(new ScannableButton('home', this.home.bind(this), 1));
-    }
-    if (this.config.speakOnSpeechbarClick) {
-      buttons.push(new ScannableButton('speechbar', this.speechbarClick.bind(this), 2));
-    }
-    if (this._displayedButtons.showBackspaceButton) {
-      buttons.push(new ScannableButton('backspace', this.backspace.bind(this), 3));
-    }
-    if (this._displayedButtons.showClearButton) {
-      buttons.push(new ScannableButton('clear', this.clear.bind(this), 4));
-    }
-
-    this.scanningSubscription = this.scanningService.getScanningModel().subscribe(
-      new ScannableSpeechbarProvider(buttons, this.updateScanning)
-    );
-  }
-
-  private updateScanning = (scanningModel: ScanningModel) => {
-    this.scanningModel = scanningModel;
-
-    if (this.scanningModel.currentSelection && this.scanningModel.currentSelection.type === ScannableButton.TYPE) {
-      (<ScannableButton> this.scanningModel.currentSelection).handler();
-    }
-  }
-
-  containerScanHighlight(): boolean {
-    return this.scanningModel && this.scanningModel.currentHighlight &&
-        this.scanningModel.currentHighlight.type === ScannableSpeechbarRow.TYPE;
-  }
-
-  containerScanSelect(): boolean {
-    return this.scanningModel && this.scanningModel.currentSelection &&
-        this.scanningModel.currentSelection.type === ScannableSpeechbarRow.TYPE;
-  }
-
-  buttonScanHighlight(name: string): boolean {
-    if (this.scanningModel && this.scanningModel.currentHighlight &&
-        this.scanningModel.currentHighlight.type === ScannableButton.TYPE) {
-      return (<ScannableButton> this.scanningModel.currentHighlight).name === name;
-    } else {
-      return false;
-    }
-  }
-
-  buttonScanSelect(name: string): boolean {
-    if (this.scanningModel && this.scanningModel.currentSelection &&
-        this.scanningModel.currentSelection.type === ScannableButton.TYPE) {
-      return (<ScannableButton> this.scanningModel.currentSelection).name === name;
-    } else {
-      return false;
-    }
-  }
 }
 
 class ScannableSpeechbarProvider extends Subscriber<ScanningModel> implements ScannableCollectionProvider {
   private rows: ScannableSpeechbarRow[];
 
-  constructor(buttons: ScannableButton[], next: (ScanningModel) => void) {
-    super(next);
-    this.rows = [new ScannableSpeechbarRow(buttons, 0)];
+  constructor(displayedButtons: ButtonDisplayConfig, speakOnSpeechbarClick: boolean, speechbarComponent: SpeechbarComponent) {
+    super((scanningModel: ScanningModel) => {
+      speechbarComponent.scanningModel = scanningModel;
+
+      if (speechbarComponent.scanningModel.currentSelection &&
+        speechbarComponent.scanningModel.currentSelection.type === ScannableButton.TYPE) {
+        (<ScannableButton> speechbarComponent.scanningModel.currentSelection).handler();
+      }
+    });
+    this.rows = [new ScannableSpeechbarRow(displayedButtons, speakOnSpeechbarClick, speechbarComponent)];
   }
 
   getScannableCollections(): ScannableCollection[] {
@@ -160,37 +110,82 @@ class ScannableSpeechbarProvider extends Subscriber<ScanningModel> implements Sc
 
 class ScannableSpeechbarRow extends ScannableCollection {
   static TYPE = 'SpeechbarRow';
+  speak: ScannableButton;
+  home: ScannableButton;
+  speechbar: ScannableButton;
+  backspace: ScannableButton;
+  clear: ScannableButton;
+  private speechbarComponent: SpeechbarComponent;
 
-  constructor(buttons: ScannableButton[], priority: number) {
-    super(priority, ScannableSpeechbarRow.TYPE);
-    buttons.forEach(button => this.addChild(button));
+  constructor(displayedButtons: ButtonDisplayConfig, speakOnSpeechbarClick: boolean, speechbarComponent: SpeechbarComponent) {
+    super(0, ScannableSpeechbarRow.TYPE);
+    this.speechbarComponent = speechbarComponent;
+
+    if (displayedButtons.showSpeakButton) {
+      this.speak = new ScannableButton('Speak', speechbarComponent.speak.bind(speechbarComponent), 0, speechbarComponent);
+      this.addChild(this.speak);
+    }
+    if (displayedButtons.showHomeButton) {
+      this.home = new ScannableButton('Home', speechbarComponent.home.bind(speechbarComponent), 1, speechbarComponent);
+      this.addChild(this.home);
+    }
+    if (speakOnSpeechbarClick) {
+      this.speechbar = new ScannableButton('speechbar', speechbarComponent.speechbarClick.bind(speechbarComponent), 2, speechbarComponent);
+      this.addChild(this.speechbar);
+    }
+    if (displayedButtons.showBackspaceButton) {
+      this.backspace = new ScannableButton('Backspace', speechbarComponent.backspace.bind(speechbarComponent), 3, speechbarComponent);
+      this.addChild(this.backspace);
+    }
+    if (displayedButtons.showClearButton) {
+      this.clear = new ScannableButton('Clear', speechbarComponent.clear.bind(speechbarComponent), 4, speechbarComponent);
+      this.addChild(this.clear);
+    }
+  }
+
+  isHighlighted(): boolean {
+    return this.speechbarComponent.scanningModel && this.speechbarComponent.scanningModel.currentHighlight === this;
+  }
+
+  isSelected(): boolean {
+    return this.speechbarComponent.scanningModel && this.speechbarComponent.scanningModel.currentSelection === this;
   }
 }
 
 class ScannableButton extends Scannable {
   static TYPE = 'SpeechbarButton';
-  private _name: string;
+  private _label: string;
   private _handler: () => void;
+  private speechbarComponent: SpeechbarComponent;
 
-  constructor(name: string, handler: () => void, priority: number) {
+  constructor(label: string, handler: () => void, priority: number, speechbarComponent: SpeechbarComponent) {
     super(priority, ScannableButton.TYPE);
-    this._name = name;
+    this._label = label;
     this._handler = handler;
+    this.speechbarComponent = speechbarComponent;
   }
 
-  get name(): string {
-    return this._name;
+  get label(): string {
+    return this._label;
   }
 
   get handler(): () => void {
     return this._handler;
   }
 
-  set name(name: string) {
-    this._name = name;
+  set label(label: string) {
+    this._label = label;
   }
 
   set handler(handler: () => void) {
     this._handler = handler;
+  }
+
+  isHighlighted(): boolean {
+    return this.speechbarComponent.scanningModel && this.speechbarComponent.scanningModel.currentHighlight === this;
+  }
+
+  isSelected(): boolean {
+    return this.speechbarComponent.scanningModel && this.speechbarComponent.scanningModel.currentSelection === this;
   }
 }
