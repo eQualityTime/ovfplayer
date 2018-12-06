@@ -3,7 +3,7 @@
       *ngFor="let row of buttonProvider.getScannableCollections()"
       [class.scanHighlight]="row.isHighlighted()"
       [class.scanSelect]="row.isSelection()"
-      [style.height]="calculateRowHeight()">
+      [style.height]="row.rowHeight">
     <div class="boardButton"
         *ngFor="let butt of row.displayButtons"
         [class.scanHighlight]="butt && butt.isHighlighted()"

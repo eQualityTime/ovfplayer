@@ -117,10 +117,6 @@ export class ButtonPageComponent implements OnInit, OnDestroy {
       }
     }
   }
-
-  calculateRowHeight(): string {
-    return (100 / this.board.grid.rows).toString() + '%';
-  }
 }
 
 class ScannableButtonRowProvider extends Subscriber<ScanningModel> implements ScannableCollectionProvider {
@@ -136,7 +132,8 @@ class ScannableButtonRowProvider extends Subscriber<ScanningModel> implements Sc
         buttonPressHandler(button);
       }
     });
-    this.rows = board.grid.order.map((row, index) => new ScannableButtonRow(this, board, row, index + 1));
+    const rowHeight = (100 / board.grid.rows).toString() + '%';
+    this.rows = board.grid.order.map((row, index) => new ScannableButtonRow(this, board, row, index + 1, rowHeight));
   }
 
   getScannableCollections(): ScannableCollection[] {
@@ -156,10 +153,12 @@ class ScannableButtonRow extends ScannableCollection {
   static TYPE = 'OBFButtonRow';
   private provider: ScannableButtonRowProvider;
   displayButtons = [];
+  rowHeight: string;
 
-  constructor(provider: ScannableButtonRowProvider, board: OBFBoard, row: string[], priority: number) {
+  constructor(provider: ScannableButtonRowProvider, board: OBFBoard, row: string[], priority: number, rowHeight: string) {
     super(priority, ScannableButtonRow.TYPE);
     this.provider = provider;
+    this.rowHeight = rowHeight;
 
     row.forEach((buttonId, index) => {
       if (buttonId) {
