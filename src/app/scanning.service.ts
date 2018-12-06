@@ -101,10 +101,6 @@ export class ScanningService {
     this.currentCollection = this.topLevelScannables;
     this.scanningModel = new ScanningModel();
     this.observers = [];
-
-    if (this.configService.scanningConfig.enabled) {
-      document.onkeydown = this.handleInteraction.bind(this);
-    }
   }
 
   getScanningModel(): Observable<ScanningModel> {
@@ -115,7 +111,10 @@ export class ScanningService {
     this.observers.push(observer);
 
     this.topLevelScannables.addChildren(observer.getScannableCollections());
-    this.startScanning();
+
+    if (this.configService.scanningConfig.enabled) {
+      this.startScanning();
+    }
 
     return new Subscription(() => this._unsubscribe(observer));
   }
@@ -147,14 +146,15 @@ export class ScanningService {
   }
 
   private startScanning() {
-    this.currentSelectedIndex = 0;
-
-    if (this.intervalId === undefined && this.observers.length >= 1 && this.configService.scanningConfig.enabled) {
+    if (this.intervalId === undefined && this.observers.length >= 1) {
+      document.onkeydown = this.handleInteraction.bind(this);
+      this.currentSelectedIndex = 0;
       this.intervalId = setInterval(this.updateHighlighted, this.configService.scanningConfig.time);
     }
   }
 
   private stopScanning() {
+    document.onkeydown = undefined;
     clearInterval(this.intervalId);
     this.intervalId = undefined;
   }

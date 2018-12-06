@@ -36,14 +36,18 @@ describe('ScanningService', () => {
   it('should not start if config has scanning disabled', done => {
     inject([ScanningService, ConfigService], (service: ScanningService, config: ConfigService) => {
       config.scanningConfig.enabled = false;
+      const serviceSpy = spyOn<any>(service, 'startScanning').and.callThrough();
       const sub = service.getScanningModel().subscribe(new TestProvider([],
         (scanningModel: ScanningModel) => {
-          // just don't call done and it will error with a timeout
+          expect(true).toBeFalsy();
+          sub.unsubscribe();
+          done();
         }
       ));
 
       // time is set to 0, so wait 1 second and if it hasn't started assume it won't
       setTimeout(() => {
+        expect(serviceSpy).not.toHaveBeenCalled();
         sub.unsubscribe();
         done();
       }, 1000);
