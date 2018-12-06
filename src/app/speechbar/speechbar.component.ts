@@ -20,7 +20,7 @@ export class SpeechbarComponent implements OnInit, OnDestroy {
   speaking: boolean;
   buttons: Button[];
   scanningModel: ScanningModel;
-  buttonRow: ScannableCollection;
+  buttonRow: ScannableSpeechbarRow;
 
   constructor(
     private boardService: BoardService,
@@ -34,7 +34,7 @@ export class SpeechbarComponent implements OnInit, OnDestroy {
     this._displayedButtons = this.config.displayedButtons;
     this._showIconsInSpeechbar = this.config.showIconsInSpeechbar;
     const provider = new ScannableSpeechbarProvider(this._displayedButtons, this.config.speakOnSpeechbarClick, this);
-    this.buttonRow = provider.getScannableCollections()[0];
+    this.buttonRow = <ScannableSpeechbarRow> provider.getScannableCollections()[0];
     this.scanningSubscription = this.scanningService.getScanningModel().subscribe(provider);
     this.speakingSubscription = this.speechbarService.getSpeaking().subscribe(speaking => {
       this.speaking = speaking;
