@@ -17,6 +17,7 @@
         <td><pre class="message">{{error.causeChain}}</pre></td>
       </tr>
     </table>
+    <button mat-raised-button (click)="goToConfig()">Go to config page</button>
     <p>If you need help resolving this issue or believe it may be an issue on our side, please don't hesitate to contact us.</p>
     <a *ngIf="error" [href]="errorHRef" target="_top" mat-raised-button>Send error report</a>
   </mat-card>
