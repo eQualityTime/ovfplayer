@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ErrorService, ErrorDetails } from '../error.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-error-page',
@@ -10,10 +11,14 @@ export class ErrorPageComponent implements OnInit {
 
   error: ErrorDetails;
 
-  constructor(private errorService: ErrorService) { }
+  constructor(private errorService: ErrorService, private router: Router) { }
 
   ngOnInit() {
     this.error = this.errorService.lastError;
+  }
+
+  goToConfig() {
+    this.router.navigate(['/config']);
   }
 
   get errorHRef(): string {
