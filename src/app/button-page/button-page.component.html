@@ -1,7 +1,14 @@
 <div class="board" *ngIf="board; else noBoard">
-  <div class="boardRow" [style.height]="calculateRowHeight()" *ngFor="let row of board.grid.order">
-    <div class="boardButton" *ngFor="let cell of row">
-        <app-obf-button *ngIf="board.getButton(cell) as butt" [butt]="butt" [clickHandler]="handleButtonClick.bind(this)"></app-obf-button>
+  <div class="boardRow"
+      *ngFor="let row of buttonProvider.getScannableCollections()"
+      [class.scanHighlight]="row.isHighlighted()"
+      [class.scanSelect]="row.isSelection()"
+      [style.height]="row.rowHeight">
+    <div class="boardButton"
+        *ngFor="let butt of row.displayButtons"
+        [class.scanHighlight]="butt && butt.isHighlighted()"
+        [class.scanSelect]="butt && butt.isSelection()">
+      <app-obf-button *ngIf="butt" [butt]="butt.button" [clickHandler]="handleButtonClick.bind(this)"></app-obf-button>
     </div>
   </div>
 </div>

@@ -10,6 +10,7 @@ import { Observable } from 'rxjs';
 import { Type } from '@angular/core';
 import { OBFPageComponent } from '../obfpage/obfpage.component';
 
+// we might not need this, the current tests can all be done with RouterTestingModule.withRoutes([])
 export class MockActivatedRoute implements ActivatedRoute {
   snapshot: ActivatedRouteSnapshot;
   url: Observable<UrlSegment[]>;
@@ -50,6 +51,10 @@ describe('ConfigPageComponent', () => {
         showHomeButton: false,
         showBackspaceButton: false,
         showClearButton: false
+      },
+      scanningConfig: {
+        enabled: false,
+        time: 0
       }
     };
     snackbarStub = {};

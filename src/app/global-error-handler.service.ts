@@ -13,6 +13,7 @@ export class GlobalErrorHandlerService implements ErrorHandler {
     const router = this.injector.get(Router);
     const errSer = this.injector.get(ErrorService);
 
+    console.error(error);
     // TODO: buffer logs
     console.log(`Error on page ${router.url}: ${error.message}`);
 
