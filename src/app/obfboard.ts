@@ -271,7 +271,7 @@ export class OBFBoard {
 
   deserialize(input: any): OBFBoard {
     this.format = input.format;
-    this.id = String(input.id);
+    this.id = input.id && String(input.id);
     this.locale = input.locale;
     this.name = input.name;
     this.descriptionHtml = input.description_html;

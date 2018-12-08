@@ -1,4 +1,5 @@
 import { OBFBoard, Grid, Button, Image, Sound, LoadBoardAction } from './obfboard';
+import { ErrorCodes } from './errors';
 
 describe('OBFBoard', () => {
 
@@ -142,5 +143,30 @@ describe('obfboard.LoadBoardAction', () => {
   it('should be created', () => {
     const lba = new LoadBoardAction();
     expect(lba).toBeTruthy();
+  });
+});
+
+describe('obfboard.validation', () => {
+  it('should validate required board id', () => {
+    const input = {
+      name: 'board_name',
+      grid: {
+        rows: 2,
+        columns: 2,
+        order: [[1, null],
+        [null, 2]]
+      },
+      buttons: [],
+      images: [],
+      sounds: [],
+    };
+    try {
+      new OBFBoard().deserialize(input);
+      expect(true).toBe(false);
+    } catch (e) {
+      expect(e.errorCode).toBe(ErrorCodes.OBF_VALIDATION);
+      expect(e.message).toContain('id should not be empty');
+      expect(e.message).toContain('id must be a string');
+    }
   });
 });
