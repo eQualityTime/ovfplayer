@@ -1,7 +1,20 @@
-import { IsString, IsNotEmpty, IsOptional, IsDefined, IsInt, IsUrl, ValidateNested, validateSync, ValidationError } from 'class-validator';
+import {
+  IsString,
+  IsNotEmpty,
+  IsOptional,
+  IsDefined,
+  IsInt,
+  IsUrl,
+  ValidateNested,
+  validateSync,
+  ValidationError,
+  ArrayMinSize,
+  ArrayMaxSize
+} from 'class-validator';
 import { ImageResolver } from './image-resolver';
 import { SoundResolver } from './sound-resolver';
 import { FatalOpenVoiceFactoryError, ErrorCodes } from './errors';
+import { Check2DArray } from './custom-validation';
 
 export class Grid {
 
@@ -13,6 +26,7 @@ export class Grid {
   @IsInt()
   columns: number;
 
+  @Check2DArray('columns', 'rows', { message: 'Grid order is not correct size for specified rows and columns'})
   order: string[][];
 
   deserialize(input: any): Grid {

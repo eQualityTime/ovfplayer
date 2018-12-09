@@ -169,4 +169,54 @@ describe('obfboard.validation', () => {
       expect(e.message).toContain('id must be a string');
     }
   });
+
+  it('should validate grid array size - rows', () => {
+    const input = {
+      id: 'test',
+      name: 'board_name',
+      grid: {
+        rows: 3,
+        columns: 2,
+        order: [
+          [1, null],
+          [null, 2]
+        ]
+      },
+      buttons: [],
+      images: [],
+      sounds: [],
+    };
+    try {
+      new OBFBoard().deserialize(input);
+      expect(true).toBe(false);
+    } catch (e) {
+      expect(e.errorCode).toBe(ErrorCodes.OBF_VALIDATION);
+      expect(e.message).toContain('Grid order is not correct size for specified rows and columns');
+    }
+  });
+
+  it('should validate grid array size - columns', () => {
+    const input = {
+      id: 'test',
+      name: 'board_name',
+      grid: {
+        rows: 2,
+        columns: 2,
+        order: [
+          [1, null],
+          [null, 2, 3]
+        ]
+      },
+      buttons: [],
+      images: [],
+      sounds: [] };
+    try {
+      new OBFBoard().deserialize(input);
+      expect(true).toBe(false);
+    } catch (e) {
+      expect(e.errorCode).toBe(ErrorCodes.OBF_VALIDATION);
+      expect(e.message).toContain('Grid order is not correct size for specified rows and columns');
+    }
+  });
 });
+
