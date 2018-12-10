@@ -15,7 +15,6 @@ export class BoardService {
   constructor(private obzService: ObzService) {}
 
   private addObserver = (observer: Observer<OBFBoard>) => {
-    // TODO: check we don't already have an observer
     this.observer = observer;
     this.obzService.getBoardSet().subscribe(boardSet => {
       this.setBoardSet(boardSet);

@@ -1,0 +1,21 @@
+.errorCard {
+  margin: 100px;
+}
+
+.label {
+  font-weight: bold;
+  font-size: larger;
+  vertical-align: top;
+}
+
+.message {
+  background-color: #eee;
+  border: lightgrey solid 1px;
+  padding: 1em;
+  margin: 0px;
+  white-space: pre-wrap;
+}
+
+td {
+  padding: 1em;
+}

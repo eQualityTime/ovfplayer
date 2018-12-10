@@ -3,12 +3,14 @@ import { FormsModule } from '@angular/forms';
 
 import { ConfigPageComponent } from './config-page.component';
 import { ConfigService } from '../config.service';
-import { MatFormFieldModule, MatCardModule, MatCheckboxModule, MatInputModule, MatSnackBar } from '@angular/material';
+import { MatFormFieldModule, MatCardModule, MatCheckboxModule, MatInputModule, MatSnackBar, MatTabsModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Router, ActivatedRoute, ActivatedRouteSnapshot, UrlSegment, Params, Data, Route, ParamMap } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Type } from '@angular/core';
+import { OBFPageComponent } from '../obfpage/obfpage.component';
 
+// we might not need this, the current tests can all be done with RouterTestingModule.withRoutes([])
 export class MockActivatedRoute implements ActivatedRoute {
   snapshot: ActivatedRouteSnapshot;
   url: Observable<UrlSegment[]>;
@@ -49,6 +51,10 @@ describe('ConfigPageComponent', () => {
         showHomeButton: false,
         showBackspaceButton: false,
         showClearButton: false
+      },
+      scanningConfig: {
+        enabled: false,
+        time: 0
       }
     };
     snackbarStub = {};
@@ -77,14 +83,14 @@ describe('ConfigPageComponent', () => {
     };
 
     TestBed.configureTestingModule({
-      declarations: [ ConfigPageComponent ],
+      declarations: [ ConfigPageComponent, OBFPageComponent ],
       providers: [
         {provide: Router, useValue: routerStub},
         {provide: ConfigService, useValue: configServiceStub},
         {provide: ActivatedRoute, useValue: mockActivatedRoute},
         {provide: MatSnackBar, useValue: snackbarStub }
       ],
-      imports: [ FormsModule, MatFormFieldModule, MatCardModule, MatCheckboxModule, MatInputModule, BrowserAnimationsModule ]
+      imports: [ FormsModule, MatFormFieldModule, MatCardModule, MatCheckboxModule, MatInputModule, BrowserAnimationsModule, MatTabsModule ]
     }).compileComponents();
   }));
 
