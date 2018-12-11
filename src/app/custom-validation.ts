@@ -18,15 +18,23 @@ export function Check2DArray(widthProperty: string, heightProperty: string, vali
           const heightValue = (args.object as any)[heightName];
 
           if (value.length === heightValue) {
+            let count = 0;
             for (const row of value) {
+              count++;
               if (row.length !== widthValue) {
+                this.message = `Row ${count} is of width ${row.length}, but it should be ${widthValue}`;
                 return false;
               }
             }
             return true;
           } else {
+            this.message = `Grid has ${value.length} rows but should have ${heightValue}`;
             return false;
           }
+        },
+
+        defaultMessage(args: ValidationArguments) {
+          return this.message;
         }
       }
     });

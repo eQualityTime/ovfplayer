@@ -191,7 +191,7 @@ describe('obfboard.validation', () => {
       expect(true).toBe(false);
     } catch (e) {
       expect(e.errorCode).toBe(ErrorCodes.OBF_VALIDATION);
-      expect(e.message).toContain('Grid order is not correct size for specified rows and columns');
+      expect(e.message).toContain('Grid has 2 rows but should have 3');
     }
   });
 
@@ -215,7 +215,7 @@ describe('obfboard.validation', () => {
       expect(true).toBe(false);
     } catch (e) {
       expect(e.errorCode).toBe(ErrorCodes.OBF_VALIDATION);
-      expect(e.message).toContain('Grid order is not correct size for specified rows and columns');
+      expect(e.message).toContain('Row 2 is of width 3, but it should be 2');
     }
   });
 });
