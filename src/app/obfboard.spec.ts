@@ -165,8 +165,38 @@ describe('obfboard.validation', () => {
       expect(true).toBe(false);
     } catch (e) {
       expect(e.errorCode).toBe(ErrorCodes.OBF_VALIDATION);
-      expect(e.message).toContain('id should not be empty');
-      expect(e.message).toContain('id must be a string');
+      expect(e.message).toContain('Board id must be specified');
+      expect(e.message).toContain('Board id must be a string');
+    }
+  });
+
+  it('should validate required image id', () => {
+    const input = {
+      id: 'b1',
+      name: 'board_name',
+      grid: {
+        rows: 2,
+        columns: 2,
+        order: [
+          [1, null],
+          [null, 2]
+        ]
+      },
+      buttons: [],
+      images: [
+        {
+          url: 'http://example.com'
+        }
+      ],
+      sounds: [],
+    };
+    try {
+      new OBFBoard().deserialize(input);
+      expect(true).toBe(false);
+    } catch (e) {
+      expect(e.errorCode).toBe(ErrorCodes.OBF_VALIDATION);
+      expect(e.message).toContain('Image id must be specified');
+      expect(e.message).toContain('Image id must be a string');
     }
   });
 

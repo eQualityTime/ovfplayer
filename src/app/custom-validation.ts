@@ -10,13 +10,12 @@ export function OneOf(otherProperties: string[], validationOptions?: ValidationO
       options: validationOptions,
       validator: {
         validate(value: any, args: ValidationArguments) {
-          let anySet = false;
-          function isValid(element: string, index: number, array: string[]): boolean {
-            const val = (args.object as any)[element];
+          const theObject = <any>args.object;
+          function isValid(element: string): boolean {
+            const val = theObject[element];
             return val !== undefined && val !== null;
           }
-          anySet = (<Array<string>>args.constraints[0]).some(isValid);
-          return anySet;
+          return (<Array<string>>args.constraints[0]).some(isValid);
         }
       }
     });

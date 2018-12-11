@@ -7,7 +7,7 @@ import {
   IsUrl,
   ValidateNested,
   validateSync,
-  ValidationError
+  ValidationError,
 } from 'class-validator';
 import { ImageResolver } from './image-resolver';
 import { SoundResolver } from './sound-resolver';
@@ -37,8 +37,8 @@ export class Grid {
 
 export class LoadBoardAction {
 
-  @IsNotEmpty()
-  @IsString()
+  @IsNotEmpty({ message: 'Load board action id must be specified'})
+  @IsString({ message: 'Load board action id must be a string'})
   id: string;
 
   name: string;
@@ -66,8 +66,8 @@ export class LoadBoardAction {
 
 export class Button {
 
-  @IsNotEmpty()
-  @IsString()
+  @IsNotEmpty({ message: 'Button id must be specified'})
+  @IsString({ message: 'Button id must be a string'})
   id: string;
 
   @IsNotEmpty()
@@ -95,7 +95,7 @@ export class Button {
   parent: OBFBoard;
 
   deserialize(input: any, parent: OBFBoard): Button {
-    this.id = String(input.id);
+    this.id = input.id && String(input.id);
     this.label = input.label;
     this.vocalization = input.vocalization;
     this.imageId = input.image_id || input.image_id === 0 ? String(input.image_id) : undefined;
@@ -129,9 +129,9 @@ export class Button {
 
 export class Image {
 
-  @IsNotEmpty()
-  @IsString()
-  @OneOf(['url', 'data'], { message: 'Image with id "$value" must specifiy data, a url or a path' })
+  @OneOf(['url', 'data', 'path'], { message: 'Image with id "$value" must specifiy data, a url or a path' })
+  @IsString({ message: 'Image id must be a string' })
+  @IsNotEmpty({ message: 'Image id must be specified'})
   id: string;
 
   @IsOptional()
@@ -159,10 +159,11 @@ export class Image {
   parent: OBFBoard;
 
   @IsOptional()
+  @IsString()
   svgData: string;
 
   deserialize(input: any, parent: OBFBoard): Image {
-    this.id = String(input.id);
+    this.id = input.id && String(input.id);
     this.width = input.width;
     this.height = input.height;
     this.data = input.data;
@@ -203,8 +204,8 @@ export class Image {
 
 export class Sound {
 
-  @IsNotEmpty()
-  @IsString()
+  @IsNotEmpty({ message: 'Sound id must be specified'})
+  @IsString({ message: 'Sound id must be a string'})
   @OneOf(['url', 'data', 'path'], { message: 'Sound with id "$value" must specifiy data, a url or a path' })
   id: string;
 
@@ -226,7 +227,7 @@ export class Sound {
   parent: OBFBoard;
 
   deserialize(input: any, parent: OBFBoard): Sound {
-    this.id = String(input.id);
+    this.id = input.id && String(input.id);
     this.data = input.data;
     this.url = input.url;
     this.path = input.path;
@@ -250,8 +251,8 @@ export class OBFBoard {
 
   format: string;
 
-  @IsNotEmpty()
-  @IsString()
+  @IsNotEmpty({ message: 'Board id must be specified'})
+  @IsString({ message: 'Board id must be a string'})
   id: string;
 
   locale: string;
