@@ -7,14 +7,12 @@ import {
   IsUrl,
   ValidateNested,
   validateSync,
-  ValidationError,
-  ArrayMinSize,
-  ArrayMaxSize
+  ValidationError
 } from 'class-validator';
 import { ImageResolver } from './image-resolver';
 import { SoundResolver } from './sound-resolver';
 import { FatalOpenVoiceFactoryError, ErrorCodes } from './errors';
-import { Check2DArray } from './custom-validation';
+import { Check2DArray, OneOf } from './custom-validation';
 
 export class Grid {
 
@@ -133,6 +131,7 @@ export class Image {
 
   @IsNotEmpty()
   @IsString()
+  @OneOf(['url', 'data'], { message: 'Image with id "$value" must specifiy data, a url or a path' })
   id: string;
 
   @IsOptional()
@@ -150,6 +149,8 @@ export class Image {
   @IsUrl()
   url: string;
 
+  @IsOptional()
+  @IsString()
   path: string;
 
   contentType: string;
@@ -204,6 +205,7 @@ export class Sound {
 
   @IsNotEmpty()
   @IsString()
+  @OneOf(['url', 'data', 'path'], { message: 'Sound with id "$value" must specifiy data, a url or a path' })
   id: string;
 
   @IsOptional()

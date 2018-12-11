@@ -1,5 +1,28 @@
 import { registerDecorator, ValidationOptions, ValidationArguments } from 'class-validator';
 
+export function OneOf(otherProperties: string[], validationOptions?: ValidationOptions) {
+  return function (object: Object, propertyName: string) {
+    registerDecorator({
+      name: 'OneOf',
+      target: object.constructor,
+      propertyName: propertyName,
+      constraints: [otherProperties],
+      options: validationOptions,
+      validator: {
+        validate(value: any, args: ValidationArguments) {
+          let anySet = false;
+          function isValid(element: string, index: number, array: string[]): boolean {
+            const val = (args.object as any)[element];
+            return val !== undefined && val !== null;
+          }
+          anySet = (<Array<string>>args.constraints[0]).some(isValid);
+          return anySet;
+        }
+      }
+    });
+  };
+}
+
 export function Check2DArray(widthProperty: string, heightProperty: string, validationOptions?: ValidationOptions) {
   return function (object: Object, propertyName: string) {
     registerDecorator({

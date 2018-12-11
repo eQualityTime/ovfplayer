@@ -218,5 +218,59 @@ describe('obfboard.validation', () => {
       expect(e.message).toContain('Row 2 is of width 3, but it should be 2');
     }
   });
+
+  it('should validate image OneOf', () => {
+    const input = {
+      id: 'test',
+      name: 'board_name',
+      grid: {
+        rows: 2,
+        columns: 2,
+        order: [
+          [1, null],
+          [null, 2]
+        ]
+      },
+      buttons: [],
+      images: [
+        {
+          id: 'image1'
+        }
+      ],
+      sounds: []
+    };
+    try {
+      new OBFBoard().deserialize(input);
+      expect(true).toBe(false);
+    } catch (e) {
+      expect(e.errorCode).toBe(ErrorCodes.OBF_VALIDATION);
+      expect(e.message).toContain('Image with id "image1" must specifiy data, a url or a path');
+    }
+  });
+
+  it('should validate sound OneOf', () => {
+    const input = {
+      id: 'test',
+      name: 'board_name',
+      grid: {
+        rows: 2,
+        columns: 2,
+        order: [
+          [1, null],
+          [null, 2]
+        ]
+      },
+      buttons: [],
+      sounds: [{ id: 'sound1' }],
+      images: []
+    };
+    try {
+      new OBFBoard().deserialize(input);
+      expect(true).toBe(false);
+    } catch (e) {
+      expect(e.errorCode).toBe(ErrorCodes.OBF_VALIDATION);
+      expect(e.message).toContain('Sound with id "sound1" must specifiy data, a url or a path');
+    }
+  });
 });
 
