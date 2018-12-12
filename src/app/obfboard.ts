@@ -14,6 +14,10 @@ import { SoundResolver } from './sound-resolver';
 import { FatalOpenVoiceFactoryError, ErrorCodes } from './errors';
 import { Check2DArray, OneOf } from './custom-validation';
 
+function stringify(value: any): string {
+  return value || value === 0 ? String(value) : undefined;
+}
+
 export class Grid {
 
   @IsDefined()
@@ -30,15 +34,14 @@ export class Grid {
   deserialize(input: any): Grid {
     this.rows = input.rows;
     this.columns = input.columns;
-    this.order = input.order.map(row => row.map(cell => cell || cell === 0 ? String(cell) : undefined));
+    this.order = input.order.map(row => row.map(cell => stringify(cell)));
     return this;
   }
 }
 
 export class LoadBoardAction {
 
-  @IsNotEmpty({ message: 'Load board action id must be specified'})
-  @IsString({ message: 'Load board action id must be a string'})
+  @OneOf(['url', 'dataUrl', 'path'], { message: 'Load board should have one of dataUrl, url or path'})
   id: string;
 
   name: string;
@@ -95,11 +98,11 @@ export class Button {
   parent: OBFBoard;
 
   deserialize(input: any, parent: OBFBoard): Button {
-    this.id = input.id && String(input.id);
+    this.id = stringify(input.id);
     this.label = input.label;
     this.vocalization = input.vocalization;
-    this.imageId = input.image_id || input.image_id === 0 ? String(input.image_id) : undefined;
-    this.soundId = input.sound_id || input.sound_id === 0 ? String(input.sound_id) : undefined;
+    this.imageId = stringify(input.image_id);
+    this.soundId = stringify(input.sound_id);
     this.backgroundColor = input.background_color;
     this.borderColor = input.border_color;
     this.parent = parent;
@@ -163,7 +166,7 @@ export class Image {
   svgData: string;
 
   deserialize(input: any, parent: OBFBoard): Image {
-    this.id = input.id && String(input.id);
+    this.id = stringify(input.id);
     this.width = input.width;
     this.height = input.height;
     this.data = input.data;
@@ -227,7 +230,7 @@ export class Sound {
   parent: OBFBoard;
 
   deserialize(input: any, parent: OBFBoard): Sound {
-    this.id = input.id && String(input.id);
+    this.id = stringify(input.id);
     this.data = input.data;
     this.url = input.url;
     this.path = input.path;
@@ -288,7 +291,7 @@ export class OBFBoard {
 
   deserialize(input: any): OBFBoard {
     this.format = input.format;
-    this.id = input.id && String(input.id);
+    this.id = stringify(input.id);
     this.locale = input.locale;
     this.name = input.name;
     this.descriptionHtml = input.description_html;
