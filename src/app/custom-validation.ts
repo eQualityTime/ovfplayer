@@ -1,12 +1,12 @@
 import { registerDecorator, ValidationOptions, ValidationArguments } from 'class-validator';
 
-export function OneOf(otherProperties: string[], validationOptions?: ValidationOptions) {
+export function OneOf(validationProperties: string[], validationOptions?: ValidationOptions) {
   return function (object: Object, propertyName: string) {
     registerDecorator({
       name: 'OneOf',
       target: object.constructor,
       propertyName: propertyName,
-      constraints: [otherProperties],
+      constraints: [validationProperties],
       options: validationOptions,
       validator: {
         validate(value: any, args: ValidationArguments) {
