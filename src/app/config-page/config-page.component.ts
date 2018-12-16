@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ConfigService, ButtonDisplayConfig, ScanningConfig } from '../config.service';
 import { MatSnackBar } from '@angular/material';
+import { VERSION } from '../../environments/version';
 
 @Component({
   selector: 'app-config-page',
@@ -61,5 +62,9 @@ export class ConfigPageComponent implements OnInit {
     document.execCommand('copy');
     document.body.removeChild(selBox);
     this.snackBar.open('Configuration link copied to clipboard', '', { duration: 1000 });
+  }
+
+  getVersion() {
+    return VERSION.tag;
   }
 }
