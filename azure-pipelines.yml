@@ -30,6 +30,7 @@ jobs:
     displayName: 'execute tests'
 
   - script: |
+      git status
       npm run-script release -n major
     displayName: 'Tag and release'
 
