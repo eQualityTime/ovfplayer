@@ -29,6 +29,14 @@ jobs:
       ng test --watch=false --browsers ChromeHeadless
     displayName: 'execute tests'
 
+  - script: |
+      npm run-script release -n major
+    displayName: 'Tag and release'
+
+  - script: |
+      node git_version.js
+    displayName: 'Git describe'
+
   - task: PublishTestResults@2
     condition: always()
     inputs:
@@ -52,6 +60,10 @@ jobs:
       npm install
       npm i angular-cli-ghpages --save-dev
     displayName: 'npm install'
+
+  - script: |
+      npm run-script release -n major
+    displayName: 'Tag and release'
 
   - script: |
       node git_version.js

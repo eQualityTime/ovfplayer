@@ -1,5 +1,5 @@
 /*
-  Copied from
+  Copied and modified from
   https://medium.com/@amcdnl/version-stamping-your-app-with-the-angular-cli-d563284bb94d
 */
 const { gitDescribeSync } = require('git-describe');
