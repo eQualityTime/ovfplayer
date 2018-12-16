@@ -31,7 +31,8 @@ jobs:
 
   - script: |
       git reset HEAD --hard
-      npm run-script release -n major
+      git tag -a $BUILD_BUILDNUMBER -m "Release tag"
+      git push --tags
     displayName: 'Tag and release'
 
   - script: |
@@ -65,7 +66,8 @@ jobs:
   - script: |
       # do a git reset to undo changes to package-lock.json
       git reset HEAD --hard
-      npm run-script release -n major
+      git tag -a $BUILD_BUILDNUMBER -m "Release tag"
+      git push --tags
     displayName: 'Tag and release'
 
   - script: |
