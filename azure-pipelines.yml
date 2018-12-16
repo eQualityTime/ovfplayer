@@ -54,6 +54,10 @@ jobs:
     displayName: 'npm install'
 
   - script: |
+      node git_version.js
+    displayName: 'Git describe'
+
+  - script: |
       ng build --prod --base-href "https://equalitytime.github.io/ovfplayer/"
     displayName: 'build with correct HREF'
 
