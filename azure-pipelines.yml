@@ -30,7 +30,7 @@ jobs:
     displayName: 'execute tests'
 
   - script: |
-      git status
+      git reset HEAD --hard
       npm run-script release -n major
     displayName: 'Tag and release'
 
@@ -63,6 +63,8 @@ jobs:
     displayName: 'npm install'
 
   - script: |
+      # do a git reset to undo changes to package-lock.json
+      git reset HEAD --hard
       npm run-script release -n major
     displayName: 'Tag and release'
 
