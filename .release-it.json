@@ -2,7 +2,8 @@
   "git": {
     "tagName": "${version}",
     "commit": false,
-    "requireCleanWorkingDir": false
+    "requireCleanWorkingDir": false,
+    "requireUpstream": false
   },
   "github": {
     "release": true,
