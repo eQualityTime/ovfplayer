@@ -31,9 +31,9 @@ jobs:
 
   - script: |
       git remote set-url origin https://$GH_TOKEN@github.com/eQualityTime/ovfplayer.git
-      git config --global user.name "psi77"
-      git config --global user.email "simon@smith77.co.uk"
-      git tag -a $BUILD_BUILDNUMBER
+      git config user.name "psi77"
+      git config user.email "simon@smith77.co.uk"
+      git tag -a $BUILD_BUILDNUMBER -m "Release tagging"
       git push --tags
     displayName: 'Tag and release'
 
