@@ -29,18 +29,6 @@ jobs:
       ng test --watch=false --browsers ChromeHeadless
     displayName: 'execute tests'
 
-  - script: |
-      git remote set-url origin https://$GH_TOKEN@github.com/eQualityTime/ovfplayer.git
-      git config user.name "eQualityTimeDevs"
-      git config user.email "support@equalitytime.co.uk"
-      git tag -a $BUILD_BUILDNUMBER -m "Release tagging"
-      git push --tags
-    displayName: 'Tag and release'
-
-  - script: |
-      node git_version.js
-    displayName: 'Git describe'
-
   - task: PublishTestResults@2
     condition: always()
     inputs:
