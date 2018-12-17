@@ -30,6 +30,7 @@ jobs:
     displayName: 'execute tests'
 
   - script: |
+      git remote set-url origin https://psi77:$GH_TOKEN@github.com/eQualityTime/ovfplayer.git
       npm run-script release -- ${BUILD_BUILDNUMBER} -n
     displayName: 'Tag and release'
 
@@ -62,6 +63,7 @@ jobs:
     displayName: 'npm install'
 
   - script: |
+      git remote set-url origin https://psi77:$GH_TOKEN@github.com/eQualityTime/ovfplayer.git
       npm run-script release -- ${BUILD_BUILDNUMBER} -n
     displayName: 'Tag and release'
 
