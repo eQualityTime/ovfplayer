@@ -23,6 +23,7 @@
     "@angular/platform-browser": "^6.0.3",
     "@angular/platform-browser-dynamic": "^6.0.3",
     "@angular/router": "^6.0.3",
+    "@ngx-pwa/local-storage": "^6.2.1",
     "class-validator": "^0.9.1",
     "core-js": "^2.5.4",
     "jszip": "^3.1.5",

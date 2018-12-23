@@ -15,6 +15,7 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, Observer } from 'rxjs';
+import { LocalStorage } from '@ngx-pwa/local-storage';
 import { ConfigService } from './config.service';
 import { UrlUtils } from './url-utils';
 import { OBZBoardSet } from './obzboard-set';
@@ -31,7 +32,7 @@ export class ObzService {
 
   private observer: Observer<OBZBoardSet>;
 
-  constructor(private http: HttpClient, private config: ConfigService) { }
+  constructor(private http: HttpClient, private config: ConfigService, private localStorage: LocalStorage) { }
 
   getBoardSet(): Observable<OBZBoardSet> {
     return new Observable<OBZBoardSet>(this.addObserver);
@@ -39,15 +40,34 @@ export class ObzService {
 
   addObserver = (observer: Observer<OBZBoardSet>) => {
     this.observer = observer;
-
     this.loadBoardSet(this.config.boardURL);
   }
 
   public loadBoardSet(boardURL: string) {
-    // Decide if we're loading an obz or an obf
+    this.loadFromNetwork(boardURL);
+
+    // this.localStorage.getItem(boardURL).subscribe((boardSet) => {
+    //   if (boardSet) {
+    //     this.log(`Successfully loaded ${boardURL} from cache`);
+    //     console.log(boardSet);
+    //     this.observer.next(<OBZBoardSet>boardSet);
+    //   } else {
+    //     this.loadFromNetwork(boardURL);
+    //   }
+    // }, (error) => {
+    //   console.error(`Error loading ${boardURL} from cache`, error);
+    //   this.loadFromNetwork(boardURL);
+    // });
+  }
+
+  private loadFromNetwork(boardURL: string) {
+
+    this.log(`Loading ${boardURL} from internet`);
+
     const urlSlug = new UrlUtils().getSlug(boardURL);
     this.log(`Parsed url ${urlSlug}`);
 
+    // Decide if we're loading an obz or an obf
     if (urlSlug.toLowerCase().endsWith('.obf')) {
       this.loadOBFFile(boardURL);
     } else {
@@ -56,13 +76,28 @@ export class ObzService {
     }
   }
 
+  private cacheAndFire = (boardURL: string, boardSet: OBZBoardSet) => {
+    this.log(`Caching ${boardURL}`);
+    // TODO: make key for when we have different board set sources
+    this.localStorage.setItem(boardURL, boardSet).subscribe(() => {
+      // Success!
+      this.log(`Cache of ${boardURL} successful`);
+      this.observer.next(boardSet);
+    }, (error) => {
+      // Error
+      console.error(`Cache of ${boardURL} failed`, error);
+      // may as well carry on though as we have loaded the board
+      this.observer.next(boardSet);
+    });
+  }
+
   private loadOBFFile(boardURL: string) {
     this.http.get<OBFBoard>(boardURL).subscribe({
       next: (page) => {
         const boardSet = new OBZBoardSet();
         boardSet.rootBoardKey = 'root';
         boardSet.setBoard('root', new OBFBoard().deserialize(page));
-        this.observer.next(boardSet);
+        this.cacheAndFire(boardURL, boardSet);
       },
       error: (err) => {
         this.observer.error(new FatalOpenVoiceFactoryError(ErrorCodes.OBF_LOAD_ERROR, `Failed to load obf from ${boardURL}`, err));
@@ -78,7 +113,7 @@ export class ObzService {
     this.getOBZFile(boardURL).subscribe(
       (blob: Blob) => {
         this.parseOBZFile(blob).then(boardSet => {
-          this.observer.next(boardSet);
+          this.cacheAndFire(boardURL, boardSet);
         }).catch(error => {
           // error loading zip file
           throw new FatalOpenVoiceFactoryError(ErrorCodes.OBZ_PARSE_ERROR, `Could not parse ${boardURL} as a zip file`, error);
