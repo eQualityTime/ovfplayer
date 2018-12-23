@@ -36,7 +36,7 @@ function updateFiles() {
     if (changes.length === 0) {
       console.log('No files updated');
     } else {
-      console.log('Modified files:', changes.join(', '));
+      console.log('Modified files:', changes.join('\n\t'));
     }
   }
   catch (error) {
