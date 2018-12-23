@@ -14,6 +14,7 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: */
 import { Component, OnInit, Input } from '@angular/core';
 import { Button, Image } from '../obfboard';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-obf-button',
@@ -23,12 +24,23 @@ import { Button, Image } from '../obfboard';
 export class ObfButtonComponent implements OnInit {
 
   @Input()butt: Button;
-  @Input()image: Image;
+
+  // TODO: we don't seem to be using image
+  // @Input()image: Image;
   @Input()clickHandler: (Button) => void;
 
-  constructor() { }
+  constructor(private domSanit: DomSanitizer) { }
 
   ngOnInit() {
   }
 
+  getDataURL() {
+    try {
+      return this.domSanit.bypassSecurityTrustUrl(
+        URL.createObjectURL(this.butt.getImage().getDataBlob())
+      );
+    } finally {
+      // TODO: need to destroy url URL.revoke...
+    }
+  }
 }

@@ -13,5 +13,5 @@ You should have received a copy of the GNU General Public License
 along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: */
 export interface ImageResolver {
-  getImageData(imagePath: string): string;
+  getImageData(imagePath: string): Blob;
 }

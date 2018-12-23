@@ -27,6 +27,7 @@ import { ImageResolver } from './image-resolver';
 import { SoundResolver } from './sound-resolver';
 import { FatalOpenVoiceFactoryError, ErrorCodes } from './errors';
 import { Check2DArray, OneOf } from './custom-validation';
+import { Type, Exclude } from 'class-transformer';
 
 function stringify(value: any): string {
   return value || value === 0 ? String(value) : undefined;
@@ -106,9 +107,12 @@ export class Button {
   backgroundColor: string;
   borderColor: string;
   actions: string[];
+  @Type(() => LoadBoardAction)
   loadBoardAction: LoadBoardAction;
 
   @IsDefined()
+  @Type(() => OBFBoard)
+  @Exclude()
   parent: OBFBoard;
 
   deserialize(input: any, parent: OBFBoard): Button {
@@ -173,6 +177,8 @@ export class Image {
   contentType: string;
 
   @IsDefined()
+  @Type(() => OBFBoard)
+  @Exclude()
   parent: OBFBoard;
 
   @IsOptional()
@@ -196,27 +202,31 @@ export class Image {
     return 'image/svg+xml' === this.contentType || (this.path && this.path.toLowerCase().endsWith('.svg'));
   }
 
-  getSource(): string {
-    if (this.path && this.parent.imageResolver) {
-      const imageData = this.parent.imageResolver.getImageData(this.path);
-      if (this.isSVG()) {
-        if (!this.svgData) {
-          // Make SVGs scale nicely in the grid regardless of original size
-          const imgData = imageData.substring(imageData.indexOf('<svg'));
-          const htmlTag = document.createElement('div');
-          htmlTag.innerHTML = imgData;
-          const svgTag = htmlTag.getElementsByTagName('svg')[0];
-          svgTag.setAttribute('height', '100%');
-          svgTag.setAttribute('width', '100%');
-          this.svgData = htmlTag.innerHTML;
-        }
-        return this.svgData;
-      } else {
-        return `data:${this.contentType};base64,${imageData}`;
-      }
-    }
-    return this.data || this.url;
+  getDataBlob(): Blob {
+    return this.parent.imageResolver.getImageData(this.path);
   }
+
+  // getSource(): string {
+  //   if (this.path && this.parent.imageResolver) {
+  //     const imageData = this.parent.imageResolver.getImageData(this.path);
+  //     if (this.isSVG()) {
+  //       if (!this.svgData) {
+  //         // Make SVGs scale nicely in the grid regardless of original size
+  //         const imgData = imageData.substring(imageData.indexOf('<svg'));
+  //         const htmlTag = document.createElement('div');
+  //         htmlTag.innerHTML = imgData;
+  //         const svgTag = htmlTag.getElementsByTagName('svg')[0];
+  //         svgTag.setAttribute('height', '100%');
+  //         svgTag.setAttribute('width', '100%');
+  //         this.svgData = htmlTag.innerHTML;
+  //       }
+  //       return this.svgData;
+  //     } else {
+  //       return `data:${this.contentType};base64,${imageData}`;
+  //     }
+  //   }
+  //   return this.data || this.url;
+  // }
 }
 
 export class Sound {
@@ -241,6 +251,8 @@ export class Sound {
   duration: number;
 
   @IsDefined()
+  @Type(() => OBFBoard)
+  @Exclude()
   parent: OBFBoard;
 
   deserialize(input: any, parent: OBFBoard): Sound {
@@ -282,25 +294,32 @@ export class OBFBoard {
 
   @ValidateNested()
   @IsDefined()
+  @Type(() => Grid)
   grid: Grid;
 
   @ValidateNested({
     each: true
   })
   @IsDefined()
+  @Type(() => Button)
   buttons: Button[];
 
   @ValidateNested({
     each: true
   })
+  @Type(() => Image)
   images: Image[];
 
   @ValidateNested({
     each: true
   })
+  @Type(() => Sound)
   sounds: Sound[];
 
+  @Exclude()
   imageResolver: ImageResolver;
+
+  @Exclude()
   soundResolver: SoundResolver;
 
   deserialize(input: any): OBFBoard {
@@ -355,5 +374,17 @@ export class OBFBoard {
 
   getSound(id: string): Sound {
     return id === null ? null : this.sounds.find(sound => sound.id === id);
+  }
+
+  resolveIntegrity() {
+    this.buttons.forEach(button => {
+      button.parent = this;
+    });
+    this.sounds.forEach(sound => {
+      sound.parent = this;
+    });
+    this.images.forEach(image => {
+      image.parent = this;
+    });
   }
 }

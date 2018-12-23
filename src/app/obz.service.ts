@@ -20,6 +20,7 @@ import { ConfigService } from './config.service';
 import { UrlUtils } from './url-utils';
 import { OBZBoardSet } from './obzboard-set';
 import { OBFBoard } from './obfboard';
+import { plainToClass } from 'class-transformer';
 
 
 import * as JSZip from 'jszip';
@@ -29,6 +30,8 @@ import { FatalOpenVoiceFactoryError, ErrorCodes } from './errors';
   providedIn: 'root'
 })
 export class ObzService {
+
+  private static CURRENT_CACHE_KEY = 'currentOVF';
 
   private observer: Observer<OBZBoardSet>;
 
@@ -44,20 +47,23 @@ export class ObzService {
   }
 
   public loadBoardSet(boardURL: string) {
-    this.loadFromNetwork(boardURL);
 
-    // this.localStorage.getItem(boardURL).subscribe((boardSet) => {
-    //   if (boardSet) {
-    //     this.log(`Successfully loaded ${boardURL} from cache`);
-    //     console.log(boardSet);
-    //     this.observer.next(<OBZBoardSet>boardSet);
-    //   } else {
-    //     this.loadFromNetwork(boardURL);
-    //   }
-    // }, (error) => {
-    //   console.error(`Error loading ${boardURL} from cache`, error);
-    //   this.loadFromNetwork(boardURL);
-    // });
+    this.localStorage.getItem(ObzService.CURRENT_CACHE_KEY).subscribe((boardSet) => {
+      if (boardSet) {
+        this.log(`Successfully loaded ${boardURL} from cache`);
+        const bs = <any>plainToClass(OBZBoardSet, boardSet);
+        // TODO: this is a bit of a hack....
+        boardSet.images.forEach((value: Blob, key: string) => {
+          bs.images.set(key, value);
+        });
+        this.observer.next((<OBZBoardSet>bs).resolveIntegrity());
+      } else {
+        this.loadFromNetwork(boardURL);
+      }
+    }, (error) => {
+      console.error(`Error loading ${boardURL} from cache`, error);
+      this.loadFromNetwork(boardURL);
+    });
   }
 
   private loadFromNetwork(boardURL: string) {
@@ -79,7 +85,7 @@ export class ObzService {
   private cacheAndFire = (boardURL: string, boardSet: OBZBoardSet) => {
     this.log(`Caching ${boardURL}`);
     // TODO: make key for when we have different board set sources
-    this.localStorage.setItem(boardURL, boardSet).subscribe(() => {
+    this.localStorage.setItem(ObzService.CURRENT_CACHE_KEY, boardSet).subscribe(() => {
       // Success!
       this.log(`Cache of ${boardURL} successful`);
       this.observer.next(boardSet);
@@ -173,12 +179,11 @@ export class ObzService {
   }
 
   private parseImage = (zip, image: string, boardSet: OBZBoardSet): Promise<void> => {
-    const encoding = image.toLowerCase().endsWith('.svg') ? 'text' : 'base64';
     const imageFile = zip.file(image);
     if (!imageFile) {
       throw new FatalOpenVoiceFactoryError(ErrorCodes.IMAGE_NOT_THERE, `Image ${image} is not present in obz`);
     }
-    const imagePromise = imageFile.async(encoding).then(function (contents) {
+    const imagePromise = imageFile.async('blob').then(function (contents) {
       boardSet.setImage(image, contents);
     }).catch(error => {
       // error loading image file

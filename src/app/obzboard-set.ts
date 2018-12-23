@@ -15,36 +15,52 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 import { OBFBoard } from './obfboard';
 import { ImageResolver } from './image-resolver';
 import { SoundResolver } from './sound-resolver';
+import { Type } from 'class-transformer';
 
 export class OBZBoardSet implements ImageResolver, SoundResolver {
-  private boards: {[key: string]: OBFBoard} = {};
-  private images: {[key: string]: string} = {};
-  private sounds: {[key: string]: string} = {};
+
+  @Type(() => OBFBoard)
+  private boards: Map<string, OBFBoard> = new Map();
+
+  @Type(() => Blob)
+  private images: Map<string, Blob> = new Map();
+
+  private sounds: Map<string, string> = new Map();
+
   rootBoardKey: string;
 
   public getBoard(boardKey: string): OBFBoard {
-    return this.boards[boardKey];
+    return this.boards.get(boardKey);
   }
 
   public setBoard(boardKey: string, board: OBFBoard) {
-    this.boards[boardKey] = board;
+    this.boards.set(boardKey, board);
     board.setImageResolver(this);
     board.setSoundResolver(this);
   }
 
-  public setImage(imageKey: string, imageData: string) {
-    this.images[imageKey] = imageData;
+  public setImage(imageKey: string, imageData: Blob) {
+    this.images.set(imageKey, imageData);
   }
 
   public setSound(soundKey: string, soundData: string) {
-    this.sounds[soundKey] = soundData;
+    this.sounds.set(soundKey, soundData);
   }
 
-  public getImageData(imagePath: string): string {
-    return this.images[imagePath];
+  public getImageData(imagePath: string): Blob {
+    return this.images.get(imagePath);
   }
 
   public getSoundData(soundPath: string): string {
-    return this.sounds[soundPath];
+    return this.sounds.get(soundPath);
+  }
+
+  public resolveIntegrity(): OBZBoardSet {
+    this.boards.forEach((value: OBFBoard, key: string) => {
+      value.setImageResolver(this);
+      value.setSoundResolver(this);
+      value.resolveIntegrity();
+    });
+    return this;
   }
 }
