@@ -15,27 +15,24 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, Observer } from 'rxjs';
-import { LocalStorage } from '@ngx-pwa/local-storage';
+import { first } from 'rxjs/operators';
 import { ConfigService } from './config.service';
 import { UrlUtils } from './url-utils';
 import { OBZBoardSet } from './obzboard-set';
 import { OBFBoard } from './obfboard';
-import { plainToClass } from 'class-transformer';
-
 
 import * as JSZip from 'jszip';
 import { FatalOpenVoiceFactoryError, ErrorCodes } from './errors';
+import { BoardCacheService } from './board-cache.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ObzService {
 
-  private static CURRENT_CACHE_KEY = 'currentOVF';
-
   private observer: Observer<OBZBoardSet>;
 
-  constructor(private http: HttpClient, private config: ConfigService, private localStorage: LocalStorage) { }
+  constructor(private http: HttpClient, private config: ConfigService, private boardCache: BoardCacheService) { }
 
   getBoardSet(): Observable<OBZBoardSet> {
     return new Observable<OBZBoardSet>(this.addObserver);
@@ -48,15 +45,9 @@ export class ObzService {
 
   public loadBoardSet(boardURL: string) {
 
-    this.localStorage.getItem(ObzService.CURRENT_CACHE_KEY).subscribe((boardSet) => {
+    this.boardCache.retrieve().pipe(first()).subscribe((boardSet: OBZBoardSet) => {
       if (boardSet) {
-        this.log(`Successfully loaded ${boardURL} from cache`);
-        const bs = <any>plainToClass(OBZBoardSet, boardSet);
-        // TODO: this is a bit of a hack....
-        boardSet.images.forEach((value: Blob, key: string) => {
-          bs.images.set(key, value);
-        });
-        this.observer.next((<OBZBoardSet>bs).resolveIntegrity());
+        this.observer.next(boardSet);
       } else {
         this.loadFromNetwork(boardURL);
       }
@@ -84,8 +75,7 @@ export class ObzService {
 
   private cacheAndFire = (boardURL: string, boardSet: OBZBoardSet) => {
     this.log(`Caching ${boardURL}`);
-    // TODO: make key for when we have different board set sources
-    this.localStorage.setItem(ObzService.CURRENT_CACHE_KEY, boardSet).subscribe(() => {
+    this.boardCache.save(boardSet).pipe(first()).subscribe(() => {
       // Success!
       this.log(`Cache of ${boardURL} successful`);
       this.observer.next(boardSet);

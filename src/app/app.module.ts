@@ -35,6 +35,7 @@ import { SafePipe } from './safe.pipe';
 import { GlobalErrorHandlerService } from './global-error-handler.service';
 import { ErrorPageComponent } from './error-page/error-page.component';
 import { OBFPageComponent } from './obfpage/obfpage.component';
+// TODO: remove if remove class-transformer
 import 'reflect-metadata';
 
 @NgModule({
