@@ -24,16 +24,15 @@
     "@angular/platform-browser-dynamic": "^6.0.3",
     "@angular/pwa": "^0.8.7",
     "@angular/router": "^6.0.3",
+    "@angular/service-worker": "^6.0.3",
     "@ngx-pwa/local-storage": "^6.2.1",
     "class-validator": "^0.9.1",
     "core-js": "^2.5.4",
     "jszip": "^3.1.5",
     "ngx-store": "^2.0.0",
-    "reflect-metadata": "^0.1.12",
     "rxjs": "^6.0.0",
     "url-parse": "^1.4.4",
-    "zone.js": "^0.8.26",
-    "@angular/service-worker": "^6.0.3"
+    "zone.js": "^0.8.26"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.6.8",
