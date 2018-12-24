@@ -1,4 +1,4 @@
-/* ::START::LICENCE::
+
 Copyright eQualityTime ©2018
 This file is part of OVFPlayer.
 OVFPlayer is free software: you can redistribute it and/or modify
@@ -11,13 +11,3 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
-::END::LICENCE:: */
-import { Component } from '@angular/core';
-
-@Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
-})
-export class AppComponent {
-}
