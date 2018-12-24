@@ -15,16 +15,11 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 import { OBFBoard } from './obfboard';
 import { ImageResolver } from './image-resolver';
 import { SoundResolver } from './sound-resolver';
-import { Type } from 'class-transformer';
 
 export class OBZBoardSet implements ImageResolver, SoundResolver {
 
-  @Type(() => OBFBoard)
   private boards: Map<string, OBFBoard> = new Map();
-
-  @Type(() => Blob)
   private images: Map<string, Blob> = new Map();
-
   private sounds: Map<string, string> = new Map();
 
   rootBoardKey: string;

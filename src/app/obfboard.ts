@@ -27,7 +27,6 @@ import { ImageResolver } from './image-resolver';
 import { SoundResolver } from './sound-resolver';
 import { FatalOpenVoiceFactoryError, ErrorCodes } from './errors';
 import { Check2DArray, OneOf } from './custom-validation';
-import { Type, Exclude } from 'class-transformer';
 
 function stringify(value: any): string {
   return value || value === 0 ? String(value) : undefined;
@@ -75,7 +74,7 @@ export class LoadBoardAction {
     this.id = input.id;
     this.name = input.name;
     this.url = input.url;
-    this.dataUrl = input.data_url;
+    this.dataUrl = input.dataUrl || input.data_url;
     this.path = input.path;
 
     return this;
@@ -107,22 +106,19 @@ export class Button {
   backgroundColor: string;
   borderColor: string;
   actions: string[];
-  @Type(() => LoadBoardAction)
   loadBoardAction: LoadBoardAction;
 
   @IsDefined()
-  @Type(() => OBFBoard)
-  @Exclude()
   parent: OBFBoard;
 
   deserialize(input: any, parent: OBFBoard): Button {
     this.id = stringify(input.id);
     this.label = input.label;
     this.vocalization = input.vocalization;
-    this.imageId = stringify(input.image_id);
-    this.soundId = stringify(input.sound_id);
-    this.backgroundColor = input.background_color;
-    this.borderColor = input.border_color;
+    this.imageId = stringify(input.imageId) || stringify(input.image_id);
+    this.soundId = stringify(input.soundId) || stringify(input.sound_id);
+    this.backgroundColor = input.backgroundColor || input.background_color;
+    this.borderColor = input.borderColor || input.border_color;
     this.parent = parent;
 
     if (input.actions && input.actions.length > 0) {
@@ -131,7 +127,10 @@ export class Button {
       this.actions = (input.action !== undefined && input.action !== '') ? [input.action] : [];
     }
 
-    if (input.load_board) {
+    if (input.loadBoardAction) {
+      // TODO: if there is a board to load we should probably load it now so it will get cached by the service worker
+      this.loadBoardAction = new LoadBoardAction().deserialize(input.loadBoardAction);
+    } else if (input.load_board) {
       // TODO: if there is a board to load we should probably load it now so it will get cached by the service worker
       this.loadBoardAction = new LoadBoardAction().deserialize(input.load_board);
     }
@@ -177,8 +176,6 @@ export class Image {
   contentType: string;
 
   @IsDefined()
-  @Type(() => OBFBoard)
-  @Exclude()
   parent: OBFBoard;
 
   @IsOptional()
@@ -192,7 +189,7 @@ export class Image {
     this.data = input.data;
     this.url = input.url;
     this.path = input.path;
-    this.contentType = input.content_type;
+    this.contentType = input.contentType || input.content_type;
     this.parent = parent;
 
     return this;
@@ -251,8 +248,6 @@ export class Sound {
   duration: number;
 
   @IsDefined()
-  @Type(() => OBFBoard)
-  @Exclude()
   parent: OBFBoard;
 
   deserialize(input: any, parent: OBFBoard): Sound {
@@ -260,7 +255,7 @@ export class Sound {
     this.data = input.data;
     this.url = input.url;
     this.path = input.path;
-    this.contentType = input.content_type;
+    this.contentType = input.contentType || input.content_type;
     this.duration = input.duration;
     this.parent = parent;
 
@@ -294,32 +289,26 @@ export class OBFBoard {
 
   @ValidateNested()
   @IsDefined()
-  @Type(() => Grid)
   grid: Grid;
 
   @ValidateNested({
     each: true
   })
   @IsDefined()
-  @Type(() => Button)
   buttons: Button[];
 
   @ValidateNested({
     each: true
   })
-  @Type(() => Image)
   images: Image[];
 
   @ValidateNested({
     each: true
   })
-  @Type(() => Sound)
   sounds: Sound[];
 
-  @Exclude()
   imageResolver: ImageResolver;
 
-  @Exclude()
   soundResolver: SoundResolver;
 
   deserialize(input: any): OBFBoard {
@@ -327,7 +316,7 @@ export class OBFBoard {
     this.id = stringify(input.id);
     this.locale = input.locale;
     this.name = input.name;
-    this.descriptionHtml = input.description_html;
+    this.descriptionHtml = input.descriptionHtml || input.description_html;
     this.grid = new Grid().deserialize(input.grid);
     this.buttons = input.buttons.map(button => new Button().deserialize(button, this));
     this.images = input.images.map(image => new Image().deserialize(image, this));
