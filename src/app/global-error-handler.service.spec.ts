@@ -1,5 +1,5 @@
 /* ::START::LICENCE::
-Copyright ©2018
+Copyright eQualityTime ©2018
 This file is part of OVFPlayer.
 OVFPlayer is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
