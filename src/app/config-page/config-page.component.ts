@@ -14,7 +14,6 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: */
 import { Component, OnInit, Input } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { first } from 'rxjs/operators';
 import { ConfigService, ButtonDisplayConfig, ScanningConfig } from '../config.service';
 import { MatSnackBar } from '@angular/material';
 import { VERSION } from '../../environments/version';
@@ -65,7 +64,7 @@ export class ConfigPageComponent implements OnInit {
     // TODO: some kind of validation
 
     // clear local cache of page to force a refresh
-    this.boardCache.clear().pipe(first()).subscribe(
+    this.boardCache.clear().subscribe(
       () => {
         this.router.navigate(['/main']);
       },

@@ -4,7 +4,7 @@ import { LocalStorage } from '@ngx-pwa/local-storage';
 import { plainToClass } from 'class-transformer';
 import { OBZBoardSet } from './obzboard-set';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, first } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +17,7 @@ export class BoardCacheService {
 
   public clear(): Observable<boolean> {
     this.log('Clearing local board cache');
-    return this.localStorage.removeItem(BoardCacheService.BOARD_CACHE_KEY);
+    return this.localStorage.removeItem(BoardCacheService.BOARD_CACHE_KEY).pipe(first());
   }
 
   public retrieve(): Observable<OBZBoardSet> {
@@ -34,11 +34,11 @@ export class BoardCacheService {
       } else {
         return null;
       }
-    }));
+    }), first());
   }
 
   public save(boardSet: OBZBoardSet): Observable<boolean> {
-    return this.localStorage.setItem(BoardCacheService.BOARD_CACHE_KEY, boardSet);
+    return this.localStorage.setItem(BoardCacheService.BOARD_CACHE_KEY, boardSet).pipe(first());
   }
 
   private log(message: string) {
