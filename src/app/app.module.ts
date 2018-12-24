@@ -35,8 +35,8 @@ import { SafePipe } from './safe.pipe';
 import { GlobalErrorHandlerService } from './global-error-handler.service';
 import { ErrorPageComponent } from './error-page/error-page.component';
 import { OBFPageComponent } from './obfpage/obfpage.component';
-// TODO: remove if remove class-transformer
-import 'reflect-metadata';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -68,7 +68,8 @@ import 'reflect-metadata';
     LayoutModule,
     AppRoutingModule,
     WebStorageModule,
-    MatRippleModule
+    MatRippleModule,
+    ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [
     {
