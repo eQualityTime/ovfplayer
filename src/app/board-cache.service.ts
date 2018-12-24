@@ -40,7 +40,6 @@ export class BoardCacheService {
           board.setSoundResolver(bs);
           bs.setBoard(key, board);
         });
-        console.log(bs);
         return bs;
       } else {
         return null;
