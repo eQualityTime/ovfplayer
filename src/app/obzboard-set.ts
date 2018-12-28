@@ -16,7 +16,7 @@ import { OBFBoard } from './obfboard';
 import { ImageResolver } from './image-resolver';
 import { SoundResolver } from './sound-resolver';
 import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
 
 export class OBZBoardSet implements ImageResolver, SoundResolver {
 
@@ -85,7 +85,7 @@ export class OBZBoardSet implements ImageResolver, SoundResolver {
           } else if (image.url) {
             // load url into blob
             promises.push(httpClient.get(image.url, { responseType: 'blob' }).pipe(
-              map(blob => {
+              tap(blob => {
                 const key = `url:${image.id}`;
                 this.setImage(key, blob);
                 image.path = key;
