@@ -60,8 +60,11 @@ export class BoardCacheService {
     }), first());
   }
 
-  public save(boardSet: OBZBoardSet): Observable<boolean> {
-    return this.localStorage.setItem(BoardCacheService.BOARD_CACHE_KEY, boardSet).pipe(first());
+  public save(boardSet: OBZBoardSet): Observable<OBZBoardSet> {
+    return this.localStorage.setItem(BoardCacheService.BOARD_CACHE_KEY, boardSet).pipe(
+      map(success => boardSet),
+      first()
+    );
   }
 
   private log(message: string) {

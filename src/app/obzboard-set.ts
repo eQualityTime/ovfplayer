@@ -16,7 +16,8 @@ import { OBFBoard } from './obfboard';
 import { ImageResolver } from './image-resolver';
 import { SoundResolver } from './sound-resolver';
 import { HttpClient } from '@angular/common/http';
-import { tap } from 'rxjs/operators';
+import { tap, map } from 'rxjs/operators';
+import { Observable, forkJoin } from 'rxjs';
 
 export class OBZBoardSet implements ImageResolver, SoundResolver {
 
@@ -52,21 +53,22 @@ export class OBZBoardSet implements ImageResolver, SoundResolver {
     return this.sounds.get(soundPath);
   }
 
-  public blobify(httpClient: HttpClient): Promise<OBZBoardSet> {
+  public blobify(httpClient: HttpClient): Observable<OBZBoardSet> {
 
-    const promises = [];
     // TODO: go through boards and load other boards from board actions (until there are no more new ones!)
 
     // go through all url & data images & sounds and blobify into maps
-    promises.push(this.blobifyImages(httpClient));
 
     // TODO: error handling might be nice...
-    return Promise.all(promises).then(() => this);
+
+    return this.blobifyImages(httpClient).pipe(
+      map(imageResult => this)
+    );
   }
 
-  private blobifyImages(httpClient: HttpClient): Promise<boolean> {
+  private blobifyImages(httpClient: HttpClient): Observable<boolean> {
 
-    const promises = [];
+    const observables = [];
 
     this.boards.forEach(board => {
       board.images.forEach(image => {
@@ -75,7 +77,7 @@ export class OBZBoardSet implements ImageResolver, SoundResolver {
           // try data first
           if (image.data && image.contentType) {
             const key = `data:${image.id}`;
-            // TODO: we could use the content type from here that we're stipping off
+            // TODO: we could use the content type from here that we're stripping off
             const data = image.data.substr(image.data.indexOf(',') + 1);
             this.setImage(key, this.base64ToBlob(data, image.contentType));
             // set path to key so render code will look up blob in images
@@ -84,20 +86,20 @@ export class OBZBoardSet implements ImageResolver, SoundResolver {
             image.data = null;
           } else if (image.url) {
             // load url into blob
-            promises.push(httpClient.get(image.url, { responseType: 'blob' }).pipe(
+            observables.push(httpClient.get(image.url, { responseType: 'blob' }).pipe(
               tap(blob => {
                 const key = `url:${image.id}`;
                 this.setImage(key, blob);
                 image.path = key;
                 image.url = null;
               })
-            ).toPromise());
+            ));
           }
         }
       });
     });
 
-    return Promise.all(promises).then(() => true);
+    return forkJoin(...observables);
   }
 
   private base64ToBlob(data: string, type: string): Blob {

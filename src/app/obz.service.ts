@@ -14,7 +14,8 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: */
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable, Observer } from 'rxjs';
+import { Observable, Observer, empty } from 'rxjs';
+import { flatMap, tap, catchError, first } from 'rxjs/operators';
 import { ConfigService } from './config.service';
 import { UrlUtils } from './url-utils';
 import { OBZBoardSet } from './obzboard-set';
@@ -73,21 +74,22 @@ export class ObzService {
 
   private cacheAndFire = (boardURL: string, boardSet: OBZBoardSet) => {
     this.log(`Blobifying ${boardURL}`);
-    boardSet.blobify(this.http).then(
-      blobified => {
+    boardSet.blobify(this.http).pipe(
+      flatMap(blobified => {
         this.log(`Caching ${boardURL}`);
-        this.boardCache.save(blobified).subscribe(() => {
-          // Success!
-          this.log(`Cache of ${boardURL} successful`);
-          this.observer.next(blobified);
-        }, (error) => {
-          // Error
-          console.error(`Cache of ${boardURL} failed`, error);
-          // may as well carry on though as we have loaded the board
-          this.observer.next(boardSet);
-        });
-      }
-    );
+        return this.boardCache.save(blobified);
+      }),
+      tap(cached => {
+        this.observer.next(cached);
+      }),
+      first(),
+      catchError(error => {
+        console.error(`Cache of ${boardURL} failed`, error);
+        // may as well carry on though as we have loaded the board
+        this.observer.next(boardSet);
+        return empty();
+      })
+    ).subscribe(() => {});
   }
 
   private loadOBFFile(boardURL: string) {
