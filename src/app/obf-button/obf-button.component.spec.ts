@@ -15,7 +15,6 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ObfButtonComponent } from './obf-button.component';
-import { SafePipe } from '../safe.pipe';
 import { Button, OBFBoard } from '../obfboard';
 import { MatRippleModule } from '@angular/material';
 
@@ -41,7 +40,7 @@ describe('ObfButtonComponent', () => {
 
     TestBed.configureTestingModule({
       imports: [ MatRippleModule ],
-      declarations: [ ObfButtonComponent, SafePipe ]
+      declarations: [ ObfButtonComponent ]
     })
     .compileComponents();
   }));

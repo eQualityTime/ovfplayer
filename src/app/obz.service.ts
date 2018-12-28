@@ -43,7 +43,6 @@ export class ObzService {
   }
 
   public loadBoardSet(boardURL: string) {
-
     this.boardCache.retrieve().subscribe((boardSet: OBZBoardSet) => {
       if (boardSet) {
         this.observer.next(boardSet);
@@ -73,17 +72,22 @@ export class ObzService {
   }
 
   private cacheAndFire = (boardURL: string, boardSet: OBZBoardSet) => {
-    this.log(`Caching ${boardURL}`);
-    this.boardCache.save(boardSet).subscribe(() => {
-      // Success!
-      this.log(`Cache of ${boardURL} successful`);
-      this.observer.next(boardSet);
-    }, (error) => {
-      // Error
-      console.error(`Cache of ${boardURL} failed`, error);
-      // may as well carry on though as we have loaded the board
-      this.observer.next(boardSet);
-    });
+    this.log(`Blobifying ${boardURL}`);
+    boardSet.blobify(this.http).then(
+      blobified => {
+        this.log(`Caching ${boardURL}`);
+        this.boardCache.save(blobified).subscribe(() => {
+          // Success!
+          this.log(`Cache of ${boardURL} successful`);
+          this.observer.next(blobified);
+        }, (error) => {
+          // Error
+          console.error(`Cache of ${boardURL} failed`, error);
+          // may as well carry on though as we have loaded the board
+          this.observer.next(boardSet);
+        });
+      }
+    );
   }
 
   private loadOBFFile(boardURL: string) {

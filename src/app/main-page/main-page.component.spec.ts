@@ -19,7 +19,6 @@ import { MatCardModule, MatRippleModule } from '@angular/material';
 import { MainPageComponent } from './main-page.component';
 import { SpeechbarComponent } from '../speechbar/speechbar.component';
 import { ButtonPageComponent } from '../button-page/button-page.component';
-import { SafePipe } from '../safe.pipe';
 import { ObfButtonComponent } from '../obf-button/obf-button.component';
 
 describe('MainPageComponent', () => {
@@ -32,7 +31,6 @@ describe('MainPageComponent', () => {
         MainPageComponent,
         SpeechbarComponent,
         ButtonPageComponent,
-        SafePipe,
         ObfButtonComponent
       ],
       imports: [ MatCardModule, HttpClientTestingModule, MatRippleModule ]

@@ -31,7 +31,6 @@ import { ConfigPageComponent } from './config-page/config-page.component';
 import { MainPageComponent } from './main-page/main-page.component';
 import { ObfButtonComponent } from './obf-button/obf-button.component';
 import { SpeechbarComponent } from './speechbar/speechbar.component';
-import { SafePipe } from './safe.pipe';
 import { GlobalErrorHandlerService } from './global-error-handler.service';
 import { ErrorPageComponent } from './error-page/error-page.component';
 import { OBFPageComponent } from './obfpage/obfpage.component';
@@ -43,7 +42,6 @@ import { OBFPageComponent } from './obfpage/obfpage.component';
     SpeechbarComponent,
     ConfigPageComponent,
     MainPageComponent,
-    SafePipe,
     ObfButtonComponent,
     ErrorPageComponent,
     OBFPageComponent

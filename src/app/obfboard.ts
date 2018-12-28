@@ -195,35 +195,9 @@ export class Image {
     return this;
   }
 
-  isSVG(): boolean {
-    return 'image/svg+xml' === this.contentType || (this.path && this.path.toLowerCase().endsWith('.svg'));
-  }
-
   getDataBlob(): Blob {
     return this.parent.imageResolver.getImageData(this.path);
   }
-
-  // getSource(): string {
-  //   if (this.path && this.parent.imageResolver) {
-  //     const imageData = this.parent.imageResolver.getImageData(this.path);
-  //     if (this.isSVG()) {
-  //       if (!this.svgData) {
-  //         // Make SVGs scale nicely in the grid regardless of original size
-  //         const imgData = imageData.substring(imageData.indexOf('<svg'));
-  //         const htmlTag = document.createElement('div');
-  //         htmlTag.innerHTML = imgData;
-  //         const svgTag = htmlTag.getElementsByTagName('svg')[0];
-  //         svgTag.setAttribute('height', '100%');
-  //         svgTag.setAttribute('width', '100%');
-  //         this.svgData = htmlTag.innerHTML;
-  //       }
-  //       return this.svgData;
-  //     } else {
-  //       return `data:${this.contentType};base64,${imageData}`;
-  //     }
-  //   }
-  //   return this.data || this.url;
-  // }
 }
 
 export class Sound {

@@ -15,6 +15,8 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 import { OBFBoard } from './obfboard';
 import { ImageResolver } from './image-resolver';
 import { SoundResolver } from './sound-resolver';
+import { HttpClient } from '@angular/common/http';
+import { map } from 'rxjs/operators';
 
 export class OBZBoardSet implements ImageResolver, SoundResolver {
 
@@ -50,12 +52,61 @@ export class OBZBoardSet implements ImageResolver, SoundResolver {
     return this.sounds.get(soundPath);
   }
 
-  public resolveIntegrity(): OBZBoardSet {
-    this.boards.forEach((value: OBFBoard, key: string) => {
-      value.setImageResolver(this);
-      value.setSoundResolver(this);
-      value.resolveIntegrity();
+  public blobify(httpClient: HttpClient): Promise<OBZBoardSet> {
+
+    const promises = [];
+    // TODO: go through boards and load other boards from board actions (until there are no more new ones!)
+
+    // go through all url & data images & sounds and blobify into maps
+    promises.push(this.blobifyImages(httpClient));
+
+    // TODO: error handling might be nice...
+    return Promise.all(promises).then(() => this);
+  }
+
+  private blobifyImages(httpClient: HttpClient): Promise<boolean> {
+
+    const promises = [];
+
+    this.boards.forEach(board => {
+      board.images.forEach(image => {
+        // if image already has a path, then don't worry
+        if (!image.path) {
+          // try data first
+          if (image.data && image.contentType) {
+            const key = `data:${image.id}`;
+            // TODO: we could use the content type from here that we're stipping off
+            const data = image.data.substr(image.data.indexOf(',') + 1);
+            this.setImage(key, this.base64ToBlob(data, image.contentType));
+            // set path to key so render code will look up blob in images
+            image.path = key;
+            // remove data as we don't need to cache it too
+            image.data = null;
+          } else if (image.url) {
+            // load url into blob
+            promises.push(httpClient.get(image.url, { responseType: 'blob' }).pipe(
+              map(blob => {
+                const key = `url:${image.id}`;
+                this.setImage(key, blob);
+                image.path = key;
+                image.url = null;
+              })
+            ).toPromise());
+          }
+        }
+      });
     });
-    return this;
+
+    return Promise.all(promises).then(() => true);
+  }
+
+  private base64ToBlob(data: string, type: string): Blob {
+    const byteCharacters = atob(data);
+    const byteNumbers = new Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+    const byteArray = new Uint8Array(byteNumbers);
+    return new Blob([byteArray], { type: type });
   }
 }
