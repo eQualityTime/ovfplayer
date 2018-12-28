@@ -22,5 +22,24 @@ if (environment.production) {
   enableProdMode();
 }
 
-platformBrowserDynamic().bootstrapModule(AppModule)
-  .catch(err => console.log(err));
+platformBrowserDynamic()
+  .bootstrapModule(AppModule)
+  .then(() => {
+    registerServiceWorker('service-worker');
+  });
+
+function registerServiceWorker(swName: string) {
+  if ('serviceWorker' in navigator) {
+    // TODO: /ovf/ in here needs correcting to deployed subdomain
+    navigator.serviceWorker
+      .register(`/ovf/${swName}.js`)
+      .then(reg => {
+        console.log('Successful service worker registration', reg);
+      })
+      .catch(err =>
+        console.error('Service worker registration failed', err)
+      );
+  } else {
+    console.error('Service Worker API is not supported in current browser');
+  }
+}

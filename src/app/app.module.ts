@@ -35,8 +35,6 @@ import { SafePipe } from './safe.pipe';
 import { GlobalErrorHandlerService } from './global-error-handler.service';
 import { ErrorPageComponent } from './error-page/error-page.component';
 import { OBFPageComponent } from './obfpage/obfpage.component';
-import { ServiceWorkerModule } from '@angular/service-worker';
-import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -68,8 +66,7 @@ import { environment } from '../environments/environment';
     LayoutModule,
     AppRoutingModule,
     WebStorageModule,
-    MatRippleModule,
-    ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production })
+    MatRippleModule
   ],
   providers: [
     {
