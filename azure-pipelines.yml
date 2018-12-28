@@ -49,6 +49,7 @@ jobs:
 
   - script: |
       npm install -g @angular/cli
+      npm install -g workbox-cli
       npm install
       npm i angular-cli-ghpages --save-dev
     displayName: 'npm install'
@@ -67,6 +68,7 @@ jobs:
 
   - script: |
       ng build --prod --base-href "https://equalitytime.github.io/ovfplayer/"
+      workbox injectManifest
     displayName: 'build with correct HREF'
 
   - script: |
