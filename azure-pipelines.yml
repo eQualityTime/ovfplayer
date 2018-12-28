@@ -49,7 +49,7 @@ jobs:
 
   - script: |
       npm install -g @angular/cli
-      npm install -g workbox-cli
+      npm install -g workbox-cli@3.6.3
       npm install
       npm i angular-cli-ghpages --save-dev
     displayName: 'npm install'
