@@ -17,7 +17,8 @@ import { ImageResolver } from './image-resolver';
 import { SoundResolver } from './sound-resolver';
 import { HttpClient } from '@angular/common/http';
 import { tap, map } from 'rxjs/operators';
-import { Observable, forkJoin } from 'rxjs';
+import { Observable, forkJoin, of } from 'rxjs';
+import { ProgressService } from './progress.service';
 
 export class OBZBoardSet implements ImageResolver, SoundResolver {
 
@@ -53,7 +54,7 @@ export class OBZBoardSet implements ImageResolver, SoundResolver {
     return this.sounds.get(soundPath);
   }
 
-  public blobify(httpClient: HttpClient): Observable<OBZBoardSet> {
+  public blobify(httpClient: HttpClient, progress: ProgressService): Observable<OBZBoardSet> {
 
     // TODO: go through boards and load other boards from board actions (until there are no more new ones!)
 
@@ -61,6 +62,7 @@ export class OBZBoardSet implements ImageResolver, SoundResolver {
 
     // TODO: error handling might be nice...
 
+    progress.progress(ProgressService.message('Precaching images'));
     return this.blobifyImages(httpClient).pipe(
       map(imageResult => this)
     );
@@ -99,7 +101,7 @@ export class OBZBoardSet implements ImageResolver, SoundResolver {
       });
     });
 
-    return forkJoin(...observables);
+    return observables.length > 0 ? forkJoin(...observables) : of(true);
   }
 
   private base64ToBlob(data: string, type: string): Blob {

@@ -34,6 +34,7 @@ import { SpeechbarComponent } from './speechbar/speechbar.component';
 import { GlobalErrorHandlerService } from './global-error-handler.service';
 import { ErrorPageComponent } from './error-page/error-page.component';
 import { OBFPageComponent } from './obfpage/obfpage.component';
+import { ProgressComponent } from './progress/progress.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import { OBFPageComponent } from './obfpage/obfpage.component';
     MainPageComponent,
     ObfButtonComponent,
     ErrorPageComponent,
-    OBFPageComponent
+    OBFPageComponent,
+    ProgressComponent
   ],
   imports: [
     BrowserModule,

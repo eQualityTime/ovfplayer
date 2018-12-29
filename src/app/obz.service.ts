@@ -24,6 +24,7 @@ import { OBFBoard } from './obfboard';
 import * as JSZip from 'jszip';
 import { FatalOpenVoiceFactoryError, ErrorCodes } from './errors';
 import { BoardCacheService } from './board-cache.service';
+import { ProgressService } from './progress.service';
 
 @Injectable({
   providedIn: 'root'
@@ -32,7 +33,12 @@ export class ObzService {
 
   private observer: Observer<OBZBoardSet>;
 
-  constructor(private http: HttpClient, private config: ConfigService, private boardCache: BoardCacheService) { }
+  constructor(
+    private http: HttpClient,
+    private config: ConfigService,
+    private boardCache: BoardCacheService,
+    private progress: ProgressService
+  ) { }
 
   getBoardSet(): Observable<OBZBoardSet> {
     return new Observable<OBZBoardSet>(this.addObserver);
@@ -58,6 +64,7 @@ export class ObzService {
 
   private loadFromNetwork(boardURL: string) {
 
+    this.progress.progress(ProgressService.message(`Downloading ${boardURL}`));
     this.log(`Loading ${boardURL} from internet`);
 
     const urlSlug = new UrlUtils().getSlug(boardURL);
@@ -73,9 +80,11 @@ export class ObzService {
   }
 
   private cacheAndFire = (boardURL: string, boardSet: OBZBoardSet) => {
+    this.progress.progress(ProgressService.message(`Parsing ${boardURL}`));
     this.log(`Blobifying ${boardURL}`);
-    boardSet.blobify(this.http).pipe(
+    boardSet.blobify(this.http, this.progress).pipe(
       flatMap(blobified => {
+        this.progress.progress(ProgressService.message(`Caching ${boardURL}`));
         this.log(`Caching ${boardURL}`);
         return this.boardCache.save(blobified);
       }),

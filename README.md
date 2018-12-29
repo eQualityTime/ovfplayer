@@ -35,3 +35,8 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 Run `npm run dist`.
 
 Then start server `http-server -p 8080 -c-1 dist/open-voice-factory`
+
+## Updating licence in new files
+Add `::START::LICENCE::  ::END::LICENCE::` in a comment in the file at the top
+
+Run `npm run update-licence` to update the licence
