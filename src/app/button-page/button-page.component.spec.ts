@@ -21,6 +21,7 @@ import { of } from 'rxjs';
 import { OBFBoard } from '../obfboard';
 import { ObfButtonComponent } from '../obf-button/obf-button.component';
 import { MatRippleModule } from '@angular/material';
+import { ProgressComponent } from '../progress/progress.component';
 
 describe('ButtonPageComponent', () => {
   let component: ButtonPageComponent;
@@ -56,7 +57,7 @@ describe('ButtonPageComponent', () => {
 
     TestBed.configureTestingModule({
       imports: [ MatRippleModule ],
-      declarations: [ ButtonPageComponent, ObfButtonComponent ],
+      declarations: [ ButtonPageComponent, ObfButtonComponent, ProgressComponent ],
       providers: [
         {provide: BoardService, useValue: boardServiceStub},
         {provide: SpeechbarService, useValue: speechbarServiceStub}

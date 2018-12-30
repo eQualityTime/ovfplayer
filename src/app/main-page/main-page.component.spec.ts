@@ -20,6 +20,7 @@ import { MainPageComponent } from './main-page.component';
 import { SpeechbarComponent } from '../speechbar/speechbar.component';
 import { ButtonPageComponent } from '../button-page/button-page.component';
 import { ObfButtonComponent } from '../obf-button/obf-button.component';
+import { ProgressComponent } from '../progress/progress.component';
 
 describe('MainPageComponent', () => {
   let component: MainPageComponent;
@@ -31,7 +32,8 @@ describe('MainPageComponent', () => {
         MainPageComponent,
         SpeechbarComponent,
         ButtonPageComponent,
-        ObfButtonComponent
+        ObfButtonComponent,
+        ProgressComponent
       ],
       imports: [ MatCardModule, HttpClientTestingModule, MatRippleModule ]
     })
