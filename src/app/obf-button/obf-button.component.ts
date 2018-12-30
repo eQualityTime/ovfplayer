@@ -12,7 +12,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: */
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, AfterViewInit, ViewChild, ElementRef, AfterViewChecked, OnDestroy } from '@angular/core';
 import { Button, Image } from '../obfboard';
 import { DomSanitizer } from '@angular/platform-browser';
 
@@ -21,26 +21,33 @@ import { DomSanitizer } from '@angular/platform-browser';
   templateUrl: './obf-button.component.html',
   styleUrls: ['./obf-button.component.css']
 })
-export class ObfButtonComponent implements OnInit {
+export class ObfButtonComponent implements OnInit, OnDestroy {
 
-  @Input()butt: Button;
+  @Input()
+  butt: Button;
 
-  // TODO: we don't seem to be using image
-  // @Input()image: Image;
-  @Input()clickHandler: (Button) => void;
+  @Input()
+  clickHandler: (Button) => void;
 
-  constructor(private domSanit: DomSanitizer) { }
+  private url: string;
 
-  ngOnInit() {
-  }
+  constructor(private domSanit: DomSanitizer) {}
+
+  ngOnInit() { }
 
   getDataURL() {
-    try {
-      return this.domSanit.bypassSecurityTrustUrl(
-        URL.createObjectURL(this.butt.getImage().getDataBlob())
-      );
-    } finally {
-      // TODO: need to destroy url URL.revoke...
+    this.url = URL.createObjectURL(this.butt.getImage().getDataBlob());
+    return this.domSanit.bypassSecurityTrustUrl(this.url);
+  }
+
+  ngOnDestroy() {
+    this.unload();
+  }
+
+  private unload() {
+    if (this.url) {
+      URL.revokeObjectURL(this.url);
+      this.url = undefined;
     }
   }
 }
