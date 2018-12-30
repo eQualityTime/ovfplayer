@@ -13,17 +13,58 @@ You should have received a copy of the GNU General Public License
 along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: */
 import { TestBed, inject } from '@angular/core/testing';
-
 import { BoardCacheService } from './board-cache.service';
+import { LocalStorage } from '@ngx-pwa/local-storage';
+import { Observable, of } from 'rxjs';
+import { OBZBoardSet } from './obzboard-set';
+import { nextTick } from 'q';
 
 describe('BoardCacheService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [BoardCacheService]
+      providers: [ BoardCacheService ]
     });
   });
 
   it('should be created', inject([BoardCacheService], (service: BoardCacheService) => {
     expect(service).toBeTruthy();
   }));
+
+  it(
+    'should call removeItem when clear',
+    inject([BoardCacheService, LocalStorage], (service: BoardCacheService, localStorage: LocalStorage
+  ) => {
+    spyOn(localStorage, 'removeItem').and.returnValue(of(true));
+    service.clear();
+    expect(localStorage.removeItem).toHaveBeenCalled();
+  }));
+
+  it('should call setItem when save', (done) => {
+    inject([BoardCacheService, LocalStorage], (service: BoardCacheService, localStorage: LocalStorage) => {
+      spyOn(localStorage, 'setItem').and.returnValue(of(true));
+      const boardSet = new OBZBoardSet();
+      service.save(boardSet).subscribe(ret => {
+        expect(ret).toBe(boardSet);
+        done();
+      });
+      expect(localStorage.setItem).toHaveBeenCalled();
+    })();
+  });
+
+  it('should call getItem when retrieve', (done) => {
+    inject([BoardCacheService, LocalStorage], (service: BoardCacheService, localStorage: LocalStorage) => {
+      const boardSet = {
+        rootBoardKey: 'testRoot',
+        images: [],
+        sounds: [],
+        boards: []
+      };
+      spyOn(localStorage, 'getItem').and.returnValue(of(boardSet));
+      service.retrieve().subscribe(ret => {
+        expect(ret.rootBoardKey).toBe('testRoot');
+        done();
+      });
+      expect(localStorage.getItem).toHaveBeenCalled();
+    })();
+  });
 });

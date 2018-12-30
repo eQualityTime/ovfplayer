@@ -18,7 +18,7 @@ import { OBZFixture } from '../test-utils/OBZFixture';
 import { ObzService } from './obz.service';
 import { ErrorCodes } from './errors';
 import { BoardCacheService } from './board-cache.service';
-import { Observable, of, empty } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { OBZBoardSet } from './obzboard-set';
 
 class MockBoardCache {
