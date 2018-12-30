@@ -13,8 +13,8 @@ You should have received a copy of the GNU General Public License
 along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: */
 .maxSpace {
-}
-.progressContainer {
+  width: 100%;
+  text-align: center;
 }
 .progressMessage {
   font-size: small;

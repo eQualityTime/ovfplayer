@@ -338,16 +338,4 @@ export class OBFBoard {
   getSound(id: string): Sound {
     return id === null ? null : this.sounds.find(sound => sound.id === id);
   }
-
-  resolveIntegrity() {
-    this.buttons.forEach(button => {
-      button.parent = this;
-    });
-    this.sounds.forEach(sound => {
-      sound.parent = this;
-    });
-    this.images.forEach(image => {
-      image.parent = this;
-    });
-  }
 }

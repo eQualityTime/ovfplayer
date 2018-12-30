@@ -64,7 +64,7 @@ export class ObzService {
 
   private loadFromNetwork(boardURL: string) {
 
-    this.progress.progress(ProgressService.message(`Downloading ${boardURL}`));
+    this.progress.progress(ProgressService.message('Downloading'));
     this.log(`Loading ${boardURL} from internet`);
 
     const urlSlug = new UrlUtils().getSlug(boardURL);
@@ -80,11 +80,11 @@ export class ObzService {
   }
 
   private cacheAndFire = (boardURL: string, boardSet: OBZBoardSet) => {
-    this.progress.progress(ProgressService.message(`Parsing ${boardURL}`));
+    this.progress.progress(ProgressService.message('Parsing'));
     this.log(`Blobifying ${boardURL}`);
     boardSet.blobify(this.http, this.progress).pipe(
       flatMap(blobified => {
-        this.progress.progress(ProgressService.message(`Caching ${boardURL}`));
+        this.progress.progress(ProgressService.message('Caching'));
         this.log(`Caching ${boardURL}`);
         return this.boardCache.save(blobified);
       }),
