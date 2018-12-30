@@ -17,13 +17,31 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { OBZFixture } from '../test-utils/OBZFixture';
 import { ObzService } from './obz.service';
 import { ErrorCodes } from './errors';
+import { BoardCacheService } from './board-cache.service';
+import { Observable, of, empty } from 'rxjs';
+import { OBZBoardSet } from './obzboard-set';
+
+class MockBoardCache {
+
+  public clear(): Observable<boolean> {
+    return of(true);
+  }
+
+  public retrieve(): Observable<OBZBoardSet> {
+    return of(null);
+  }
+
+  public save(): Observable<boolean> {
+    return of(true);
+  }
+}
 
 describe('ObzService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [ObzService]
+      providers: [ObzService, { provide: BoardCacheService, useClass: MockBoardCache }]
     });
   });
 
