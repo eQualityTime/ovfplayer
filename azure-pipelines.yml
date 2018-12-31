@@ -54,9 +54,21 @@ jobs:
     displayName: 'npm install'
 
   - script: |
+      git remote set-url origin https://$GH_TOKEN@github.com/eQualityTime/ovfplayer.git
+      git config user.name "eQualityTimeDevs"
+      git config user.email "support@equalitytime.co.uk"
+      git tag -a $BUILD_BUILDNUMBER -m "Release tagging"
+      git push --tags
+    displayName: 'Tag and release'
+
+  - script: |
+      node git_version.js
+    displayName: 'Git describe'
+
+  - script: |
       ng build --prod --base-href "https://equalitytime.github.io/ovfplayer/"
     displayName: 'build with correct HREF'
 
   - script: |
-      npx ngh --dir=dist/open-voice-factory --repo=https://$GH_TOKEN@github.com/eQualityTime/ovfplayer.git --name="psi77" --email="simon@smith77.co.uk"
+      npx ngh --dir=dist/open-voice-factory --repo=https://$GH_TOKEN@github.com/eQualityTime/ovfplayer.git --name="eQualityTimeDevs" --email="support@equalitytime.co.uk"
     displayName: 'deploy to gh-pages'

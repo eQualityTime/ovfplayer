@@ -1,52 +1,89 @@
-<mat-card class="formCard">
-  <div class="formTitle">
-    Configuration
-  </div>
-  <div class="formContainer">
-    <mat-card>
-      <mat-form-field class="formInputField">
-        <input [(ngModel)]="boardURL" matInput placeholder="URL for obf/obz file" class="formInputUrl">
-      </mat-form-field>
-      <div class="clickable" (click)="copyToClipboard()"><i class="material-icons">link</i>&nbsp;Create link</div>
-    </mat-card>
-  </div>
-  <div class="formContainer">
-    <mat-card>
-      <mat-checkbox [(ngModel)]="speakOnSpeechbarClick">
-        <span class="formLabel">Speak when speechbar is clicked</span>
-      </mat-checkbox>
-    </mat-card>
-  </div>
-  <div class="formContainer">
-    <mat-card>
-      <mat-checkbox [(ngModel)]="displayedButtons.showSpeakButton">
-          <span class="formLabel">Speak button always shown</span>
-        </mat-checkbox>
-    </mat-card>
-    <mat-card>
-      <mat-checkbox [(ngModel)]="displayedButtons.showBackspaceButton">
-          <span class="formLabel">Backspace button always shown</span>
-        </mat-checkbox>
-    </mat-card>
-    <mat-card>
-      <mat-checkbox [(ngModel)]="displayedButtons.showClearButton">
-          <span class="formLabel">Clear button always shown</span>
-        </mat-checkbox>
-    </mat-card>
-    <mat-card>
-      <mat-checkbox [(ngModel)]="displayedButtons.showHomeButton">
-          <span class="formLabel">Home button always shown</span>
-          </mat-checkbox>
-    </mat-card>
-  </div>
-  <div class="formContainer">
-    <mat-card>
-      <mat-checkbox [(ngModel)]="showIconsInSpeechbar">
-        <span class="formLabel">Display button images and labels in speechbar (instead of vocalisation text)</span>
-      </mat-checkbox>
-    </mat-card>
-  </div>
-  <div class="formButtons">
-    <button mat-raised-button color="primary" (click)="save()">Save</button>
-  </div>
-</mat-card>
+<!-- ::START::LICENCE::
+Copyright eQualityTime ©2018
+This file is part of OVFPlayer.
+OVFPlayer is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+OVFPlayer is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+You should have received a copy of the GNU General Public License
+along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
+::END::LICENCE:: -->
+<app-obfpage>
+  <mat-card class="formCard">
+    <div class="formTitle">
+      Configuration
+    </div>
+    <div class="formButtons">
+      <button mat-raised-button color="primary" (click)="save()">Save</button>
+    </div>
+    <mat-tab-group>
+      <mat-tab label="Board URL">
+        <div class="formContainer">
+          <mat-card>
+            <mat-form-field class="formInputField">
+              <input [(ngModel)]="boardURL" matInput placeholder="URL for obf/obz file" class="formInputUrl">
+            </mat-form-field>
+            <div class="clickable" (click)="copyToClipboard()"><i class="material-icons">link</i>&nbsp;Create link</div>
+          </mat-card>
+        </div>
+      </mat-tab>
+      <mat-tab label="Speechbar behaviour">
+        <div class="formContainer">
+          <mat-card>
+            <mat-checkbox [(ngModel)]="speakOnSpeechbarClick">
+              <span class="formLabel">Speak when speechbar is clicked</span>
+            </mat-checkbox>
+          </mat-card>
+          <mat-card>
+            <mat-checkbox [(ngModel)]="showIconsInSpeechbar">
+              <span class="formLabel">Display button images and labels in speechbar (instead of vocalisation text)</span>
+            </mat-checkbox>
+          </mat-card>
+        </div>
+      </mat-tab>
+      <mat-tab label="Permanent buttons">
+        <div class="formContainer">
+          <mat-card>
+            <mat-checkbox [(ngModel)]="displayedButtons.showSpeakButton">
+              <span class="formLabel">Speak button always shown</span>
+            </mat-checkbox>
+          </mat-card>
+          <mat-card>
+            <mat-checkbox [(ngModel)]="displayedButtons.showBackspaceButton">
+              <span class="formLabel">Backspace button always shown</span>
+            </mat-checkbox>
+          </mat-card>
+          <mat-card>
+            <mat-checkbox [(ngModel)]="displayedButtons.showClearButton">
+              <span class="formLabel">Clear button always shown</span>
+            </mat-checkbox>
+          </mat-card>
+          <mat-card>
+            <mat-checkbox [(ngModel)]="displayedButtons.showHomeButton">
+              <span class="formLabel">Home button always shown</span>
+            </mat-checkbox>
+          </mat-card>
+        </div>
+      </mat-tab>
+      <mat-tab label="Scanning">
+        <div class="formContainer">
+          <mat-card>
+            <mat-checkbox [(ngModel)]="scanningConfig.enabled">
+              <span class="formLabel">Enable scanning</span>
+            </mat-checkbox>
+          </mat-card>
+          <mat-card>
+            <mat-form-field class="formInputField">
+              <input [(ngModel)]="scanningConfig.time" matInput placeholder="Time to stay on each scanned item (in milliseconds)">
+            </mat-form-field>
+          </mat-card>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-card>
+  <p>Version: {{getVersion()}}</p>
+</app-obfpage>

@@ -1,6 +1,19 @@
-import { TestBed, inject } from '@angular/core/testing';
-
+/* ::START::LICENCE::
+Copyright eQualityTime ©2018
+This file is part of OVFPlayer.
+OVFPlayer is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+OVFPlayer is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+You should have received a copy of the GNU General Public License
+along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
+::END::LICENCE:: */
 import { OBFBoard, Grid, Button, Image, Sound, LoadBoardAction } from './obfboard';
+import { ErrorCodes } from './errors';
 
 describe('OBFBoard', () => {
 
@@ -29,13 +42,13 @@ describe('OBFBoard', () => {
     images: [
       {
         id: 1,
-        url: 'http://a.b'
+        url: 'http://example.com'
       }
     ],
     sounds: [
       {
         id: 1,
-        url: 'http://b.c'
+        url: 'http://another.com'
       }
     ]
   });
@@ -85,7 +98,7 @@ describe('OBFBoard', () => {
     const board = testBoard;
     const image = board.getImage('1');
     expect(image).toBeTruthy();
-    expect(image.url).toBe('http://a.b');
+    expect(image.url).toBe('http://example.com');
     expect(image.parent).toBe(board);
   });
 
@@ -93,7 +106,7 @@ describe('OBFBoard', () => {
     const board = testBoard;
     const sound = board.getSound('1');
     expect(sound).toBeTruthy();
-    expect(sound.url).toBe('http://b.c');
+    expect(sound.url).toBe('http://another.com');
   });
 });
 
@@ -146,3 +159,162 @@ describe('obfboard.LoadBoardAction', () => {
     expect(lba).toBeTruthy();
   });
 });
+
+describe('obfboard.validation', () => {
+  it('should validate required board id', () => {
+    const input = {
+      name: 'board_name',
+      grid: {
+        rows: 2,
+        columns: 2,
+        order: [[1, null],
+        [null, 2]]
+      },
+      buttons: [],
+      images: [],
+      sounds: [],
+    };
+    try {
+      new OBFBoard().deserialize(input);
+      expect(true).toBe(false);
+    } catch (e) {
+      expect(e.errorCode).toBe(ErrorCodes.OBF_VALIDATION);
+      expect(e.message).toContain('Board id must be specified');
+      expect(e.message).toContain('Board id must be a string');
+    }
+  });
+
+  it('should validate required image id', () => {
+    const input = {
+      id: 'b1',
+      name: 'board_name',
+      grid: {
+        rows: 2,
+        columns: 2,
+        order: [
+          [1, null],
+          [null, 2]
+        ]
+      },
+      buttons: [],
+      images: [
+        {
+          url: 'http://example.com'
+        }
+      ],
+      sounds: [],
+    };
+    try {
+      new OBFBoard().deserialize(input);
+      expect(true).toBe(false);
+    } catch (e) {
+      expect(e.errorCode).toBe(ErrorCodes.OBF_VALIDATION);
+      expect(e.message).toContain('Image id must be specified');
+      expect(e.message).toContain('Image id must be a string');
+    }
+  });
+
+  it('should validate grid array size - rows', () => {
+    const input = {
+      id: 'test',
+      name: 'board_name',
+      grid: {
+        rows: 3,
+        columns: 2,
+        order: [
+          [1, null],
+          [null, 2]
+        ]
+      },
+      buttons: [],
+      images: [],
+      sounds: [],
+    };
+    try {
+      new OBFBoard().deserialize(input);
+      expect(true).toBe(false);
+    } catch (e) {
+      expect(e.errorCode).toBe(ErrorCodes.OBF_VALIDATION);
+      expect(e.message).toContain('Grid has 2 rows but should have 3');
+    }
+  });
+
+  it('should validate grid array size - columns', () => {
+    const input = {
+      id: 'test',
+      name: 'board_name',
+      grid: {
+        rows: 2,
+        columns: 2,
+        order: [
+          [1, null],
+          [null, 2, 3]
+        ]
+      },
+      buttons: [],
+      images: [],
+      sounds: [] };
+    try {
+      new OBFBoard().deserialize(input);
+      expect(true).toBe(false);
+    } catch (e) {
+      expect(e.errorCode).toBe(ErrorCodes.OBF_VALIDATION);
+      expect(e.message).toContain('Row 2 is of width 3, but it should be 2');
+    }
+  });
+
+  it('should validate image OneOf', () => {
+    const input = {
+      id: 'test',
+      name: 'board_name',
+      grid: {
+        rows: 2,
+        columns: 2,
+        order: [
+          [1, null],
+          [null, 2]
+        ]
+      },
+      buttons: [],
+      images: [
+        {
+          id: 'image1'
+        }
+      ],
+      sounds: []
+    };
+    try {
+      new OBFBoard().deserialize(input);
+      expect(true).toBe(false);
+    } catch (e) {
+      expect(e.errorCode).toBe(ErrorCodes.OBF_VALIDATION);
+      expect(e.message).toContain('Image with id "image1" must specifiy data, a url or a path');
+    }
+  });
+
+  it('should validate sound OneOf', () => {
+    const input = {
+      id: 'test',
+      name: 'board_name',
+      grid: {
+        rows: 2,
+        columns: 2,
+        order: [
+          [1, null],
+          [null, 2]
+        ]
+      },
+      buttons: [],
+      sounds: [{ id: 'sound1' }],
+      images: []
+    };
+    try {
+      new OBFBoard().deserialize(input);
+      expect(true).toBe(false);
+    } catch (e) {
+      expect(e.errorCode).toBe(ErrorCodes.OBF_VALIDATION);
+      expect(e.message).toContain('Sound with id "sound1" must specifiy data, a url or a path');
+    }
+  });
+});
+

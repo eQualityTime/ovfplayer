@@ -1,14 +1,30 @@
+/* ::START::LICENCE::
+Copyright eQualityTime ©2018
+This file is part of OVFPlayer.
+OVFPlayer is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+OVFPlayer is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+You should have received a copy of the GNU General Public License
+along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
+::END::LICENCE:: */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 
 import { ConfigPageComponent } from './config-page.component';
 import { ConfigService } from '../config.service';
-import { MatFormFieldModule, MatCardModule, MatCheckboxModule, MatInputModule, MatSnackBar } from '@angular/material';
+import { MatFormFieldModule, MatCardModule, MatCheckboxModule, MatInputModule, MatSnackBar, MatTabsModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Router, ActivatedRoute, ActivatedRouteSnapshot, UrlSegment, Params, Data, Route, ParamMap } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Type } from '@angular/core';
+import { OBFPageComponent } from '../obfpage/obfpage.component';
 
+// we might not need this, the current tests can all be done with RouterTestingModule.withRoutes([])
 export class MockActivatedRoute implements ActivatedRoute {
   snapshot: ActivatedRouteSnapshot;
   url: Observable<UrlSegment[]>;
@@ -49,6 +65,10 @@ describe('ConfigPageComponent', () => {
         showHomeButton: false,
         showBackspaceButton: false,
         showClearButton: false
+      },
+      scanningConfig: {
+        enabled: false,
+        time: 0
       }
     };
     snackbarStub = {};
@@ -77,14 +97,14 @@ describe('ConfigPageComponent', () => {
     };
 
     TestBed.configureTestingModule({
-      declarations: [ ConfigPageComponent ],
+      declarations: [ ConfigPageComponent, OBFPageComponent ],
       providers: [
         {provide: Router, useValue: routerStub},
         {provide: ConfigService, useValue: configServiceStub},
         {provide: ActivatedRoute, useValue: mockActivatedRoute},
         {provide: MatSnackBar, useValue: snackbarStub }
       ],
-      imports: [ FormsModule, MatFormFieldModule, MatCardModule, MatCheckboxModule, MatInputModule, BrowserAnimationsModule ]
+      imports: [ FormsModule, MatFormFieldModule, MatCardModule, MatCheckboxModule, MatInputModule, BrowserAnimationsModule, MatTabsModule ]
     }).compileComponents();
   }));
 

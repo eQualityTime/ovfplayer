@@ -1,7 +1,28 @@
+<!-- ::START::LICENCE::
+Copyright eQualityTime ©2018
+This file is part of OVFPlayer.
+OVFPlayer is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+OVFPlayer is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+You should have received a copy of the GNU General Public License
+along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
+::END::LICENCE:: -->
 <div class="board" *ngIf="board; else noBoard">
-  <div class="boardRow" [style.height]="calculateRowHeight()" *ngFor="let row of board.grid.order">
-    <div class="boardButton" *ngFor="let cell of row">
-        <app-obf-button *ngIf="board.getButton(cell) as butt" [butt]="butt" [clickHandler]="handleButtonClick.bind(this)"></app-obf-button>
+  <div class="boardRow"
+      *ngFor="let row of buttonProvider.getScannableCollections()"
+      [class.scanHighlight]="row.isHighlighted()"
+      [class.scanSelect]="row.isSelection()"
+      [style.height]="row.rowHeight">
+    <div class="boardButton"
+        *ngFor="let butt of row.displayButtons"
+        [class.scanHighlight]="butt && butt.isHighlighted()"
+        [class.scanSelect]="butt && butt.isSelection()">
+      <app-obf-button *ngIf="butt" [butt]="butt.button" [clickHandler]="handleButtonClick.bind(this)"></app-obf-button>
     </div>
   </div>
 </div>
