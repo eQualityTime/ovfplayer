@@ -12,8 +12,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: */
-import { Component, OnInit, Input, AfterViewInit, ViewChild, ElementRef, AfterViewChecked, OnDestroy } from '@angular/core';
-import { Button, Image } from '../obfboard';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Button } from '../obfboard';
 import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({

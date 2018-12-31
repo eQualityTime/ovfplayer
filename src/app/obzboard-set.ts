@@ -58,14 +58,15 @@ export class OBZBoardSet implements ImageResolver, SoundResolver {
 
     // TODO: go through boards and load other boards from board actions (until there are no more new ones!)
 
-    // go through all url & data images & sounds and blobify into maps
-
     // TODO: error handling might be nice...
 
-    progress.progress(ProgressService.message('Precaching images'));
+    // go through all url & data images & sounds and blobify into maps
+    progress.progress(ProgressService.message('Pre-caching images'));
     return this.blobifyImages(httpClient).pipe(
       map(imageResult => this)
     );
+
+    // TODO: sounds
   }
 
   private blobifyImages(httpClient: HttpClient): Observable<boolean> {
@@ -105,12 +106,7 @@ export class OBZBoardSet implements ImageResolver, SoundResolver {
   }
 
   private base64ToBlob(data: string, type: string): Blob {
-    const byteCharacters = atob(data);
-    const byteNumbers = new Array(byteCharacters.length);
-    for (let i = 0; i < byteCharacters.length; i++) {
-      byteNumbers[i] = byteCharacters.charCodeAt(i);
-    }
-    const byteArray = new Uint8Array(byteNumbers);
+    const byteArray = new Uint8Array(Array.from(atob(data)).map(char => char.charCodeAt(0)));
     return new Blob([byteArray], { type: type });
   }
 }

@@ -15,9 +15,8 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 import { TestBed, inject } from '@angular/core/testing';
 import { BoardCacheService } from './board-cache.service';
 import { LocalStorage } from '@ngx-pwa/local-storage';
-import { Observable, of } from 'rxjs';
+import { of } from 'rxjs';
 import { OBZBoardSet } from './obzboard-set';
-import { nextTick } from 'q';
 
 describe('BoardCacheService', () => {
   beforeEach(() => {

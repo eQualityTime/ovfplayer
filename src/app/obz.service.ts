@@ -15,7 +15,7 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, Observer, empty } from 'rxjs';
-import { flatMap, tap, catchError, first } from 'rxjs/operators';
+import { flatMap, catchError, first } from 'rxjs/operators';
 import { ConfigService } from './config.service';
 import { UrlUtils } from './url-utils';
 import { OBZBoardSet } from './obzboard-set';
@@ -88,9 +88,6 @@ export class ObzService {
         this.log(`Caching ${boardURL}`);
         return this.boardCache.save(blobified);
       }),
-      tap(cached => {
-        this.observer.next(cached);
-      }),
       first(),
       catchError(error => {
         console.error(`Cache of ${boardURL} failed`, error);
@@ -98,7 +95,7 @@ export class ObzService {
         this.observer.next(boardSet);
         return empty();
       })
-    ).subscribe(() => {});
+    ).subscribe((cached) => this.observer.next(cached));
   }
 
   private loadOBFFile(boardURL: string) {

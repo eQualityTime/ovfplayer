@@ -127,12 +127,8 @@ export class Button {
       this.actions = (input.action !== undefined && input.action !== '') ? [input.action] : [];
     }
 
-    if (input.loadBoardAction) {
-      // TODO: if there is a board to load we should probably load it now so it will get cached by the service worker
-      this.loadBoardAction = new LoadBoardAction().deserialize(input.loadBoardAction);
-    } else if (input.load_board) {
-      // TODO: if there is a board to load we should probably load it now so it will get cached by the service worker
-      this.loadBoardAction = new LoadBoardAction().deserialize(input.load_board);
+    if (input.loadBoardAction || input.load_board) {
+      this.loadBoardAction = new LoadBoardAction().deserialize(input.loadBoardAction || input.load_board);
     }
 
     return this;

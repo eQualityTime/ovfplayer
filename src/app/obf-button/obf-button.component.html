@@ -20,7 +20,7 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
      mat-ripple [matRippleDisabled]="!clickHandler"
      (click)="clickHandler && clickHandler(butt)">
   <div class="buttonImageDiv" *ngIf="butt.getImage() as image">
-    <img #domImage class="buttonImage" [src]="getDataURL()"/>
+    <img class="buttonImage" [src]="getDataURL()"/>
   </div>
   <div class="buttonLabel">
     {{butt.label}}
