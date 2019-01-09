@@ -22,5 +22,23 @@ if (environment.production) {
   enableProdMode();
 }
 
-platformBrowserDynamic().bootstrapModule(AppModule)
-  .catch(err => console.log(err));
+platformBrowserDynamic()
+  .bootstrapModule(AppModule)
+  .then(() => {
+    registerServiceWorker('service-worker');
+  });
+
+function registerServiceWorker(swName: string) {
+  if (environment.production && 'serviceWorker' in navigator) {
+    navigator.serviceWorker
+      .register(`/ovfplayer/${swName}.js`)
+      .then(reg => {
+        console.log('Successful service worker registration', reg);
+      })
+      .catch(err =>
+        console.error('Service worker registration failed', err)
+      );
+  } else if (environment.production) {
+    console.error('Service Worker API is not supported in current browser');
+  }
+}

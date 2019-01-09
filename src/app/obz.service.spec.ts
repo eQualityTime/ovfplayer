@@ -17,13 +17,16 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { OBZFixture } from '../test-utils/OBZFixture';
 import { ObzService } from './obz.service';
 import { ErrorCodes } from './errors';
+import { BoardCacheService } from './board-cache.service';
+import { Observable, of } from 'rxjs';
+import { OBZBoardSet } from './obzboard-set';
 
 describe('ObzService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [ObzService]
+      providers: [ObzService, BoardCacheService]
     });
   });
 
@@ -32,7 +35,11 @@ describe('ObzService', () => {
   }));
 
   it('getBoardSet should throw fatal error if unable to load file', (done) => {
-    inject([ObzService, HttpTestingController], (service: ObzService, httpMock: HttpTestingController) => {
+    inject(
+      [ObzService, HttpTestingController, BoardCacheService],
+      (service: ObzService, httpMock: HttpTestingController, cache: BoardCacheService) => {
+
+      spyOn(cache, 'retrieve').and.returnValue(of(null));
 
       service.getBoardSet().subscribe({
         next() { console.log('Hmmm'); },
@@ -44,6 +51,25 @@ describe('ObzService', () => {
       const request = httpMock.expectOne('https://dl.dropboxusercontent.com/s/oiwfo47fprv3jl4/ck20.obz?dl=1');
       request.error(new ErrorEvent('ERROR_LOADING_OBZ'));
       httpMock.verify();
+    })();
+  });
+
+  it('getBoardSet should return cache hit', (done) => {
+    inject(
+      [ObzService, HttpTestingController, BoardCacheService],
+      (service: ObzService, httpMock: HttpTestingController, cache: BoardCacheService) => {
+
+      const boardSet = new OBZBoardSet();
+      boardSet.rootBoardKey = 'test';
+
+      spyOn(cache, 'retrieve').and.returnValue(of(boardSet));
+
+      service.getBoardSet().subscribe({
+        next(value) {
+          expect(value).toBe(boardSet);
+          done();
+        },
+      });
     })();
   });
 

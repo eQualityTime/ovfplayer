@@ -1,4 +1,4 @@
-/* ::START::LICENCE::
+<!-- ::START::LICENCE::
 Copyright eQualityTime ©2018
 This file is part of OVFPlayer.
 OVFPlayer is free software: you can redistribute it and/or modify
@@ -11,12 +11,15 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
-::END::LICENCE:: */
-import { SafePipe } from './safe.pipe';
-
-describe('SafePipe', () => {
-  it('create an instance', () => {
-    // const pipe = new SafePipe();
-    // expect(pipe).toBeTruthy();
-  });
-});
+::END::LICENCE:: -->
+<div class="maxSpace" *ngIf="currentProgress">
+  <div class="progressContainer">
+    <div class="spinner">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+    <div class="progressMessage">{{currentProgress.message}}</div>
+  </div>
+</div>

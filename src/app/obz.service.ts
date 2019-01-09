@@ -14,15 +14,17 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: */
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable, Observer } from 'rxjs';
+import { Observable, Observer, empty } from 'rxjs';
+import { flatMap, catchError, first } from 'rxjs/operators';
 import { ConfigService } from './config.service';
 import { UrlUtils } from './url-utils';
 import { OBZBoardSet } from './obzboard-set';
 import { OBFBoard } from './obfboard';
 
-
 import * as JSZip from 'jszip';
 import { FatalOpenVoiceFactoryError, ErrorCodes } from './errors';
+import { BoardCacheService } from './board-cache.service';
+import { ProgressService } from './progress.service';
 
 @Injectable({
   providedIn: 'root'
@@ -31,7 +33,12 @@ export class ObzService {
 
   private observer: Observer<OBZBoardSet>;
 
-  constructor(private http: HttpClient, private config: ConfigService) { }
+  constructor(
+    private http: HttpClient,
+    private config: ConfigService,
+    private boardCache: BoardCacheService,
+    private progress: ProgressService
+  ) { }
 
   getBoardSet(): Observable<OBZBoardSet> {
     return new Observable<OBZBoardSet>(this.addObserver);
@@ -39,15 +46,31 @@ export class ObzService {
 
   addObserver = (observer: Observer<OBZBoardSet>) => {
     this.observer = observer;
-
     this.loadBoardSet(this.config.boardURL);
   }
 
   public loadBoardSet(boardURL: string) {
-    // Decide if we're loading an obz or an obf
+    this.boardCache.retrieve().subscribe((boardSet: OBZBoardSet) => {
+      if (boardSet) {
+        this.observer.next(boardSet);
+      } else {
+        this.loadFromNetwork(boardURL);
+      }
+    }, (error) => {
+      console.error(`Error loading ${boardURL} from cache`, error);
+      this.loadFromNetwork(boardURL);
+    });
+  }
+
+  private loadFromNetwork(boardURL: string) {
+
+    this.progress.progress(ProgressService.message('Downloading'));
+    this.log(`Loading ${boardURL} from internet`);
+
     const urlSlug = new UrlUtils().getSlug(boardURL);
     this.log(`Parsed url ${urlSlug}`);
 
+    // Decide if we're loading an obz or an obf
     if (urlSlug.toLowerCase().endsWith('.obf')) {
       this.loadOBFFile(boardURL);
     } else {
@@ -56,13 +79,32 @@ export class ObzService {
     }
   }
 
+  private cacheAndFire = (boardURL: string, boardSet: OBZBoardSet) => {
+    this.progress.progress(ProgressService.message('Parsing'));
+    this.log(`Blobifying ${boardURL}`);
+    boardSet.blobify(this.http, this.progress).pipe(
+      flatMap(blobified => {
+        this.progress.progress(ProgressService.message('Caching'));
+        this.log(`Caching ${boardURL}`);
+        return this.boardCache.save(blobified);
+      }),
+      first(),
+      catchError(error => {
+        console.error(`Cache of ${boardURL} failed`, error);
+        // may as well carry on though as we have loaded the board
+        this.observer.next(boardSet);
+        return empty();
+      })
+    ).subscribe((cached) => this.observer.next(cached));
+  }
+
   private loadOBFFile(boardURL: string) {
     this.http.get<OBFBoard>(boardURL).subscribe({
       next: (page) => {
         const boardSet = new OBZBoardSet();
         boardSet.rootBoardKey = 'root';
         boardSet.setBoard('root', new OBFBoard().deserialize(page));
-        this.observer.next(boardSet);
+        this.cacheAndFire(boardURL, boardSet);
       },
       error: (err) => {
         this.observer.error(new FatalOpenVoiceFactoryError(ErrorCodes.OBF_LOAD_ERROR, `Failed to load obf from ${boardURL}`, err));
@@ -78,7 +120,7 @@ export class ObzService {
     this.getOBZFile(boardURL).subscribe(
       (blob: Blob) => {
         this.parseOBZFile(blob).then(boardSet => {
-          this.observer.next(boardSet);
+          this.cacheAndFire(boardURL, boardSet);
         }).catch(error => {
           // error loading zip file
           throw new FatalOpenVoiceFactoryError(ErrorCodes.OBZ_PARSE_ERROR, `Could not parse ${boardURL} as a zip file`, error);
@@ -138,12 +180,11 @@ export class ObzService {
   }
 
   private parseImage = (zip, image: string, boardSet: OBZBoardSet): Promise<void> => {
-    const encoding = image.toLowerCase().endsWith('.svg') ? 'text' : 'base64';
     const imageFile = zip.file(image);
     if (!imageFile) {
       throw new FatalOpenVoiceFactoryError(ErrorCodes.IMAGE_NOT_THERE, `Image ${image} is not present in obz`);
     }
-    const imagePromise = imageFile.async(encoding).then(function (contents) {
+    const imagePromise = imageFile.async('blob').then(function (contents) {
       boardSet.setImage(image, contents);
     }).catch(error => {
       // error loading image file

@@ -74,7 +74,7 @@ export class LoadBoardAction {
     this.id = input.id;
     this.name = input.name;
     this.url = input.url;
-    this.dataUrl = input.data_url;
+    this.dataUrl = input.dataUrl || input.data_url;
     this.path = input.path;
 
     return this;
@@ -115,10 +115,10 @@ export class Button {
     this.id = stringify(input.id);
     this.label = input.label;
     this.vocalization = input.vocalization;
-    this.imageId = stringify(input.image_id);
-    this.soundId = stringify(input.sound_id);
-    this.backgroundColor = input.background_color;
-    this.borderColor = input.border_color;
+    this.imageId = stringify(input.imageId) || stringify(input.image_id);
+    this.soundId = stringify(input.soundId) || stringify(input.sound_id);
+    this.backgroundColor = input.backgroundColor || input.background_color;
+    this.borderColor = input.borderColor || input.border_color;
     this.parent = parent;
 
     if (input.actions && input.actions.length > 0) {
@@ -127,9 +127,8 @@ export class Button {
       this.actions = (input.action !== undefined && input.action !== '') ? [input.action] : [];
     }
 
-    if (input.load_board) {
-      // TODO: if there is a board to load we should probably load it now so it will get cached by the service worker
-      this.loadBoardAction = new LoadBoardAction().deserialize(input.load_board);
+    if (input.loadBoardAction || input.load_board) {
+      this.loadBoardAction = new LoadBoardAction().deserialize(input.loadBoardAction || input.load_board);
     }
 
     return this;
@@ -186,36 +185,14 @@ export class Image {
     this.data = input.data;
     this.url = input.url;
     this.path = input.path;
-    this.contentType = input.content_type;
+    this.contentType = input.contentType || input.content_type;
     this.parent = parent;
 
     return this;
   }
 
-  isSVG(): boolean {
-    return 'image/svg+xml' === this.contentType || (this.path && this.path.toLowerCase().endsWith('.svg'));
-  }
-
-  getSource(): string {
-    if (this.path && this.parent.imageResolver) {
-      const imageData = this.parent.imageResolver.getImageData(this.path);
-      if (this.isSVG()) {
-        if (!this.svgData) {
-          // Make SVGs scale nicely in the grid regardless of original size
-          const imgData = imageData.substring(imageData.indexOf('<svg'));
-          const htmlTag = document.createElement('div');
-          htmlTag.innerHTML = imgData;
-          const svgTag = htmlTag.getElementsByTagName('svg')[0];
-          svgTag.setAttribute('height', '100%');
-          svgTag.setAttribute('width', '100%');
-          this.svgData = htmlTag.innerHTML;
-        }
-        return this.svgData;
-      } else {
-        return `data:${this.contentType};base64,${imageData}`;
-      }
-    }
-    return this.data || this.url;
+  getDataBlob(): Blob {
+    return this.parent.imageResolver.getImageData(this.path);
   }
 }
 
@@ -248,7 +225,7 @@ export class Sound {
     this.data = input.data;
     this.url = input.url;
     this.path = input.path;
-    this.contentType = input.content_type;
+    this.contentType = input.contentType || input.content_type;
     this.duration = input.duration;
     this.parent = parent;
 
@@ -301,6 +278,7 @@ export class OBFBoard {
   sounds: Sound[];
 
   imageResolver: ImageResolver;
+
   soundResolver: SoundResolver;
 
   deserialize(input: any): OBFBoard {
@@ -308,7 +286,7 @@ export class OBFBoard {
     this.id = stringify(input.id);
     this.locale = input.locale;
     this.name = input.name;
-    this.descriptionHtml = input.description_html;
+    this.descriptionHtml = input.descriptionHtml || input.description_html;
     this.grid = new Grid().deserialize(input.grid);
     this.buttons = input.buttons.map(button => new Button().deserialize(button, this));
     this.images = input.images.map(image => new Image().deserialize(image, this));

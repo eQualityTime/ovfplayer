@@ -19,7 +19,6 @@ import { ConfigService } from '../config.service';
 import { BoardService } from '../board.service';
 import { SpeechbarService } from '../speechbar.service';
 import { ObfButtonComponent } from '../obf-button/obf-button.component';
-import { SafePipe } from '../safe.pipe';
 import { MatRippleModule, MatCardModule } from '@angular/material';
 import { Observable } from 'rxjs';
 
@@ -50,7 +49,7 @@ describe('SpeechbarComponent', () => {
     };
 
     TestBed.configureTestingModule({
-      declarations: [ SpeechbarComponent, ObfButtonComponent, SafePipe ],
+      declarations: [ SpeechbarComponent, ObfButtonComponent ],
       providers: [
         {provide: ConfigService, useValue: configServiceStub},
         {provide: BoardService, useValue: boardServiceStub},

@@ -17,11 +17,11 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ButtonPageComponent } from './button-page.component';
 import { BoardService } from '../board.service';
 import { SpeechbarService } from '../speechbar.service';
-import { SafePipe } from '../safe.pipe';
 import { of } from 'rxjs';
 import { OBFBoard } from '../obfboard';
 import { ObfButtonComponent } from '../obf-button/obf-button.component';
 import { MatRippleModule } from '@angular/material';
+import { ProgressComponent } from '../progress/progress.component';
 
 describe('ButtonPageComponent', () => {
   let component: ButtonPageComponent;
@@ -57,7 +57,7 @@ describe('ButtonPageComponent', () => {
 
     TestBed.configureTestingModule({
       imports: [ MatRippleModule ],
-      declarations: [ ButtonPageComponent, SafePipe, ObfButtonComponent ],
+      declarations: [ ButtonPageComponent, ObfButtonComponent, ProgressComponent ],
       providers: [
         {provide: BoardService, useValue: boardServiceStub},
         {provide: SpeechbarService, useValue: speechbarServiceStub}

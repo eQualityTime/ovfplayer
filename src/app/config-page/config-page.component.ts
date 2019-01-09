@@ -17,6 +17,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { ConfigService, ButtonDisplayConfig, ScanningConfig } from '../config.service';
 import { MatSnackBar } from '@angular/material';
 import { VERSION } from '../../environments/version';
+import { BoardCacheService } from '../board-cache.service';
 
 @Component({
   selector: 'app-config-page',
@@ -37,7 +38,8 @@ export class ConfigPageComponent implements OnInit {
     private configService: ConfigService,
     private router: Router,
     private route: ActivatedRoute,
-    private snackBar: MatSnackBar) { }
+    private snackBar: MatSnackBar,
+    private boardCache: BoardCacheService) { }
 
   ngOnInit() {
     this.boardURL = this.configService.boardURL;
@@ -60,7 +62,18 @@ export class ConfigPageComponent implements OnInit {
     this.configService.speakOnSpeechbarClick = this.speakOnSpeechbarClick;
     this.configService.scanningConfig = this.scanningConfig;
     // TODO: some kind of validation
-    this.router.navigate(['/main']);
+
+    // clear local cache of page to force a refresh
+    this.boardCache.clear().subscribe(
+      () => {
+        this.router.navigate(['/main']);
+      },
+      (error) => {
+        // not much we can do really
+        console.error('Error clearing cache', error);
+        this.router.navigate(['/main']);
+      }
+    );
   }
 
   copyToClipboard() {
