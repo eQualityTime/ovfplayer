@@ -31,12 +31,12 @@ describe('BoardCacheService', () => {
 
   it(
     'should call removeItem when clear',
-    inject([BoardCacheService, LocalStorage], (service: BoardCacheService, localStorage: LocalStorage
-  ) => {
-    spyOn(localStorage, 'removeItem').and.returnValue(of(true));
-    service.clear();
-    expect(localStorage.removeItem).toHaveBeenCalled();
-  }));
+    inject([BoardCacheService, LocalStorage], (service: BoardCacheService, localStorage: LocalStorage) => {
+      spyOn(localStorage, 'removeItem').and.returnValue(of(true));
+      service.clear();
+      expect(localStorage.removeItem).toHaveBeenCalled();
+    })
+  );
 
   it('should call setItem when save', (done) => {
     inject([BoardCacheService, LocalStorage], (service: BoardCacheService, localStorage: LocalStorage) => {
