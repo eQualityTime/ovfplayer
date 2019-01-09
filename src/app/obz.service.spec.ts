@@ -59,18 +59,18 @@ describe('ObzService', () => {
       [ObzService, HttpTestingController, BoardCacheService],
       (service: ObzService, httpMock: HttpTestingController, cache: BoardCacheService) => {
 
-        const boardSet = new OBZBoardSet();
-        boardSet.rootBoardKey = 'test';
+      const boardSet = new OBZBoardSet();
+      boardSet.rootBoardKey = 'test';
 
-        spyOn(cache, 'retrieve').and.returnValue(of(boardSet));
+      spyOn(cache, 'retrieve').and.returnValue(of(boardSet));
 
-        service.getBoardSet().subscribe({
-          next(value) {
-            expect(value).toBe(boardSet);
-            done();
-          },
-        });
-      })();
+      service.getBoardSet().subscribe({
+        next(value) {
+          expect(value).toBe(boardSet);
+          done();
+        },
+      });
+    })();
   });
 
   it('parseOBZFile should throw error if no manifest', (done) => {
