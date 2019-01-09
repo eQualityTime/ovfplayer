@@ -71,6 +71,7 @@ export class OBZBoardSet implements ImageResolver, SoundResolver {
 
   private blobifyImages(httpClient: HttpClient): Observable<boolean> {
 
+    console.log('blobifyImages');
     const observables = [];
 
     this.boards.forEach(board => {
@@ -89,6 +90,7 @@ export class OBZBoardSet implements ImageResolver, SoundResolver {
             image.data = null;
           } else if (image.url) {
             // load url into blob
+            console.log(`Loading image ${image.url}`);
             observables.push(httpClient.get(image.url, { responseType: 'blob' }).pipe(
               tap(blob => {
                 const key = `url:${image.id}`;
