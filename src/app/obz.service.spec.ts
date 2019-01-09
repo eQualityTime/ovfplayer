@@ -37,8 +37,7 @@ describe('ObzService', () => {
   it('getBoardSet should throw fatal error if unable to load file', (done) => {
     inject(
       [ObzService, HttpTestingController, BoardCacheService],
-      (service: ObzService, httpMock: HttpTestingController, cache: BoardCacheService
-    ) => {
+      (service: ObzService, httpMock: HttpTestingController, cache: BoardCacheService) => {
 
       spyOn(cache, 'retrieve').and.returnValue(of(null));
 
@@ -58,8 +57,7 @@ describe('ObzService', () => {
   it('getBoardSet should return cache hit', (done) => {
     inject(
       [ObzService, HttpTestingController, BoardCacheService],
-      (service: ObzService, httpMock: HttpTestingController, cache: BoardCacheService
-      ) => {
+      (service: ObzService, httpMock: HttpTestingController, cache: BoardCacheService) => {
 
         const boardSet = new OBZBoardSet();
         boardSet.rootBoardKey = 'test';
