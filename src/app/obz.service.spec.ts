@@ -21,27 +21,12 @@ import { BoardCacheService } from './board-cache.service';
 import { Observable, of } from 'rxjs';
 import { OBZBoardSet } from './obzboard-set';
 
-class MockBoardCache {
-
-  public clear(): Observable<boolean> {
-    return of(true);
-  }
-
-  public retrieve(): Observable<OBZBoardSet> {
-    return of(null);
-  }
-
-  public save(): Observable<boolean> {
-    return of(true);
-  }
-}
-
 describe('ObzService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [ObzService, { provide: BoardCacheService, useClass: MockBoardCache }]
+      providers: [ObzService, BoardCacheService]
     });
   });
 
@@ -50,7 +35,12 @@ describe('ObzService', () => {
   }));
 
   it('getBoardSet should throw fatal error if unable to load file', (done) => {
-    inject([ObzService, HttpTestingController], (service: ObzService, httpMock: HttpTestingController) => {
+    inject(
+      [ObzService, HttpTestingController, BoardCacheService],
+      (service: ObzService, httpMock: HttpTestingController, cache: BoardCacheService
+    ) => {
+
+      spyOn(cache, 'retrieve').and.returnValue(of(null));
 
       service.getBoardSet().subscribe({
         next() { console.log('Hmmm'); },
@@ -63,6 +53,26 @@ describe('ObzService', () => {
       request.error(new ErrorEvent('ERROR_LOADING_OBZ'));
       httpMock.verify();
     })();
+  });
+
+  it('getBoardSet should return cache hit', (done) => {
+    inject(
+      [ObzService, HttpTestingController, BoardCacheService],
+      (service: ObzService, httpMock: HttpTestingController, cache: BoardCacheService
+      ) => {
+
+        const boardSet = new OBZBoardSet();
+        boardSet.rootBoardKey = 'test';
+
+        spyOn(cache, 'retrieve').and.returnValue(of(boardSet));
+
+        service.getBoardSet().subscribe({
+          next(value) {
+            expect(value).toBe(boardSet);
+            done();
+          },
+        });
+      })();
   });
 
   it('parseOBZFile should throw error if no manifest', (done) => {
