@@ -22,6 +22,9 @@ Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.
 
 Run `ng test --source-map=false` to execute the unit tests if getting unknown errors!
 
+## Code Coverage
+
+Run `ng test --watch=false --code-coverage` to generate the code coverage report
 
 ## Running end-to-end tests
 

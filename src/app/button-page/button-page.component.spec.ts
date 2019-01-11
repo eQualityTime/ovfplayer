@@ -18,55 +18,61 @@ import { ButtonPageComponent } from './button-page.component';
 import { BoardService } from '../board.service';
 import { SpeechbarService } from '../speechbar.service';
 import { of } from 'rxjs';
-import { OBFBoard } from '../obfboard';
+import { OBFBoard, Button } from '../obfboard';
 import { ObfButtonComponent } from '../obf-button/obf-button.component';
 import { MatRippleModule } from '@angular/material';
 import { ProgressComponent } from '../progress/progress.component';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('ButtonPageComponent', () => {
   let component: ButtonPageComponent;
   let fixture: ComponentFixture<ButtonPageComponent>;
-  let boardServiceStub: Partial<BoardService>;
-  let speechbarServiceStub: Partial<SpeechbarService>;
+  let speechbarService: SpeechbarService;
+  let boardService: BoardService;
 
   beforeEach(async(() => {
 
-    boardServiceStub = {
-      home: () => {},
-      getBoard: () => of(new OBFBoard().deserialize({
-        id: 'test',
-        grid: {
-          rows: 1,
-          columns: 1,
-          order: [['b1']]
-        },
-        buttons: [{
-          id: 'b1',
-          label: 'test'
-        }],
-        images: [],
-        sounds: []
-      }))
-    };
-    speechbarServiceStub = {
-      clear: () => {},
-      backspace: () => {},
-      speak: () => {},
-      space: () => {}
-    };
-
     TestBed.configureTestingModule({
-      imports: [ MatRippleModule ],
+      imports: [ MatRippleModule, HttpClientTestingModule ],
       declarations: [ ButtonPageComponent, ObfButtonComponent, ProgressComponent ],
-      providers: [
-        {provide: BoardService, useValue: boardServiceStub},
-        {provide: SpeechbarService, useValue: speechbarServiceStub}
-      ]
+      providers: [ BoardService, SpeechbarService ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
+    speechbarService = TestBed.get(SpeechbarService);
+    spyOn(speechbarService, 'clear');
+    spyOn(speechbarService, 'appendButton');
+    spyOn(speechbarService, 'backspace');
+    spyOn(speechbarService, 'speak');
+    spyOn(speechbarService, 'space');
+    spyOn(speechbarService, 'addButton');
+
+    boardService = TestBed.get(BoardService);
+    spyOn(boardService, 'getBoard').and.returnValue(of(new OBFBoard().deserialize({
+      id: 'test',
+      grid: {
+        rows: 1,
+        columns: 1,
+        order: [['b1']]
+      },
+      buttons: [{
+        id: 'b1',
+        label: 'test'
+      }],
+      images: [],
+      sounds: [
+        {
+          id: '1',
+          path: 'sound1'
+        }
+      ]
+    })));
+    spyOn(boardService, 'home');
+    spyOn(boardService, 'navigateToBoard');
+    spyOn(boardService, 'navigateToExternalBoard');
+
     fixture = TestBed.createComponent(ButtonPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -75,4 +81,88 @@ describe('ButtonPageComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should handle button click - append action', () => {
+    const button = { actions: ['+a'] };
+    component.handleButtonClick(<Button>button);
+    expect(speechbarService.appendButton).toHaveBeenCalled();
+  });
+
+  it('should handle button click - clear action', () => {
+    const button = { actions: [':clear'] };
+    component.handleButtonClick(<Button>button);
+    expect(speechbarService.clear).toHaveBeenCalled();
+  });
+
+  it('should handle button click - backspace action', () => {
+    const button = { actions: [':backspace'] };
+    component.handleButtonClick(<Button>button);
+    expect(speechbarService.backspace).toHaveBeenCalled();
+  });
+
+  it('should handle button click - speak action', () => {
+    const button = { actions: [':speak'] };
+    component.handleButtonClick(<Button>button);
+    expect(speechbarService.speak).toHaveBeenCalled();
+  });
+
+  it('should handle button click - space action', () => {
+    const button = { actions: [':space'] };
+    component.handleButtonClick(<Button>button);
+    expect(speechbarService.space).toHaveBeenCalled();
+  });
+
+  it('should handle button click - home action', () => {
+    const button = { actions: [':home'] };
+    component.handleButtonClick(<Button>button);
+    expect(boardService.home).toHaveBeenCalled();
+  });
+
+  it('should handle button click - multiple actions', () => {
+    const button = { actions: [':home', ':space', ':speak'] };
+    component.handleButtonClick(<Button>button);
+    expect(boardService.home).toHaveBeenCalled();
+    expect(speechbarService.space).toHaveBeenCalled();
+    expect(speechbarService.speak).toHaveBeenCalled();
+  });
+
+  it('should handle button click - add action', () => {
+    const button = { label: 'text', actions: [] };
+    component.handleButtonClick(<Button>button);
+    expect(speechbarService.addButton).toHaveBeenCalled();
+  });
+
+  it('should handle button click - loadBoard action', () => {
+    const button = { label: 'text', actions: [], loadBoardAction: { path: 'path' } };
+    component.handleButtonClick(<Button>button);
+    expect(boardService.navigateToBoard).toHaveBeenCalled();
+    expect(speechbarService.addButton).not.toHaveBeenCalled();
+  });
+
+  it('should handle button click - loadBoard external action', () => {
+    const button = { actions: [], loadBoardAction: { dataUrl: 'path' } };
+    component.handleButtonClick(<Button>button);
+    expect(boardService.navigateToExternalBoard).toHaveBeenCalled();
+    expect(speechbarService.addButton).not.toHaveBeenCalled();
+  });
+
+  it('should handle button click - loadBoard action with vocalisation', () => {
+    const button = { vocalization: 'hello', actions: [], loadBoardAction: { path: 'path' } };
+    component.handleButtonClick(<Button>button);
+    expect(boardService.navigateToBoard).toHaveBeenCalled();
+    expect(speechbarService.addButton).toHaveBeenCalled();
+  });
+
+  it('should handle button click - loadBoard url action', () => {
+    const button = { actions: [], loadBoardAction: { url: 'path' } };
+    component.handleButtonClick(<Button>button);
+    expect(speechbarService.addButton).not.toHaveBeenCalled();
+  });
+
+  it('should handle button click - sound', () => {
+    const button = { actions: [], soundId: '1' };
+    component.handleButtonClick(<Button>button);
+    expect(speechbarService.addButton).toHaveBeenCalled();
+  });
+
 });

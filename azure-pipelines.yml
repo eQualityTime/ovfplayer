@@ -26,7 +26,7 @@ jobs:
     displayName: 'build distribution'
 
   - script: |
-      ng test --watch=false --browsers ChromeHeadless
+      ng test --watch=false --browsers ChromeHeadless --code-coverage
     displayName: 'execute tests'
 
   - task: PublishTestResults@2
@@ -34,6 +34,12 @@ jobs:
     inputs:
       testRunner: JUnit
       testResultsFiles: ./test-results/junit.xml
+
+  - task: PublishCodeCoverageResults@1
+    inputs:
+      codeCoverageTool: Cobertura
+      summaryFileLocation: '$(System.DefaultWorkingDirectory)/**/*coverage.xml'
+      reportDirectory: '$(System.DefaultWorkingDirectory)/**/coverage'
 
 - job: Deploy
   dependsOn: BuildAndTest
