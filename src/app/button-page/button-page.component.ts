@@ -26,8 +26,9 @@ import { ScanningService, ScanningModel, ScannableCollectionProvider, ScannableC
 })
 export class ButtonPageComponent implements OnInit, OnDestroy {
 
-  @Output() board: OBFBoard;
-  private scanningModel: ScanningModel;
+  @Output()
+  board: OBFBoard;
+
   private boardSubscription: Subscription;
   private scanningSubscription: Subscription;
   private buttonProvider: ScannableButtonRowProvider;
