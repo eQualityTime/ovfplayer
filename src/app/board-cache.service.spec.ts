@@ -17,7 +17,6 @@ import { BoardCacheService } from './board-cache.service';
 import { LocalStorage } from '@ngx-pwa/local-storage';
 import { of } from 'rxjs';
 import { OBZBoardSet } from './obzboard-set';
-import { nextTick } from 'q';
 
 describe('BoardCacheService', () => {
   beforeEach(() => {
@@ -81,5 +80,4 @@ describe('BoardCacheService', () => {
       expect(localStorage.getItem).toHaveBeenCalled();
     })();
   });
-
 });
