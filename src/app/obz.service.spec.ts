@@ -18,7 +18,7 @@ import { OBZFixture } from '../test-utils/OBZFixture';
 import { ObzService } from './obz.service';
 import { ErrorCodes } from './errors';
 import { BoardCacheService } from './board-cache.service';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { OBZBoardSet } from './obzboard-set';
 
 describe('ObzService', () => {
@@ -39,7 +39,7 @@ describe('ObzService', () => {
       [ObzService, HttpTestingController, BoardCacheService],
       (service: ObzService, httpMock: HttpTestingController, cache: BoardCacheService) => {
 
-      spyOn(cache, 'retrieve').and.returnValue(of(null));
+      spyOn(cache, 'retrieve').and.returnValue(throwError(new Error('Cache is empty')));
 
       service.getBoardSet().subscribe({
         next() { console.log('Hmmm'); },

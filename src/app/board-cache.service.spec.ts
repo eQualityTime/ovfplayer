@@ -17,6 +17,7 @@ import { BoardCacheService } from './board-cache.service';
 import { LocalStorage } from '@ngx-pwa/local-storage';
 import { of } from 'rxjs';
 import { OBZBoardSet } from './obzboard-set';
+import { nextTick } from 'q';
 
 describe('BoardCacheService', () => {
   beforeEach(() => {
@@ -66,4 +67,19 @@ describe('BoardCacheService', () => {
       expect(localStorage.getItem).toHaveBeenCalled();
     })();
   });
+
+  it('should throw error when cache is empty', (done) => {
+    inject([BoardCacheService, LocalStorage], (service: BoardCacheService, localStorage: LocalStorage) => {
+      spyOn(localStorage, 'getItem').and.returnValue(of(null));
+      service.retrieve().subscribe({
+        next: () => {},
+        error: (err) => {
+          expect(err).toBeTruthy();
+          done();
+        }
+      });
+      expect(localStorage.getItem).toHaveBeenCalled();
+    })();
+  });
+
 });

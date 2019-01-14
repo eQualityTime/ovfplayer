@@ -55,7 +55,8 @@ export class BoardCacheService {
         });
         return bs;
       } else {
-        return null;
+        this.log('Cache is empty');
+        throw new Error('Cache is empty');
       }
     }), first());
   }
