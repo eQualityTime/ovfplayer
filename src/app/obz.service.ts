@@ -103,7 +103,7 @@ export class ObzService {
 
     return this.getOBZFile(boardURL).pipe(
       flatMap(blob => {
-        return from(this.parseOBZFile(blob)).pipe(
+        return this.parseOBZFile(blob).pipe(
           catchError(error => throwError(
             new FatalOpenVoiceFactoryError(ErrorCodes.OBZ_PARSE_ERROR, `Could not parse ${boardURL} as a zip file`, error)
           ))
@@ -116,13 +116,13 @@ export class ObzService {
     );
   }
 
-  parseOBZFile(blob: Blob): Promise<OBZBoardSet> {
+  parseOBZFile(blob: Blob): Observable<OBZBoardSet> {
     const parseBoard = this.parseBoard;
     const parseImage = this.parseImage;
     const parseSound = this.parseSound;
     const zipper = new JSZip();
 
-    return zipper.loadAsync(blob).then(function(zip) {
+    return from(zipper.loadAsync(blob).then(function(zip) {
       const manifestFile = zip.file('manifest.json');
       if (!manifestFile) {
         throw new FatalOpenVoiceFactoryError(ErrorCodes.MISSING_MANIFEST, 'No manifest file!');
@@ -157,7 +157,7 @@ export class ObzService {
     }, function (fail) {
       // error loading zip file
       throw new FatalOpenVoiceFactoryError(ErrorCodes.ZIP_PARSE_ERROR, 'Could not parse zip file', fail);
-    });
+    }));
   }
 
   private parseImage = (zip, image: string, boardSet: OBZBoardSet): Promise<void> => {
