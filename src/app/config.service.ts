@@ -50,7 +50,7 @@ export class ConfigService {
     time: 1000,
   };
   @LocalStorage() _appearanceConfig: AppearanceConfig = {
-    borderThickness: 1
+    borderThickness: 2
   };
 
   constructor() { }
@@ -76,12 +76,6 @@ export class ConfigService {
   }
 
   get appearanceConfig(): AppearanceConfig {
-    // add default appearance config if not present
-    if (this._appearanceConfig === null || this._appearanceConfig === undefined) {
-      this._appearanceConfig = {
-        borderThickness: 2
-      };
-    }
     return this._appearanceConfig;
   }
 
