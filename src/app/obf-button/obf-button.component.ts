@@ -12,9 +12,10 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: */
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, HostBinding } from '@angular/core';
 import { Button } from '../obfboard';
 import { DomSanitizer } from '@angular/platform-browser';
+import { AppearanceConfig, ConfigService } from '../config.service';
 
 @Component({
   selector: 'app-obf-button',
@@ -29,11 +30,20 @@ export class ObfButtonComponent implements OnInit, OnDestroy {
   @Input()
   clickHandler: (Button) => void;
 
+  appearanceConfig: AppearanceConfig;
+
   private url: string;
 
-  constructor(private domSanit: DomSanitizer) {}
+  constructor(private domSanit: DomSanitizer, private config: ConfigService) {}
 
-  ngOnInit() { }
+  @HostBinding('attr.style')
+  public get valueAsStyle(): any {
+    return this.domSanit.bypassSecurityTrustStyle(`--borderWidth: ${this.appearanceConfig.borderThickness + 'px'}`);
+  }
+
+  ngOnInit() {
+    this.appearanceConfig = this.config.appearanceConfig;
+  }
 
   getDataURL() {
     this.url = URL.createObjectURL(this.butt.getImage().getDataBlob());

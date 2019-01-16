@@ -12,9 +12,9 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: */
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { ConfigService, ButtonDisplayConfig, ScanningConfig } from '../config.service';
+import { ConfigService, ButtonDisplayConfig, ScanningConfig, AppearanceConfig } from '../config.service';
 import { MatSnackBar } from '@angular/material';
 import { VERSION } from '../../environments/version';
 import { BoardCacheService } from '../board-cache.service';
@@ -28,11 +28,12 @@ export class ConfigPageComponent implements OnInit {
 
   PAGESET_PARAM = 'pagesetURL';
 
-  @Input() boardURL: string;
-  @Input() showIconsInSpeechbar: boolean;
-  @Input() speakOnSpeechbarClick: boolean;
-  @Input() displayedButtons: ButtonDisplayConfig;
-  @Input() scanningConfig: ScanningConfig;
+  boardURL: string;
+  showIconsInSpeechbar: boolean;
+  speakOnSpeechbarClick: boolean;
+  displayedButtons: ButtonDisplayConfig;
+  scanningConfig: ScanningConfig;
+  appearanceConfig: AppearanceConfig;
 
   constructor(
     private configService: ConfigService,
@@ -47,6 +48,7 @@ export class ConfigPageComponent implements OnInit {
     this.showIconsInSpeechbar = this.configService.showIconsInSpeechbar;
     this.speakOnSpeechbarClick = this.configService.speakOnSpeechbarClick;
     this.scanningConfig = this.configService.scanningConfig;
+    this.appearanceConfig = this.configService.appearanceConfig;
 
     const configURLParam = this.route.snapshot.queryParamMap.get(this.PAGESET_PARAM);
     if (configURLParam) {
@@ -61,6 +63,7 @@ export class ConfigPageComponent implements OnInit {
     this.configService.showIconsInSpeechbar = this.showIconsInSpeechbar;
     this.configService.speakOnSpeechbarClick = this.speakOnSpeechbarClick;
     this.configService.scanningConfig = this.scanningConfig;
+    this.configService.appearanceConfig = this.appearanceConfig;
     // TODO: some kind of validation
 
     // clear local cache of page to force a refresh
@@ -93,5 +96,9 @@ export class ConfigPageComponent implements OnInit {
 
   getVersion() {
     return VERSION.tag;
+  }
+
+  borderThicknessChange(event: any) {
+    this.appearanceConfig.borderThickness = event.value;
   }
 }

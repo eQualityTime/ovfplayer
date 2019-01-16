@@ -53,3 +53,9 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
   position: relative;
   top: 6px;
 }
+
+.borderExample {
+  border: solid black;
+  width: fit-content;
+  display: inline-block;
+}

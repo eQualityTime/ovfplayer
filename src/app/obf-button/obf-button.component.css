@@ -13,7 +13,6 @@ You should have received a copy of the GNU General Public License
 along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: */
 .buttonDiv {
-  --borderWidth : 2px;
   width: calc(100% - 2 * var(--borderWidth));
   height: calc(100% - 2 * var(--borderWidth));
   border: var(--borderWidth) solid;

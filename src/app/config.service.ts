@@ -27,6 +27,10 @@ export interface ScanningConfig {
   time: number;
 }
 
+export interface AppearanceConfig {
+  borderThickness: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -44,6 +48,9 @@ export class ConfigService {
   @LocalStorage() _scanningConfig: ScanningConfig = {
     enabled: false,
     time: 1000,
+  };
+  @LocalStorage() _appearanceConfig: AppearanceConfig = {
+    borderThickness: 2
   };
 
   constructor() { }
@@ -68,6 +75,10 @@ export class ConfigService {
     return this._scanningConfig;
   }
 
+  get appearanceConfig(): AppearanceConfig {
+    return this._appearanceConfig;
+  }
+
   set boardURL(boardURL: string) {
     this._boardURL = boardURL;
   }
@@ -85,5 +96,9 @@ export class ConfigService {
 
   set scanningConfig(scanningConfig: ScanningConfig) {
     this._scanningConfig = scanningConfig;
+  }
+
+  set appearanceConfig(appearanceConfig: AppearanceConfig) {
+    this._appearanceConfig = appearanceConfig;
   }
 }
