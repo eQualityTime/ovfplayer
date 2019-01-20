@@ -17,86 +17,76 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
     <div class="formTitle">
       Configuration
     </div>
-    <div class="formButtons">
-      <button mat-raised-button color="primary" (click)="save()">Save</button>
-    </div>
-    <mat-tab-group>
-      <mat-tab label="Board URL">
-        <div class="formContainer">
-          <mat-card>
-            <mat-form-field class="formInputField">
-              <input [(ngModel)]="boardURL" matInput placeholder="URL for obf/obz file" class="formInputUrl"/>
-            </mat-form-field>
-            <div class="clickable" (click)="copyToClipboard()"><i class="material-icons">link</i>&nbsp;Create link</div>
-          </mat-card>
-        </div>
-      </mat-tab>
-      <mat-tab label="Speechbar behaviour">
-        <div class="formContainer">
-          <mat-card>
-            <mat-checkbox [(ngModel)]="speakOnSpeechbarClick">
-              <span class="formLabel">Speak when speechbar is clicked</span>
-            </mat-checkbox>
-          </mat-card>
-          <mat-card>
-            <mat-checkbox [(ngModel)]="showIconsInSpeechbar">
-              <span class="formLabel">Display button images and labels in speechbar (instead of vocalisation text)</span>
-            </mat-checkbox>
-          </mat-card>
-        </div>
-      </mat-tab>
-      <mat-tab label="Permanent buttons">
-        <div class="formContainer">
-          <mat-card>
-            <mat-checkbox [(ngModel)]="displayedButtons.showSpeakButton">
-              <span class="formLabel">Speak button always shown</span>
-            </mat-checkbox>
-          </mat-card>
-          <mat-card>
-            <mat-checkbox [(ngModel)]="displayedButtons.showBackspaceButton">
-              <span class="formLabel">Backspace button always shown</span>
-            </mat-checkbox>
-          </mat-card>
-          <mat-card>
-            <mat-checkbox [(ngModel)]="displayedButtons.showClearButton">
-              <span class="formLabel">Clear button always shown</span>
-            </mat-checkbox>
-          </mat-card>
-          <mat-card>
-            <mat-checkbox [(ngModel)]="displayedButtons.showHomeButton">
-              <span class="formLabel">Home button always shown</span>
-            </mat-checkbox>
-          </mat-card>
-        </div>
-      </mat-tab>
-      <mat-tab label="Scanning">
-        <div class="formContainer">
-          <mat-card>
-            <mat-checkbox [(ngModel)]="scanningConfig.enabled">
-              <span class="formLabel">Enable scanning</span>
-            </mat-checkbox>
-          </mat-card>
-          <mat-card>
-            <mat-form-field class="formInputField">
-              <input [(ngModel)]="scanningConfig.time" matInput placeholder="Time to stay on each scanned item (in milliseconds)"/>
-            </mat-form-field>
-          </mat-card>
-        </div>
-      </mat-tab>
-      <mat-tab label="Apperance">
-        <div class="formContainer">
-          <mat-card>
-            <div>
-              <mat-slider min="1" max="10" step="1" color="Primary"
-                [(ngModel)]="appearanceConfig.borderThickness" thumbLabel="true"
-                (input)="borderThicknessChange($event)"
-              ></mat-slider>
-              <div class="borderExample" [style.border-width]="appearanceConfig.borderThickness + 'px'">Border Thickness</div>
-            </div>
-          </mat-card>
-        </div>
-      </mat-tab>
-    </mat-tab-group>
+    <form (ngSubmit)="save()" #configForm="ngForm">
+      <div class="formButtons">
+        <button type="submit" mat-raised-button color="primary" [disabled]="!configForm.form.valid">Save</button>
+      </div>
+      <mat-tab-group>
+        <mat-tab label="Board URL">
+          <div class="formContainer">
+            <mat-card>
+              <mat-form-field class="formInputField">
+                <input [(ngModel)]="boardURL" matInput name="boardURL" placeholder="URL for obf/obz file" class="formInputUrl">
+              </mat-form-field>
+              <div class="clickable" (click)="copyToClipboard()"><i class="material-icons">link</i>&nbsp;Create link</div>
+            </mat-card>
+          </div>
+        </mat-tab>
+        <mat-tab label="Speechbar behaviour">
+          <div class="formContainer">
+            <mat-card>
+              <mat-checkbox [(ngModel)]="speakOnSpeechbarClick" name="speakOnSpeechbarClick">
+                <span class="formLabel">Speak when speechbar is clicked</span>
+              </mat-checkbox>
+            </mat-card>
+            <mat-card>
+              <mat-checkbox [(ngModel)]="showIconsInSpeechbar" name="showIconsInSpeechbar">
+                <span class="formLabel">Display button images and labels in speechbar (instead of vocalisation text)</span>
+              </mat-checkbox>
+            </mat-card>
+          </div>
+        </mat-tab>
+        <mat-tab label="Permanent buttons">
+          <div class="formContainer">
+            <mat-card>
+              <mat-checkbox [(ngModel)]="displayedButtons.showSpeakButton" name="showSpeakButton">
+                <span class="formLabel">Speak button always shown</span>
+              </mat-checkbox>
+            </mat-card>
+            <mat-card>
+              <mat-checkbox [(ngModel)]="displayedButtons.showBackspaceButton" name="showBackspaceButton">
+                <span class="formLabel">Backspace button always shown</span>
+              </mat-checkbox>
+            </mat-card>
+            <mat-card>
+              <mat-checkbox [(ngModel)]="displayedButtons.showClearButton" name="showClearButton">
+                <span class="formLabel">Clear button always shown</span>
+              </mat-checkbox>
+            </mat-card>
+            <mat-card>
+              <mat-checkbox [(ngModel)]="displayedButtons.showHomeButton" name="showHomeButton">
+                <span class="formLabel">Home button always shown</span>
+              </mat-checkbox>
+            </mat-card>
+          </div>
+        </mat-tab>
+        <mat-tab label="Scanning">
+          <div class="formContainer">
+            <mat-card>
+              <mat-checkbox [(ngModel)]="scanningConfig.enabled" name="scanningEnabled">
+                <span class="formLabel">Enable scanning</span>
+              </mat-checkbox>
+            </mat-card>
+            <mat-card>
+              <mat-form-field class="formInputField">
+                <input [required]="scanningConfig.enabled" type="number" [(ngModel)]="scanningConfig.time" name="scanningTime"
+                        matInput placeholder="Time to stay on each scanned item (in milliseconds)">
+              </mat-form-field>
+            </mat-card>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </form>
   </mat-card>
   <p>Version: {{getVersion()}}</p>
 </app-obfpage>
