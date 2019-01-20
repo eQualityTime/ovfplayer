@@ -60,10 +60,6 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
   display: inline-block;
 }
 
-.invalidTabMessage {
-  color: red;
-}
-
 .invalidTab {
   color: red;
 }

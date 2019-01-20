@@ -19,17 +19,15 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
     </div>
     <form (ngSubmit)="save()" #configForm="ngForm">
 
-      <mat-card class="invalidTabMessage" *ngIf="boardURLCtrl.invalid">Board URL configuration is invalid.</mat-card>
-      <mat-card class="invalidTabMessage" *ngIf="speechbarBehaviourCtrl.invalid">Speechbar behaviour configuration is invalid.</mat-card>
-      <mat-card class="invalidTabMessage" *ngIf="displayedButtonsCtrl.invalid">Permanent buttons configuration is invalid.</mat-card>
-      <mat-card class="invalidTabMessage" *ngIf="scanningCtrl.invalid">Scanning configuration is invalid.</mat-card>
-
       <div class="formButtons">
         <button type="submit" mat-raised-button color="primary" [disabled]="!configForm.form.valid">Save</button>
       </div>
       <mat-tab-group>
         <mat-tab ngModelGroup="boardURL" #boardURLCtrl="ngModelGroup">
-          <ng-template mat-tab-label><span [class.invalidTab]="boardURLCtrl.invalid">Board URL</span></ng-template>
+          <ng-template mat-tab-label>
+            <mat-icon *ngIf="boardURLCtrl.invalid" class="invalidTab">error</mat-icon>
+            <span [class.invalidTab]="boardURLCtrl.invalid">Board URL</span>
+          </ng-template>
           <div class="formContainer">
             <mat-card>
               <mat-form-field class="formInputField">
@@ -40,7 +38,10 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
           </div>
         </mat-tab>
         <mat-tab ngModelGroup="speechbarBehaviour" #speechbarBehaviourCtrl="ngModelGroup">
-          <ng-template mat-tab-label><span [class.invalidTab]="speechbarBehaviourCtrl.invalid">Speechbar behaviour</span></ng-template>
+          <ng-template mat-tab-label>
+            <mat-icon *ngIf="speechbarBehaviourCtrl.invalid" class="invalidTab">error</mat-icon>
+            <span [class.invalidTab]="speechbarBehaviourCtrl.invalid">Speechbar behaviour</span>
+          </ng-template>
           <div class="formContainer">
             <mat-card>
               <mat-checkbox [(ngModel)]="speakOnSpeechbarClick" name="speakOnSpeechbarClick">
@@ -55,7 +56,10 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
           </div>
         </mat-tab>
         <mat-tab ngModelGroup="displayedButtons" #displayedButtonsCtrl="ngModelGroup">
-            <ng-template mat-tab-label><span [class.invalidTab]="displayedButtonsCtrl.invalid">Permanent buttons</span></ng-template>
+          <ng-template mat-tab-label>
+            <mat-icon *ngIf="displayedButtonsCtrl.invalid" class="invalidTab">error</mat-icon>
+            <span [class.invalidTab]="displayedButtonsCtrl.invalid">Permanent buttons</span>
+          </ng-template>
           <div class="formContainer">
             <mat-card>
               <mat-checkbox [(ngModel)]="displayedButtons.showSpeakButton" name="showSpeakButton">
@@ -80,7 +84,10 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
           </div>
         </mat-tab>
         <mat-tab ngModelGroup="scanning" #scanningCtrl="ngModelGroup">
-            <ng-template mat-tab-label><span [class.invalidTab]="scanningCtrl.invalid">Scanning</span></ng-template>
+          <ng-template mat-tab-label>
+            <mat-icon *ngIf="scanningCtrl.invalid" class="invalidTab">error</mat-icon>
+            <span [class.invalidTab]="scanningCtrl.invalid">Scanning</span>
+          </ng-template>
           <div class="formContainer">
             <mat-card>
               <mat-checkbox [(ngModel)]="scanningConfig.enabled" name="scanningEnabled">
