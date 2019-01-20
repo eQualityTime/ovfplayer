@@ -24,7 +24,8 @@ import {
   MatInputModule,
   MatSnackBar,
   MatTabsModule,
-  MatSliderModule
+  MatSliderModule,
+  MatIconModule
 } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Router, ActivatedRoute, ActivatedRouteSnapshot, UrlSegment, Params, Data, Route, ParamMap } from '@angular/router';
@@ -123,7 +124,8 @@ describe('ConfigPageComponent', () => {
         MatInputModule,
         BrowserAnimationsModule,
         MatTabsModule,
-        MatSliderModule
+        MatSliderModule,
+        MatIconModule
       ]
     }).compileComponents();
   }));
