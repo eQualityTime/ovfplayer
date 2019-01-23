@@ -102,6 +102,23 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
             </mat-card>
           </div>
         </mat-tab>
+        <mat-tab ngModelGroup="appearance" #appearanceCtrl="ngModelGroup">
+          <ng-template mat-tab-label>
+            <mat-icon *ngIf="appearanceCtrl.invalid" class="invalidTab">error</mat-icon>
+            <span [class.invalidTab]="appearanceCtrl.invalid">Appearance</span>
+          </ng-template>
+          <div class="formContainer">
+            <mat-card>
+              <div>
+                <mat-slider min="1" max="10" step="1" color="Primary"
+                  [(ngModel)]="appearanceConfig.borderThickness" name="borderThickness" thumbLabel="true"
+                  (input)="borderThicknessChange($event)"
+                ></mat-slider>
+                <div class="borderExample" [style.border-width]="appearanceConfig.borderThickness + 'px'">Border Thickness</div>
+              </div>
+            </mat-card>
+          </div>
+        </mat-tab>
       </mat-tab-group>
     </form>
   </mat-card>
