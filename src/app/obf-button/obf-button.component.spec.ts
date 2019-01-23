@@ -17,6 +17,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ObfButtonComponent } from './obf-button.component';
 import { Button, OBFBoard } from '../obfboard';
 import { MatRippleModule } from '@angular/material';
+import { ClickHandlerDirective } from '../click-handler.directive';
 
 describe('ObfButtonComponent', () => {
   let component: ObfButtonComponent;
@@ -40,7 +41,7 @@ describe('ObfButtonComponent', () => {
 
     TestBed.configureTestingModule({
       imports: [ MatRippleModule ],
-      declarations: [ ObfButtonComponent ]
+      declarations: [ ObfButtonComponent, ClickHandlerDirective ]
     })
     .compileComponents();
   }));

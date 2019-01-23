@@ -21,6 +21,7 @@ import { SpeechbarComponent } from '../speechbar/speechbar.component';
 import { ButtonPageComponent } from '../button-page/button-page.component';
 import { ObfButtonComponent } from '../obf-button/obf-button.component';
 import { ProgressComponent } from '../progress/progress.component';
+import { ClickHandlerDirective } from '../click-handler.directive';
 
 describe('MainPageComponent', () => {
   let component: MainPageComponent;
@@ -33,7 +34,8 @@ describe('MainPageComponent', () => {
         SpeechbarComponent,
         ButtonPageComponent,
         ObfButtonComponent,
-        ProgressComponent
+        ProgressComponent,
+        ClickHandlerDirective
       ],
       imports: [ MatCardModule, HttpClientTestingModule, MatRippleModule ]
     })
