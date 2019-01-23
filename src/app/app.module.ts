@@ -36,6 +36,7 @@ import { GlobalErrorHandlerService } from './global-error-handler.service';
 import { ErrorPageComponent } from './error-page/error-page.component';
 import { OBFPageComponent } from './obfpage/obfpage.component';
 import { ProgressComponent } from './progress/progress.component';
+import { ClickHandlerDirective } from './click-handler.directive';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,8 @@ import { ProgressComponent } from './progress/progress.component';
     ObfButtonComponent,
     ErrorPageComponent,
     OBFPageComponent,
-    ProgressComponent
+    ProgressComponent,
+    ClickHandlerDirective
   ],
   imports: [
     BrowserModule,

@@ -12,7 +12,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: */
-import { Component, OnInit, Input, OnDestroy, HostBinding, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, HostBinding } from '@angular/core';
 import { Button } from '../obfboard';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AppearanceConfig, ConfigService } from '../config.service';
@@ -22,7 +22,7 @@ import { AppearanceConfig, ConfigService } from '../config.service';
   templateUrl: './obf-button.component.html',
   styleUrls: ['./obf-button.component.css']
 })
-export class ObfButtonComponent implements OnInit, OnDestroy, AfterViewInit {
+export class ObfButtonComponent implements OnInit, OnDestroy {
 
   @Input()
   butt: Button;
@@ -34,9 +34,6 @@ export class ObfButtonComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private url: string;
 
-  @ViewChild('buttonDiv')
-  buttonElement: ElementRef;
-
   constructor(private domSanit: DomSanitizer, private config: ConfigService) {}
 
   @HostBinding('attr.style')
@@ -46,10 +43,6 @@ export class ObfButtonComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnInit() {
     this.appearanceConfig = this.config.appearanceConfig;
-  }
-
-  ngAfterViewInit(): void {
-    this.buttonElement.nativeElement.addEventListener(this.config.buttonBehaviourConfig.triggerEvent, this.handleClick.bind(this));
   }
 
   getDataURL() {
@@ -68,7 +61,7 @@ export class ObfButtonComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  private handleClick() {
+  handleClick() {
     if (this.clickHandler) {
       this.clickHandler(this.butt);
     }
