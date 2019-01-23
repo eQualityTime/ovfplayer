@@ -21,7 +21,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { LayoutModule } from '@angular/cdk/layout';
 
 import { MatMenuModule, MatIconModule, MatButtonModule, MatInputModule, MatRippleModule, MatGridListModule, MatCardModule,
-  MatFormFieldModule, MatCheckboxModule, MatSnackBarModule, MatTabsModule, MatSliderModule } from '@angular/material';
+  MatFormFieldModule, MatCheckboxModule, MatSnackBarModule, MatTabsModule, MatSliderModule, MatRadioModule } from '@angular/material';
 
 import { WebStorageModule } from 'ngx-store';
 
@@ -68,7 +68,8 @@ import { ProgressComponent } from './progress/progress.component';
     AppRoutingModule,
     WebStorageModule,
     MatRippleModule,
-    MatSliderModule
+    MatSliderModule,
+    MatRadioModule
   ],
   providers: [
     {
