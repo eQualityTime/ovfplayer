@@ -32,7 +32,6 @@ export interface AppearanceConfig {
 }
 
 export interface ButtonBehaviourConfig {
-  speakOnTrigger: boolean;
   triggerEvent: string;
 }
 
@@ -58,7 +57,6 @@ export class ConfigService {
     borderThickness: 2
   };
   @LocalStorage() _buttonBehaviourConfig: ButtonBehaviourConfig = {
-    speakOnTrigger: false,
     triggerEvent: 'click'
   };
 
