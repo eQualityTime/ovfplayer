@@ -105,4 +105,13 @@ describe('ClickHandlerDirective', () => {
     expect(directive.onClick).toHaveBeenCalled();
     expect(directive.handleEvent).toHaveBeenCalled();
   }));
+
+  it('should not handle mouseenter', fakeAsync( () => {
+    fixture.detectChanges();
+    const div = fixture.debugElement.query(By.css('div'));
+    div.triggerEventHandler('mouseenter', null);
+    tick();
+    fixture.detectChanges();
+    expect(directive.handleEvent).not.toHaveBeenCalled();
+  }));
 });
