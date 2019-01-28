@@ -1,11 +1,11 @@
-import { ClickHandlerDirective } from './click-handler.directive';
+import { InteractionEventHandlerDirective } from './interaction-event-handler.directive';
 import { ConfigService } from './config.service';
 import { TestBed, ComponentFixture, async, fakeAsync, tick } from '@angular/core/testing';
 import { Component } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
 @Component({
-  template: '<div [appClickHandler]="testHandler"></div>'
+  template: '<div [appInteractionEventHandler]="testHandler"></div>'
 })
 class TestClickHandlerComponent {
   testHandler() {
@@ -16,7 +16,7 @@ class TestClickHandlerComponent {
 describe('ClickHandlerDirective', () => {
 
   let component: TestClickHandlerComponent;
-  let directive: ClickHandlerDirective;
+  let directive: InteractionEventHandlerDirective;
   let fixture: ComponentFixture<TestClickHandlerComponent>;
   let configServiceStub: Partial<ConfigService>;
 
@@ -28,7 +28,7 @@ describe('ClickHandlerDirective', () => {
     };
 
     TestBed.configureTestingModule({
-      declarations: [ TestClickHandlerComponent, ClickHandlerDirective ],
+      declarations: [ TestClickHandlerComponent, InteractionEventHandlerDirective ],
       providers: [
         {provide: ConfigService, useValue: configServiceStub}
       ]
@@ -39,8 +39,8 @@ describe('ClickHandlerDirective', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(TestClickHandlerComponent);
     component = fixture.componentInstance;
-    const directiveEl = fixture.debugElement.query(By.directive(ClickHandlerDirective));
-    directive = directiveEl.injector.get(ClickHandlerDirective);
+    const directiveEl = fixture.debugElement.query(By.directive(InteractionEventHandlerDirective));
+    directive = directiveEl.injector.get(InteractionEventHandlerDirective);
 
     spyOn(component, 'testHandler');
     spyOn(directive, 'handleEvent').and.callThrough();

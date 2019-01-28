@@ -12,7 +12,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: -->
-<div class="buttonDiv" [appClickHandler]="handleClick.bind(this)"
+<div class="buttonDiv" [appInteractionEventHandler]="handleClick.bind(this)"
      [class.pageTurn]="clickHandler && butt.loadBoardAction"
      [class.ripple]="clickHandler"
      [style.background-color]="butt.backgroundColor"

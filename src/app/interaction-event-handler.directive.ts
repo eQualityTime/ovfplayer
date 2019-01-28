@@ -2,12 +2,12 @@ import { Directive, HostListener, Input } from '@angular/core';
 import { ConfigService } from './config.service';
 
 @Directive({
-  selector: '[appClickHandler]'
+  selector: '[appInteractionEventHandler]'
 })
-export class ClickHandlerDirective {
+export class InteractionEventHandlerDirective {
 
-  @Input('appClickHandler')
-  private appClickHandler: () => void;
+  @Input('appInteractionEventHandler')
+  private appInteractionEventHandler: () => void;
 
   constructor(private config: ConfigService) { }
 
@@ -25,7 +25,7 @@ export class ClickHandlerDirective {
 
   handleEvent(eventType: string) {
     if (eventType === this.config.buttonBehaviourConfig.triggerEvent) {
-      this.appClickHandler();
+      this.appInteractionEventHandler();
     }
   }
 }

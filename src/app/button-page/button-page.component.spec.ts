@@ -23,7 +23,7 @@ import { ObfButtonComponent } from '../obf-button/obf-button.component';
 import { MatRippleModule } from '@angular/material';
 import { ProgressComponent } from '../progress/progress.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ClickHandlerDirective } from '../click-handler.directive';
+import { InteractionEventHandlerDirective } from '../interaction-event-handler.directive';
 
 describe('ButtonPageComponent', () => {
   let component: ButtonPageComponent;
@@ -35,7 +35,7 @@ describe('ButtonPageComponent', () => {
 
     TestBed.configureTestingModule({
       imports: [ MatRippleModule, HttpClientTestingModule ],
-      declarations: [ ButtonPageComponent, ObfButtonComponent, ProgressComponent, ClickHandlerDirective ],
+      declarations: [ ButtonPageComponent, ObfButtonComponent, ProgressComponent, InteractionEventHandlerDirective ],
       providers: [ BoardService, SpeechbarService ]
     })
     .compileComponents();

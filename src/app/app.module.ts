@@ -36,7 +36,7 @@ import { GlobalErrorHandlerService } from './global-error-handler.service';
 import { ErrorPageComponent } from './error-page/error-page.component';
 import { OBFPageComponent } from './obfpage/obfpage.component';
 import { ProgressComponent } from './progress/progress.component';
-import { ClickHandlerDirective } from './click-handler.directive';
+import { InteractionEventHandlerDirective } from './interaction-event-handler.directive';
 
 @NgModule({
   declarations: [
@@ -49,7 +49,7 @@ import { ClickHandlerDirective } from './click-handler.directive';
     ErrorPageComponent,
     OBFPageComponent,
     ProgressComponent,
-    ClickHandlerDirective
+    InteractionEventHandlerDirective
   ],
   imports: [
     BrowserModule,
