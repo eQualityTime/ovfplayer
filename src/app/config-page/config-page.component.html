@@ -55,6 +55,22 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
             </mat-card>
           </div>
         </mat-tab>
+        <mat-tab ngModelGroup="buttonBehaviour" #buttonBehaviourCtrl="ngModelGroup">
+          <ng-template mat-tab-label>
+            <mat-icon *ngIf="buttonBehaviourCtrl.invalid" class="invalidTab">error</mat-icon>
+            <span [class.invalidTab]="buttonBehaviourCtrl.invalid">Button press behaviour</span>
+          </ng-template>
+          <div class="formContainer">
+            <mat-card>
+              <mat-radio-group [(ngModel)]="buttonBehaviourConfig.triggerEvent" name="buttonBehaviourConfig.triggerEvent">
+                <div class="formLabel">Event to use to trigger button usage</div>
+                <mat-radio-button [value]="interactionEventType.click">Full click</mat-radio-button>
+                <mat-radio-button [value]="interactionEventType.mouseup">Release</mat-radio-button>
+                <mat-radio-button [value]="interactionEventType.mousedown">Press</mat-radio-button>
+              </mat-radio-group>
+            </mat-card>
+          </div>
+        </mat-tab>
         <mat-tab ngModelGroup="displayedButtons" #displayedButtonsCtrl="ngModelGroup">
           <ng-template mat-tab-label>
             <mat-icon *ngIf="displayedButtonsCtrl.invalid" class="invalidTab">error</mat-icon>

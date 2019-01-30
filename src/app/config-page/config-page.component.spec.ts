@@ -16,7 +16,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 
 import { ConfigPageComponent } from './config-page.component';
-import { ConfigService } from '../config.service';
+import { ConfigService, InteractionEventType } from '../config.service';
 import {
   MatFormFieldModule,
   MatCardModule,
@@ -25,7 +25,8 @@ import {
   MatSnackBar,
   MatTabsModule,
   MatSliderModule,
-  MatIconModule
+  MatIconModule,
+  MatRadioModule
 } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Router, ActivatedRoute, ActivatedRouteSnapshot, UrlSegment, Params, Data, Route, ParamMap } from '@angular/router';
@@ -81,6 +82,9 @@ describe('ConfigPageComponent', () => {
       },
       appearanceConfig: {
         borderThickness: 2
+      },
+      buttonBehaviourConfig: {
+        triggerEvent: InteractionEventType.click
       }
     };
     snackbarStub = {};
@@ -125,7 +129,8 @@ describe('ConfigPageComponent', () => {
         BrowserAnimationsModule,
         MatTabsModule,
         MatSliderModule,
-        MatIconModule
+        MatIconModule,
+        MatRadioModule
       ]
     }).compileComponents();
   }));
