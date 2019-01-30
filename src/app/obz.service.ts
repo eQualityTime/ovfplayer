@@ -96,7 +96,11 @@ export class ObzService {
   }
 
   private getOBZFile(boardURL: string): Observable<Blob> {
-    return this.http.get(boardURL, { responseType: 'blob' });
+    return this.http.get(boardURL, { responseType: 'blob' }).pipe(
+      catchError((error: HttpErrorResponse) => throwError(
+        new FatalOpenVoiceFactoryError(ErrorCodes.OBZ_DOWNLOAD_ERROR, `Failed to download file ${boardURL}: ${error.message}`)
+      ))
+    );
   }
 
   private loadOBZFile(boardURL: string): Observable<OBZBoardSet> {
@@ -109,10 +113,7 @@ export class ObzService {
           ))
         );
       }),
-      flatMap(boardSet => this.cacheBoardSet(boardURL, boardSet)),
-      catchError((error: HttpErrorResponse) => throwError(
-        new FatalOpenVoiceFactoryError(ErrorCodes.OBZ_DOWNLOAD_ERROR, `Failed to download file ${boardURL}: ${error.message}`)
-      ))
+      flatMap(boardSet => this.cacheBoardSet(boardURL, boardSet))
     );
   }
 
