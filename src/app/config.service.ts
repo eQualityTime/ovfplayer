@@ -47,7 +47,6 @@ export interface ButtonBehaviourConfig {
 export class ConfigService {
 
   @LocalStorage() _boardURL = 'https://dl.dropboxusercontent.com/s/oiwfo47fprv3jl4/ck20.obz?dl=1';
-  // TODO : move speechbar behaviour into a config class
   @LocalStorage() _showIconsInSpeechbar = true;
   @LocalStorage() _speakOnSpeechbarClick = true;
   @LocalStorage() _displayedButtons: ButtonDisplayConfig = {
