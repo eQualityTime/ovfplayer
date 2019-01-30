@@ -31,6 +31,16 @@ export interface AppearanceConfig {
   borderThickness: number;
 }
 
+export enum InteractionEventType {
+  click = 'click',
+  mouseup = 'mouseup',
+  mousedown = 'mousedown'
+}
+
+export interface ButtonBehaviourConfig {
+  triggerEvent: InteractionEventType;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -51,6 +61,9 @@ export class ConfigService {
   };
   @LocalStorage() _appearanceConfig: AppearanceConfig = {
     borderThickness: 2
+  };
+  @LocalStorage() _buttonBehaviourConfig: ButtonBehaviourConfig = {
+    triggerEvent: InteractionEventType.click
   };
 
   constructor() { }
@@ -79,6 +92,10 @@ export class ConfigService {
     return this._appearanceConfig;
   }
 
+  get buttonBehaviourConfig(): ButtonBehaviourConfig {
+    return this._buttonBehaviourConfig;
+  }
+
   set boardURL(boardURL: string) {
     this._boardURL = boardURL;
   }
@@ -100,5 +117,9 @@ export class ConfigService {
 
   set appearanceConfig(appearanceConfig: AppearanceConfig) {
     this._appearanceConfig = appearanceConfig;
+  }
+
+  set buttonBehaviourConfig(buttonBehaviourConfig: ButtonBehaviourConfig) {
+    this._buttonBehaviourConfig = buttonBehaviourConfig;
   }
 }

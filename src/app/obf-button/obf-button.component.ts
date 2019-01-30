@@ -60,4 +60,10 @@ export class ObfButtonComponent implements OnInit, OnDestroy {
       this.url = undefined;
     }
   }
+
+  handleClick() {
+    if (this.clickHandler) {
+      this.clickHandler(this.butt);
+    }
+  }
 }
