@@ -44,7 +44,7 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
   overflow: hidden;
 }
 
-.ripple:active {
+.ripple:hover {
   transform: scale(0.98, 0.98);
 }
 

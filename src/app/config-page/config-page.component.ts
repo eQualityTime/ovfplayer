@@ -14,7 +14,8 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: */
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { ConfigService, ButtonDisplayConfig, ScanningConfig, AppearanceConfig, ButtonBehaviourConfig } from '../config.service';
+import { ConfigService, ButtonDisplayConfig, ScanningConfig, AppearanceConfig, ButtonBehaviourConfig,
+  InteractionEventType } from '../config.service';
 import { MatSnackBar } from '@angular/material';
 import { VERSION } from '../../environments/version';
 import { BoardCacheService } from '../board-cache.service';
@@ -35,6 +36,7 @@ export class ConfigPageComponent implements OnInit {
   scanningConfig: ScanningConfig;
   appearanceConfig: AppearanceConfig;
   buttonBehaviourConfig: ButtonBehaviourConfig;
+  interactionEventType = InteractionEventType;
 
   constructor(
     private configService: ConfigService,

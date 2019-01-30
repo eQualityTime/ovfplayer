@@ -31,8 +31,14 @@ export interface AppearanceConfig {
   borderThickness: number;
 }
 
+export enum InteractionEventType {
+  click = 'click',
+  mouseup = 'mouseup',
+  mousedown = 'mousedown'
+}
+
 export interface ButtonBehaviourConfig {
-  triggerEvent: string;
+  triggerEvent: InteractionEventType;
 }
 
 @Injectable({
@@ -41,6 +47,7 @@ export interface ButtonBehaviourConfig {
 export class ConfigService {
 
   @LocalStorage() _boardURL = 'https://dl.dropboxusercontent.com/s/oiwfo47fprv3jl4/ck20.obz?dl=1';
+  // TODO : move speechbar behaviour into a config class
   @LocalStorage() _showIconsInSpeechbar = true;
   @LocalStorage() _speakOnSpeechbarClick = true;
   @LocalStorage() _displayedButtons: ButtonDisplayConfig = {
@@ -57,7 +64,7 @@ export class ConfigService {
     borderThickness: 2
   };
   @LocalStorage() _buttonBehaviourConfig: ButtonBehaviourConfig = {
-    triggerEvent: 'click'
+    triggerEvent: InteractionEventType.click
   };
 
   constructor() { }

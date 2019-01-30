@@ -1,5 +1,5 @@
 import { Directive, HostListener, Input } from '@angular/core';
-import { ConfigService } from './config.service';
+import { ConfigService, InteractionEventType } from './config.service';
 
 @Directive({
   selector: '[appInteractionEventHandler]'
@@ -12,18 +12,18 @@ export class InteractionEventHandlerDirective {
   constructor(private config: ConfigService) { }
 
   @HostListener('mouseup') onRelease() {
-    this.handleEvent('mouseup');
+    this.handleEvent(InteractionEventType.mouseup);
   }
 
   @HostListener('mousedown') onPress() {
-    this.handleEvent('mousedown');
+    this.handleEvent(InteractionEventType.mousedown);
   }
 
   @HostListener('click') onClick() {
-    this.handleEvent('click');
+    this.handleEvent(InteractionEventType.click);
   }
 
-  handleEvent(eventType: string) {
+  handleEvent(eventType: InteractionEventType) {
     if (eventType === this.config.buttonBehaviourConfig.triggerEvent) {
       this.appInteractionEventHandler();
     }

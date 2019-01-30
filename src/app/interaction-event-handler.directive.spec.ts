@@ -1,5 +1,5 @@
 import { InteractionEventHandlerDirective } from './interaction-event-handler.directive';
-import { ConfigService } from './config.service';
+import { ConfigService, InteractionEventType } from './config.service';
 import { TestBed, ComponentFixture, async, fakeAsync, tick } from '@angular/core/testing';
 import { Component } from '@angular/core';
 import { By } from '@angular/platform-browser';
@@ -23,7 +23,7 @@ describe('ClickHandlerDirective', () => {
   beforeEach(async(() => {
     configServiceStub = {
       buttonBehaviourConfig: {
-        triggerEvent: 'click'
+        triggerEvent: InteractionEventType.click
       }
     };
 

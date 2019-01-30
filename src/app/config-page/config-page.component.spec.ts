@@ -16,7 +16,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 
 import { ConfigPageComponent } from './config-page.component';
-import { ConfigService } from '../config.service';
+import { ConfigService, InteractionEventType } from '../config.service';
 import {
   MatFormFieldModule,
   MatCardModule,
@@ -84,7 +84,7 @@ describe('ConfigPageComponent', () => {
         borderThickness: 2
       },
       buttonBehaviourConfig: {
-        triggerEvent: 'click'
+        triggerEvent: InteractionEventType.click
       }
     };
     snackbarStub = {};
