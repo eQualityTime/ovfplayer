@@ -66,4 +66,18 @@ describe('BoardCacheService', () => {
       expect(localStorage.getItem).toHaveBeenCalled();
     })();
   });
+
+  it('should throw error when cache is empty', (done) => {
+    inject([BoardCacheService, LocalStorage], (service: BoardCacheService, localStorage: LocalStorage) => {
+      spyOn(localStorage, 'getItem').and.returnValue(of(null));
+      service.retrieve().subscribe({
+        next: () => {},
+        error: (err) => {
+          expect(err).toBeTruthy();
+          done();
+        }
+      });
+      expect(localStorage.getItem).toHaveBeenCalled();
+    })();
+  });
 });

@@ -12,6 +12,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: */
+import 'hammerjs';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule, ErrorHandler } from '@angular/core';
@@ -20,7 +21,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { LayoutModule } from '@angular/cdk/layout';
 
 import { MatMenuModule, MatIconModule, MatButtonModule, MatInputModule, MatRippleModule, MatGridListModule, MatCardModule,
-  MatFormFieldModule, MatCheckboxModule, MatSnackBarModule, MatTabsModule } from '@angular/material';
+  MatFormFieldModule, MatCheckboxModule, MatSnackBarModule, MatTabsModule, MatSliderModule } from '@angular/material';
 
 import { WebStorageModule } from 'ngx-store';
 
@@ -66,7 +67,8 @@ import { ProgressComponent } from './progress/progress.component';
     LayoutModule,
     AppRoutingModule,
     WebStorageModule,
-    MatRippleModule
+    MatRippleModule,
+    MatSliderModule
   ],
   providers: [
     {

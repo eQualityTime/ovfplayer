@@ -18,7 +18,7 @@ import { OBZFixture } from '../test-utils/OBZFixture';
 import { ObzService } from './obz.service';
 import { ErrorCodes } from './errors';
 import { BoardCacheService } from './board-cache.service';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { OBZBoardSet } from './obzboard-set';
 
 describe('ObzService', () => {
@@ -39,7 +39,7 @@ describe('ObzService', () => {
       [ObzService, HttpTestingController, BoardCacheService],
       (service: ObzService, httpMock: HttpTestingController, cache: BoardCacheService) => {
 
-      spyOn(cache, 'retrieve').and.returnValue(of(null));
+      spyOn(cache, 'retrieve').and.returnValue(throwError(new Error('Cache is empty')));
 
       service.getBoardSet().subscribe({
         next() { console.log('Hmmm'); },
@@ -76,13 +76,12 @@ describe('ObzService', () => {
   it('parseOBZFile should throw error if no manifest', (done) => {
     inject([ObzService], (service: ObzService) => {
       const blob = OBZFixture.load('nomanifest');
-      // test parseOBZFile
-      const promise = service.parseOBZFile(blob);
-      promise.then(function () {
-        // just don't call done and test will fail with timeout...
-      }, function (reason) {
-        expect(reason.errorCode).toBe(ErrorCodes.MISSING_MANIFEST);
-        done();
+      service.parseOBZFile(blob).subscribe({
+        next: () => {},
+        error: (reason) => {
+          expect(reason.errorCode).toBe(ErrorCodes.MISSING_MANIFEST);
+          done();
+        }
       });
     })();
   });
@@ -90,27 +89,25 @@ describe('ObzService', () => {
   it('parseOBZFile should throw error if binary manifest', done => {
     inject([ObzService], (service: ObzService) => {
       const blob = OBZFixture.load('dodgymanifest');
-      // test parseOBZFile
-      const promise = service.parseOBZFile(blob);
-      promise.then(function() {
-          // just don't call done and test will fail with timeout...
-        }, function(reason) {
+      service.parseOBZFile(blob).subscribe({
+        next: () => { },
+        error: (reason) => {
           expect(reason.errorCode).toBe(ErrorCodes.MANIFEST_JSON_ERROR);
           done();
-        });
+        }
+      });
     })();
   });
 
   it('parseOBZFile should throw error if specified board is not there', done => {
     inject([ObzService], (service: ObzService) => {
       const blob = OBZFixture.load('noboard');
-      // test parseOBZFile
-      const promise = service.parseOBZFile(blob);
-      promise.then(function () {
-        // just don't call done and test will fail with timeout...
-      }, function (reason) {
-        expect(reason.errorCode).toBe(ErrorCodes.BOARD_NOT_THERE);
-        done();
+      service.parseOBZFile(blob).subscribe({
+        next: () => { },
+        error: (reason) => {
+          expect(reason.errorCode).toBe(ErrorCodes.BOARD_NOT_THERE);
+          done();
+        }
       });
     })();
   });
@@ -118,13 +115,12 @@ describe('ObzService', () => {
   it('parseOBZFile should throw error if specified board is not JSON', done => {
     inject([ObzService], (service: ObzService) => {
       const blob = OBZFixture.load('dodgyboard');
-      // test parseOBZFile
-      const promise = service.parseOBZFile(blob);
-      promise.then(function () {
-        // just don't call done and test will fail with timeout...
-      }, function (reason) {
-        expect(reason.errorCode).toBe(ErrorCodes.BOARD_PARSE_ERROR);
-        done();
+      service.parseOBZFile(blob).subscribe({
+        next: () => { },
+        error: (reason) => {
+          expect(reason.errorCode).toBe(ErrorCodes.BOARD_PARSE_ERROR);
+          done();
+        }
       });
     })();
   });
@@ -132,27 +128,25 @@ describe('ObzService', () => {
   it('parseOBZFile should throw error if image is not in obz', done => {
     inject([ObzService], (service: ObzService) => {
       const blob = OBZFixture.load('missingimage');
-      // test parseOBZFile
-      const promise = service.parseOBZFile(blob);
-      promise.then(function() {
-          // just don't call done and test will fail with timeout...
-        }, function(reason) {
+      service.parseOBZFile(blob).subscribe({
+        next: () => { },
+        error: (reason) => {
           expect(reason.errorCode).toBe(ErrorCodes.IMAGE_NOT_THERE);
           done();
-        });
+        }
+      });
     })();
   });
 
   it('parseOBZFile should throw error if sound is not in obz', done => {
     inject([ObzService], (service: ObzService) => {
       const blob = OBZFixture.load('missingsound');
-      // test parseOBZFile
-      const promise = service.parseOBZFile(blob);
-      promise.then(function () {
-        // just don't call done and test will fail with timeout...
-      }, function (reason) {
-        expect(reason.errorCode).toBe(ErrorCodes.SOUND_NOT_THERE);
-        done();
+      service.parseOBZFile(blob).subscribe({
+        next: () => { },
+        error: (reason) => {
+          expect(reason.errorCode).toBe(ErrorCodes.SOUND_NOT_THERE);
+          done();
+        }
       });
     })();
   });

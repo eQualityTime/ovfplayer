@@ -14,7 +14,7 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: */
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable, Observer, empty } from 'rxjs';
+import { Observable, empty, throwError, from, of } from 'rxjs';
 import { flatMap, catchError, first } from 'rxjs/operators';
 import { ConfigService } from './config.service';
 import { UrlUtils } from './url-utils';
@@ -31,8 +31,6 @@ import { ProgressService } from './progress.service';
 })
 export class ObzService {
 
-  private observer: Observer<OBZBoardSet>;
-
   constructor(
     private http: HttpClient,
     private config: ConfigService,
@@ -41,28 +39,14 @@ export class ObzService {
   ) { }
 
   getBoardSet(): Observable<OBZBoardSet> {
-    return new Observable<OBZBoardSet>(this.addObserver);
+    return this.loadBoardSet(this.config.boardURL);
   }
 
-  addObserver = (observer: Observer<OBZBoardSet>) => {
-    this.observer = observer;
-    this.loadBoardSet(this.config.boardURL);
+  public loadBoardSet(boardURL: string): Observable<OBZBoardSet> {
+    return this.boardCache.retrieve().pipe(catchError(err => this.loadFromNetwork(boardURL)));
   }
 
-  public loadBoardSet(boardURL: string) {
-    this.boardCache.retrieve().subscribe((boardSet: OBZBoardSet) => {
-      if (boardSet) {
-        this.observer.next(boardSet);
-      } else {
-        this.loadFromNetwork(boardURL);
-      }
-    }, (error) => {
-      console.error(`Error loading ${boardURL} from cache`, error);
-      this.loadFromNetwork(boardURL);
-    });
-  }
-
-  private loadFromNetwork(boardURL: string) {
+  private loadFromNetwork(boardURL: string): Observable<OBZBoardSet> {
 
     this.progress.progress(ProgressService.message('Downloading'));
     this.log(`Loading ${boardURL} from internet`);
@@ -72,17 +56,17 @@ export class ObzService {
 
     // Decide if we're loading an obz or an obf
     if (urlSlug.toLowerCase().endsWith('.obf')) {
-      this.loadOBFFile(boardURL);
+      return this.loadOBFFile(boardURL);
     } else {
       // assume obz by default. For now.
-      this.loadOBZFile(boardURL);
+      return this.loadOBZFile(boardURL);
     }
   }
 
-  private cacheAndFire = (boardURL: string, boardSet: OBZBoardSet) => {
+  private cacheBoardSet = (boardURL: string, boardSet: OBZBoardSet): Observable<OBZBoardSet> => {
     this.progress.progress(ProgressService.message('Parsing'));
     this.log(`Blobifying ${boardURL}`);
-    boardSet.blobify(this.http, this.progress).pipe(
+    return boardSet.blobify(this.http, this.progress).pipe(
       flatMap(blobified => {
         this.progress.progress(ProgressService.message('Caching'));
         this.log(`Caching ${boardURL}`);
@@ -92,57 +76,54 @@ export class ObzService {
       catchError(error => {
         console.error(`Cache of ${boardURL} failed`, error);
         // may as well carry on though as we have loaded the board
-        this.observer.next(boardSet);
-        return empty();
+        return of(boardSet);
       })
-    ).subscribe((cached) => this.observer.next(cached));
+    );
   }
 
-  private loadOBFFile(boardURL: string) {
-    this.http.get<OBFBoard>(boardURL).subscribe({
-      next: (page) => {
+  private loadOBFFile(boardURL: string): Observable<OBZBoardSet> {
+    return this.http.get<OBFBoard>(boardURL).pipe(
+      flatMap(page => {
         const boardSet = new OBZBoardSet();
         boardSet.rootBoardKey = 'root';
         boardSet.setBoard('root', new OBFBoard().deserialize(page));
-        this.cacheAndFire(boardURL, boardSet);
-      },
-      error: (err) => {
-        this.observer.error(new FatalOpenVoiceFactoryError(ErrorCodes.OBF_LOAD_ERROR, `Failed to load obf from ${boardURL}`, err));
-      }
-    });
+        return this.cacheBoardSet(boardURL, boardSet);
+      }),
+      catchError(err => throwError(
+        new FatalOpenVoiceFactoryError(ErrorCodes.OBF_LOAD_ERROR, `Failed to load obf from ${boardURL}`, err)
+      )
+    ));
   }
 
   private getOBZFile(boardURL: string): Observable<Blob> {
     return this.http.get(boardURL, { responseType: 'blob' });
   }
 
-  private loadOBZFile(boardURL: string) {
-    this.getOBZFile(boardURL).subscribe(
-      (blob: Blob) => {
-        this.parseOBZFile(blob).then(boardSet => {
-          this.cacheAndFire(boardURL, boardSet);
-        }).catch(error => {
-          // error loading zip file
-          throw new FatalOpenVoiceFactoryError(ErrorCodes.OBZ_PARSE_ERROR, `Could not parse ${boardURL} as a zip file`, error);
-        });
-      },
-      (error: HttpErrorResponse) => {
-        // error downloading file
-        this.observer.error(
-          new FatalOpenVoiceFactoryError(ErrorCodes.OBZ_DOWNLOAD_ERROR, `Failed to download file ${boardURL}: ${error.message}`)
+  private loadOBZFile(boardURL: string): Observable<OBZBoardSet> {
+
+    return this.getOBZFile(boardURL).pipe(
+      flatMap(blob => {
+        return this.parseOBZFile(blob).pipe(
+          catchError(error => throwError(
+            new FatalOpenVoiceFactoryError(ErrorCodes.OBZ_PARSE_ERROR, `Could not parse ${boardURL} as a zip file`, error)
+          ))
         );
-      }
+      }),
+      flatMap(boardSet => this.cacheBoardSet(boardURL, boardSet)),
+      catchError((error: HttpErrorResponse) => throwError(
+        new FatalOpenVoiceFactoryError(ErrorCodes.OBZ_DOWNLOAD_ERROR, `Failed to download file ${boardURL}: ${error.message}`)
+      ))
     );
   }
 
-  parseOBZFile(blob: Blob): Promise<OBZBoardSet> {
+  parseOBZFile(blob: Blob): Observable<OBZBoardSet> {
     const parseBoard = this.parseBoard;
     const parseImage = this.parseImage;
     const parseSound = this.parseSound;
     const validate   = this.validate;
     const zipper = new JSZip();
 
-    return zipper.loadAsync(blob).then(function(zip) {
+    return from(zipper.loadAsync(blob).then(function(zip) {
       const manifestFile = zip.file('manifest.json');
       if (!manifestFile) {
         throw new FatalOpenVoiceFactoryError(ErrorCodes.MISSING_MANIFEST, 'No manifest file!');
@@ -177,7 +158,7 @@ export class ObzService {
     }, function (fail) {
       // error loading zip file
       throw new FatalOpenVoiceFactoryError(ErrorCodes.ZIP_PARSE_ERROR, 'Could not parse zip file', fail);
-    });
+    }));
   }
 
   private validate(boardSet: OBZBoardSet): OBZBoardSet {

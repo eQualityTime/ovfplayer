@@ -17,7 +17,16 @@ import { FormsModule } from '@angular/forms';
 
 import { ConfigPageComponent } from './config-page.component';
 import { ConfigService } from '../config.service';
-import { MatFormFieldModule, MatCardModule, MatCheckboxModule, MatInputModule, MatSnackBar, MatTabsModule } from '@angular/material';
+import {
+  MatFormFieldModule,
+  MatCardModule,
+  MatCheckboxModule,
+  MatInputModule,
+  MatSnackBar,
+  MatTabsModule,
+  MatSliderModule,
+  MatIconModule
+} from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Router, ActivatedRoute, ActivatedRouteSnapshot, UrlSegment, Params, Data, Route, ParamMap } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -69,6 +78,9 @@ describe('ConfigPageComponent', () => {
       scanningConfig: {
         enabled: false,
         time: 0
+      },
+      appearanceConfig: {
+        borderThickness: 2
       }
     };
     snackbarStub = {};
@@ -104,7 +116,17 @@ describe('ConfigPageComponent', () => {
         {provide: ActivatedRoute, useValue: mockActivatedRoute},
         {provide: MatSnackBar, useValue: snackbarStub }
       ],
-      imports: [ FormsModule, MatFormFieldModule, MatCardModule, MatCheckboxModule, MatInputModule, BrowserAnimationsModule, MatTabsModule ]
+      imports: [
+        FormsModule,
+        MatFormFieldModule,
+        MatCardModule,
+        MatCheckboxModule,
+        MatInputModule,
+        BrowserAnimationsModule,
+        MatTabsModule,
+        MatSliderModule,
+        MatIconModule
+      ]
     }).compileComponents();
   }));
 
