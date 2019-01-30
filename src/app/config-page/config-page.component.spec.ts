@@ -139,4 +139,9 @@ describe('ConfigPageComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should not save config changes if save is not pressed', () => {
+    fixture.detectChanges();
+    const showSpeakButton = fixture.nativeElement.querySelector('input');
+  });
 });
