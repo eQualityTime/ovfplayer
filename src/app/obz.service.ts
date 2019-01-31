@@ -96,7 +96,11 @@ export class ObzService {
   }
 
   private getOBZFile(boardURL: string): Observable<Blob> {
-    return this.http.get(boardURL, { responseType: 'blob' });
+    return this.http.get(boardURL, { responseType: 'blob' }).pipe(
+      catchError((error: HttpErrorResponse) => throwError(
+        new FatalOpenVoiceFactoryError(ErrorCodes.OBZ_DOWNLOAD_ERROR, `Failed to download file ${boardURL}: ${error.message}`)
+      ))
+    );
   }
 
   private loadOBZFile(boardURL: string): Observable<OBZBoardSet> {
@@ -109,10 +113,7 @@ export class ObzService {
           ))
         );
       }),
-      flatMap(boardSet => this.cacheBoardSet(boardURL, boardSet)),
-      catchError((error: HttpErrorResponse) => throwError(
-        new FatalOpenVoiceFactoryError(ErrorCodes.OBZ_DOWNLOAD_ERROR, `Failed to download file ${boardURL}: ${error.message}`)
-      ))
+      flatMap(boardSet => this.cacheBoardSet(boardURL, boardSet))
     );
   }
 
@@ -120,6 +121,7 @@ export class ObzService {
     const parseBoard = this.parseBoard;
     const parseImage = this.parseImage;
     const parseSound = this.parseSound;
+    const validate   = this.validate;
     const zipper = new JSZip();
 
     return from(zipper.loadAsync(blob).then(function(zip) {
@@ -149,7 +151,7 @@ export class ObzService {
           promises = promises.concat(Object.values(manifestJSON.paths.sounds).map(sound => parseSound(zip, sound.toString(), boardSet)));
         }
 
-        return Promise.all(promises).then(() => boardSet);
+        return Promise.all(promises).then(() => validate(boardSet));
       }, function (fail) {
         // error loading manifest
         throw new FatalOpenVoiceFactoryError(ErrorCodes.MANIFEST_LOAD_ERROR, 'Could not load manifest.json', fail);
@@ -158,6 +160,21 @@ export class ObzService {
       // error loading zip file
       throw new FatalOpenVoiceFactoryError(ErrorCodes.ZIP_PARSE_ERROR, 'Could not parse zip file', fail);
     }));
+  }
+
+  private validate(boardSet: OBZBoardSet): OBZBoardSet {
+
+    // test that root board is in board set
+    const rootBoard = boardSet.getBoard(boardSet.rootBoardKey);
+    if (!rootBoard) {
+      throw new FatalOpenVoiceFactoryError(
+        ErrorCodes.INVALID_ROOT,
+        `OBZ specifies a root of '${boardSet.rootBoardKey}' but this path is not present`
+      );
+    }
+
+    // TODO: validate all paths and references in board set
+    return boardSet;
   }
 
   private parseImage = (zip, image: string, boardSet: OBZBoardSet): Promise<void> => {
