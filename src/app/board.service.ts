@@ -46,9 +46,7 @@ export class BoardService {
   }
 
   navigateToBoard(boardKey: string) {
-    // console.log(`Navigating to page ${boardKey}`);
     this.currentBoardKey = boardKey;
-    // TODO: validate this board exists!
     const board = this.boardSet.getBoard(this.currentBoardKey);
     this.observer.next(board);
   }

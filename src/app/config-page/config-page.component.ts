@@ -14,7 +14,8 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: */
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { ConfigService, ButtonDisplayConfig, ScanningConfig, AppearanceConfig } from '../config.service';
+import { ConfigService, ButtonDisplayConfig, ScanningConfig, AppearanceConfig, ButtonBehaviourConfig,
+  InteractionEventType } from '../config.service';
 import { MatSnackBar } from '@angular/material';
 import { VERSION } from '../../environments/version';
 import { BoardCacheService } from '../board-cache.service';
@@ -34,6 +35,8 @@ export class ConfigPageComponent implements OnInit {
   displayedButtons: ButtonDisplayConfig;
   scanningConfig: ScanningConfig;
   appearanceConfig: AppearanceConfig;
+  buttonBehaviourConfig: ButtonBehaviourConfig;
+  interactionEventType = InteractionEventType;
 
   constructor(
     private configService: ConfigService,
@@ -49,6 +52,7 @@ export class ConfigPageComponent implements OnInit {
     this.speakOnSpeechbarClick = this.configService.speakOnSpeechbarClick;
     this.scanningConfig = this.copyConfig(this.configService.scanningConfig);
     this.appearanceConfig = this.copyConfig(this.configService.appearanceConfig);
+    this.buttonBehaviourConfig = this.copyConfig(this.configService.buttonBehaviourConfig);
 
     const configURLParam = this.route.snapshot.queryParamMap.get(this.PAGESET_PARAM);
     if (configURLParam) {
@@ -68,6 +72,7 @@ export class ConfigPageComponent implements OnInit {
     this.configService.speakOnSpeechbarClick = this.speakOnSpeechbarClick;
     this.configService.scanningConfig = this.scanningConfig;
     this.configService.appearanceConfig = this.appearanceConfig;
+    this.configService.buttonBehaviourConfig = this.buttonBehaviourConfig;
     // TODO: some kind of validation
 
     // clear local cache of page to force a refresh

@@ -63,3 +63,7 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 .invalidTab {
   color: red;
 }
+
+mat-radio-button {
+  padding: 25px;
+}

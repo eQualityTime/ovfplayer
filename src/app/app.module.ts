@@ -21,7 +21,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { LayoutModule } from '@angular/cdk/layout';
 
 import { MatMenuModule, MatIconModule, MatButtonModule, MatInputModule, MatRippleModule, MatGridListModule, MatCardModule,
-  MatFormFieldModule, MatCheckboxModule, MatSnackBarModule, MatTabsModule, MatSliderModule } from '@angular/material';
+  MatFormFieldModule, MatCheckboxModule, MatSnackBarModule, MatTabsModule, MatSliderModule, MatRadioModule } from '@angular/material';
 
 import { WebStorageModule } from 'ngx-store';
 
@@ -36,6 +36,7 @@ import { GlobalErrorHandlerService } from './global-error-handler.service';
 import { ErrorPageComponent } from './error-page/error-page.component';
 import { OBFPageComponent } from './obfpage/obfpage.component';
 import { ProgressComponent } from './progress/progress.component';
+import { InteractionEventHandlerDirective } from './interaction-event-handler.directive';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,8 @@ import { ProgressComponent } from './progress/progress.component';
     ObfButtonComponent,
     ErrorPageComponent,
     OBFPageComponent,
-    ProgressComponent
+    ProgressComponent,
+    InteractionEventHandlerDirective
   ],
   imports: [
     BrowserModule,
@@ -68,7 +70,8 @@ import { ProgressComponent } from './progress/progress.component';
     AppRoutingModule,
     WebStorageModule,
     MatRippleModule,
-    MatSliderModule
+    MatSliderModule,
+    MatRadioModule
   ],
   providers: [
     {

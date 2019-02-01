@@ -71,7 +71,6 @@ export class OBZBoardSet implements ImageResolver, SoundResolver {
 
   private blobifyImages(httpClient: HttpClient): Observable<boolean> {
 
-    console.log('blobifyImages');
     const observables = [];
 
     this.boards.forEach(board => {

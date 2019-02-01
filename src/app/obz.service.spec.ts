@@ -150,4 +150,18 @@ describe('ObzService', () => {
       });
     })();
   });
+
+  it('parseOBZFile should throw error if invalid root', (done) => {
+    inject([ObzService], (service: ObzService) => {
+      const blob = OBZFixture.load('invalidroot');
+      // test parseOBZFile
+      service.parseOBZFile(blob).subscribe({
+        next: () => { },
+        error: (reason) => {
+          expect(reason.errorCode).toBe(ErrorCodes.INVALID_ROOT);
+          done();
+        }
+      });
+    })();
+  });
 });
