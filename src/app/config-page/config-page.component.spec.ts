@@ -30,8 +30,9 @@ import {
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Router, ActivatedRoute, ActivatedRouteSnapshot, UrlSegment, Params, Data, Route, ParamMap } from '@angular/router';
 import { Observable } from 'rxjs';
-import { Type } from '@angular/core';
+import { Type, DebugElement } from '@angular/core';
 import { OBFPageComponent } from '../obfpage/obfpage.component';
+import { By } from '@angular/platform-browser';
 
 // we might not need this, the current tests can all be done with RouterTestingModule.withRoutes([])
 export class MockActivatedRoute implements ActivatedRoute {
@@ -134,14 +135,69 @@ describe('ConfigPageComponent', () => {
     fixture = TestBed.createComponent(ConfigPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+    configServiceStub = TestBed.get(ConfigService);
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should not save config changes if save is not pressed', () => {
+  it('should not save config changes if save is not pressed', done => {
     fixture.detectChanges();
-    const showSpeakButton = fixture.nativeElement.querySelector('input');
+    expect(component.displayedButtons).not.toBe(configServiceStub.displayedButtons);
+    const allTabs = fixture.nativeElement.querySelectorAll('div.mat-tab-label');
+    allTabs[2].click();
+    fixture.detectChanges();
+    fixture.whenStable().then(() => {
+      fixture.detectChanges();
+      const showSpeakButton = fixture.debugElement.query(By.css('mat-checkbox label'));
+      const theDiv = <DebugElement>showSpeakButton.childNodes[0];
+      const theInput = <DebugElement>theDiv.childNodes[0];
+      expect(theInput.attributes['aria-checked']).toBe('false');
+      expect(configServiceStub.displayedButtons.showSpeakButton).toBeFalsy();
+      showSpeakButton.nativeElement.click();
+      fixture.detectChanges();
+      fixture.whenStable().then(() => {
+        // checkbox should now be checked
+        expect(theInput.attributes['aria-checked']).toBe('true');
+        // internal component state should also be true
+        expect(component.displayedButtons.showSpeakButton).toBeTruthy();
+        // but actual config should still be false
+        expect(configServiceStub.displayedButtons.showSpeakButton).toBeFalsy();
+        done();
+      });
+    });
+  });
+
+  it('should save config changes if save is pressed', done => {
+    fixture.detectChanges();
+    expect(component.displayedButtons).not.toBe(configServiceStub.displayedButtons);
+    const allTabs = fixture.nativeElement.querySelectorAll('div.mat-tab-label');
+    allTabs[2].click();
+    fixture.detectChanges();
+    fixture.whenStable().then(() => {
+      fixture.detectChanges();
+      const showSpeakButton = fixture.debugElement.query(By.css('mat-checkbox label'));
+      const theDiv = <DebugElement>showSpeakButton.childNodes[0];
+      const theInput = <DebugElement>theDiv.childNodes[0];
+      expect(theInput.attributes['aria-checked']).toBe('false');
+      expect(configServiceStub.displayedButtons.showSpeakButton).toBeFalsy();
+      showSpeakButton.nativeElement.click();
+      fixture.detectChanges();
+      fixture.whenStable().then(() => {
+        // checkbox should now be checked
+        expect(theInput.attributes['aria-checked']).toBe('true');
+
+        // call save
+        component.save();
+        fixture.detectChanges();
+
+        // internal component state should also be true
+        expect(component.displayedButtons.showSpeakButton).toBeTruthy();
+        // config should now also be true
+        expect(configServiceStub.displayedButtons.showSpeakButton).toBeTruthy();
+        done();
+      });
+    });
   });
 });

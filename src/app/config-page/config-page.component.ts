@@ -44,17 +44,21 @@ export class ConfigPageComponent implements OnInit {
 
   ngOnInit() {
     this.boardURL = this.configService.boardURL;
-    this.displayedButtons = this.configService.displayedButtons;
+    this.displayedButtons = this.copyConfig(this.configService.displayedButtons);
     this.showIconsInSpeechbar = this.configService.showIconsInSpeechbar;
     this.speakOnSpeechbarClick = this.configService.speakOnSpeechbarClick;
-    this.scanningConfig = this.configService.scanningConfig;
-    this.appearanceConfig = this.configService.appearanceConfig;
+    this.scanningConfig = this.copyConfig(this.configService.scanningConfig);
+    this.appearanceConfig = this.copyConfig(this.configService.appearanceConfig);
 
     const configURLParam = this.route.snapshot.queryParamMap.get(this.PAGESET_PARAM);
     if (configURLParam) {
       this.boardURL = configURLParam;
       this.save();
     }
+  }
+
+  private copyConfig(config: any): any {
+    return JSON.parse(JSON.stringify(config));
   }
 
   save() {
