@@ -221,6 +221,7 @@ describe('ButtonPageComponent - speak on trigger', () => {
 
   beforeEach(() => {
     speechbarService = TestBed.get(SpeechbarService);
+    // these spies are to prevent the methods from being called on the real service
     spyOn(speechbarService, 'clear');
     spyOn(speechbarService, 'appendButton');
     spyOn(speechbarService, 'backspace');
@@ -250,9 +251,11 @@ describe('ButtonPageComponent - speak on trigger', () => {
       ]
     });
     spyOn(boardService, 'getBoard').and.returnValue(of(board));
+    // these spies are to prevent the methods from being called on the real service
     spyOn(boardService, 'home');
     spyOn(boardService, 'navigateToBoard');
     spyOn(boardService, 'navigateToExternalBoard');
+    // this is to actually ensure this gets treated as a sound
     spyOn(board.sounds[0], 'getSource').and.returnValue(true);
 
     fixture = TestBed.createComponent(ButtonPageComponent);
