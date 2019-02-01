@@ -23,7 +23,8 @@ describe('ClickHandlerDirective', () => {
   beforeEach(async(() => {
     configServiceStub = {
       buttonBehaviourConfig: {
-        triggerEvent: InteractionEventType.click
+        triggerEvent: InteractionEventType.click,
+        speakOnTrigger: false
       }
     };
 

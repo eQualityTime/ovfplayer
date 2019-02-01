@@ -62,6 +62,11 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
           </ng-template>
           <div class="formContainer">
             <mat-card>
+              <mat-checkbox [(ngModel)]="buttonBehaviourConfig.speakOnTrigger" name="buttonBehaviourConfig.speakOnTrigger">
+                <span class="formLabel">Speak when button is pressed (as well as adding to speechbar)</span>
+              </mat-checkbox>
+            </mat-card>
+            <mat-card>
               <mat-radio-group [(ngModel)]="buttonBehaviourConfig.triggerEvent" name="buttonBehaviourConfig.triggerEvent">
                 <div class="formLabel">Event to use to trigger button usage</div>
                 <mat-radio-button [value]="interactionEventType.click">Full click</mat-radio-button>

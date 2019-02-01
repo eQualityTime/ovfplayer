@@ -124,6 +124,14 @@ export class SpeechbarService {
     }
   }
 
+  sayButton(button: Button) {
+    // we do want to queue these up, so no speaking check
+    // we also want the speak button to stay enabled for queing up the actual message, so no listener updates
+    const msg = new SpeechSynthesisUtterance();
+    msg.text = button.getVocalization();
+    this.speechSynthesizer.speak(msg);
+  }
+
   appendButton(button: Button, action: string) {
     if (this.buttons.length === 0 || this.spaceJustPressed) {
       this.spaceJustPressed = false;
