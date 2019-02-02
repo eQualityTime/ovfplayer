@@ -49,6 +49,8 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 .stackedButton {
   flex-grow: 1;
   padding-top: 50%;
+  background: var(--button-image) no-repeat 50% 35%;
+  background-size: auto 25%;
 }
 
 .scanHighlight {
@@ -77,24 +79,4 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
   left: 0;
   right: 0;
   bottom: 0;
-}
-
-.speakButton {
-    background: url('/assets/images/speechbubble.png') no-repeat 50% 35%;
-    background-size: auto 25%;
-}
-
-.backButton {
-    background: url('/assets/images/left.png') no-repeat 50% 35%;
-    background-size: auto 25%;
-}
-
-.clearButton {
-    background: url('/assets/images/erase.png') no-repeat 50% 35%;
-    background-size: auto 25%;
-}
-
-.homeButton {
-    background: url('/assets/images/home.png') no-repeat 50% 35%;
-    background-size: auto 25%;
 }

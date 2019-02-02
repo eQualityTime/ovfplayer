@@ -16,13 +16,15 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
     [class.scanHighlight]="buttonRow.isHighlighted()"
     [class.scanSelect]="buttonRow.isSelected()">
   <div class="stackedButtonContainer">
-    <button class="stackedButton speakButton" mat-raised-button [appInteractionEventHandler]="buttonRow.speak.handler" [disabled]="speaking"
+    <button class="stackedButton" mat-raised-button [appInteractionEventHandler]="buttonRow.speak.handler" [disabled]="speaking"
             [class.scanHighlight]="buttonRow.speak.isHighlighted()"
             [class.scanSelect]="buttonRow.speak.isSelected()"
+            style="--button-image: url('/assets/images/speechbubble.png')"
             *ngIf="buttonRow.speak">{{buttonRow.speak.label}}</button>
-    <button class="stackedButton homeButton" mat-raised-button [appInteractionEventHandler]="buttonRow.home.handler"
+    <button class="stackedButton" mat-raised-button [appInteractionEventHandler]="buttonRow.home.handler"
             [class.scanHighlight]="buttonRow.home.isHighlighted()"
             [class.scanSelect]="buttonRow.home.isSelected()"
+            style="--button-image: url('/assets/images/home.png')"
             *ngIf="buttonRow.home">{{buttonRow.home.label}}</button>
   </div>
 
@@ -47,13 +49,15 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
   </ng-template>
 
   <div class="stackedButtonContainer">
-    <button class="stackedButton backButton" mat-raised-button [appInteractionEventHandler]="buttonRow.backspace.handler"
+    <button class="stackedButton" mat-raised-button [appInteractionEventHandler]="buttonRow.backspace.handler"
             [class.scanHighlight]="buttonRow.backspace.isHighlighted()"
             [class.scanSelect]="buttonRow.backspace.isSelected()"
+            style="--button-image: url('/assets/images/left.png')"
             *ngIf="buttonRow.backspace">{{buttonRow.backspace.label}}</button>
-    <button class="stackedButton clearButton" mat-raised-button [appInteractionEventHandler]="buttonRow.clear.handler"
+    <button class="stackedButton" mat-raised-button [appInteractionEventHandler]="buttonRow.clear.handler"
             [class.scanHighlight]="buttonRow.clear.isHighlighted()"
             [class.scanSelect]="buttonRow.clear.isSelected()"
+            style="--button-image: url('/assets/images/erase.png')"
             *ngIf="buttonRow.clear">{{buttonRow.clear.label}}</button>
   </div>
 </div>
