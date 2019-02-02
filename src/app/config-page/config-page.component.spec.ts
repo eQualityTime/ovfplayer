@@ -150,12 +150,12 @@ describe('ConfigPageComponent', () => {
   it('should not save config changes if save is not pressed', done => {
     fixture.detectChanges();
     expect(component.displayedButtons).not.toBe(configServiceStub.displayedButtons);
-    const allTabs = fixture.nativeElement.querySelectorAll('div.mat-tab-label');
-    allTabs[2].click();
+    const displayTab = fixture.nativeElement.querySelector('div.mat-tab-label span[name="displayedButtons"]');
+    displayTab.click();
     fixture.detectChanges();
     fixture.whenStable().then(() => {
       fixture.detectChanges();
-      const showSpeakButton = fixture.debugElement.query(By.css('mat-checkbox label'));
+      const showSpeakButton = fixture.debugElement.query(By.css('mat-checkbox[name="showSpeakButton"] label'));
       const theDiv = <DebugElement>showSpeakButton.childNodes[0];
       const theInput = <DebugElement>theDiv.childNodes[0];
       expect(theInput.attributes['aria-checked']).toBe('false');
@@ -177,12 +177,12 @@ describe('ConfigPageComponent', () => {
   it('should save config changes if save is pressed', done => {
     fixture.detectChanges();
     expect(component.displayedButtons).not.toBe(configServiceStub.displayedButtons);
-    const allTabs = fixture.nativeElement.querySelectorAll('div.mat-tab-label');
-    allTabs[2].click();
+    const displayTab = fixture.nativeElement.querySelector('div.mat-tab-label span[name="displayedButtons"]');
+    displayTab.click();
     fixture.detectChanges();
     fixture.whenStable().then(() => {
       fixture.detectChanges();
-      const showSpeakButton = fixture.debugElement.query(By.css('mat-checkbox label'));
+      const showSpeakButton = fixture.debugElement.query(By.css('mat-checkbox[name="showSpeakButton"] label'));
       const theDiv = <DebugElement>showSpeakButton.childNodes[0];
       const theInput = <DebugElement>theDiv.childNodes[0];
       expect(theInput.attributes['aria-checked']).toBe('false');
