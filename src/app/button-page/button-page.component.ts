@@ -18,6 +18,7 @@ import { SpeechbarService } from '../speechbar.service';
 import { OBFBoard, Button, LoadBoardAction, Grid } from '../obfboard';
 import { Subscription, Subscriber } from 'rxjs';
 import { ScanningService, ScanningModel, ScannableCollectionProvider, ScannableCollection, Scannable } from '../scanning.service';
+import { ConfigService } from '../config.service';
 
 @Component({
   selector: 'app-button-page',
@@ -41,7 +42,8 @@ export class ButtonPageComponent implements OnInit, OnDestroy {
     ':space': this.speechbarService.space.bind(this.speechbarService)
   };
 
-  constructor(private boardService: BoardService, private speechbarService: SpeechbarService, private scanningService: ScanningService) { }
+  constructor(private boardService: BoardService, private speechbarService: SpeechbarService,
+    private scanningService: ScanningService, private configService: ConfigService) { }
 
   ngOnInit() {
     this.loadBoard();
@@ -75,6 +77,8 @@ export class ButtonPageComponent implements OnInit, OnDestroy {
   }
 
   handleButtonClick(button: Button) {
+    let soundToPlay = false;
+
     if (button.soundId) {
       const sound = this.board.getSound(button.soundId);
 
@@ -82,6 +86,7 @@ export class ButtonPageComponent implements OnInit, OnDestroy {
         const soundSource = sound.getSource();
 
         if (soundSource) {
+          soundToPlay = true;
           const audioSound = new Audio(soundSource);
           audioSound.play();
         }
@@ -115,6 +120,11 @@ export class ButtonPageComponent implements OnInit, OnDestroy {
 
     if (addToSpeechBar) {
       this.speechbarService.addButton(button);
+
+      // don't say the button if there's also a sound... that'd be weird...
+      if (!soundToPlay && this.configService.buttonBehaviourConfig.speakOnTrigger) {
+        this.speechbarService.sayButton(button);
+      }
     }
   }
 

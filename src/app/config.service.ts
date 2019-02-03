@@ -38,6 +38,7 @@ export enum InteractionEventType {
 }
 
 export interface ButtonBehaviourConfig {
+  speakOnTrigger: boolean;
   triggerEvent: InteractionEventType;
 }
 
@@ -63,6 +64,7 @@ export class ConfigService {
     borderThickness: 2
   };
   @LocalStorage() _buttonBehaviourConfig: ButtonBehaviourConfig = {
+    speakOnTrigger: false,
     triggerEvent: InteractionEventType.click
   };
 

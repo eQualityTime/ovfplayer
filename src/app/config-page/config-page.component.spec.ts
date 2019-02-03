@@ -85,6 +85,7 @@ describe('ConfigPageComponent', () => {
         borderThickness: 2
       },
       buttonBehaviourConfig: {
+        speakOnTrigger: false,
         triggerEvent: InteractionEventType.click
       }
     };
