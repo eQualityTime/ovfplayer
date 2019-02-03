@@ -147,6 +147,14 @@ describe('ConfigPageComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  it('should not directly reference config service config', () => {
+    fixture.detectChanges();
+    expect(component.displayedButtons).not.toBe(configServiceStub.displayedButtons);
+    expect(component.scanningConfig).not.toBe(configServiceStub.scanningConfig);
+    expect(component.appearanceConfig).not.toBe(configServiceStub.appearanceConfig);
+    expect(component.buttonBehaviourConfig).not.toBe(configServiceStub.buttonBehaviourConfig);
+  });
+
   it('should not save config changes if save is not pressed', done => {
     fixture.detectChanges();
     expect(component.displayedButtons).not.toBe(configServiceStub.displayedButtons);
