@@ -26,7 +26,7 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
         <mat-tab ngModelGroup="boardURL" #boardURLCtrl="ngModelGroup">
           <ng-template mat-tab-label>
             <mat-icon *ngIf="boardURLCtrl.invalid" class="invalidTab">error</mat-icon>
-            <span [class.invalidTab]="boardURLCtrl.invalid">Board URL</span>
+            <span [class.invalidTab]="boardURLCtrl.invalid" name="boardURL">Board URL</span>
           </ng-template>
           <div class="formContainer">
             <mat-card>
@@ -40,7 +40,7 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
         <mat-tab ngModelGroup="speechbarBehaviour" #speechbarBehaviourCtrl="ngModelGroup">
           <ng-template mat-tab-label>
             <mat-icon *ngIf="speechbarBehaviourCtrl.invalid" class="invalidTab">error</mat-icon>
-            <span [class.invalidTab]="speechbarBehaviourCtrl.invalid">Speechbar behaviour</span>
+            <span [class.invalidTab]="speechbarBehaviourCtrl.invalid" name="speechbarBehaviour">Speechbar behaviour</span>
           </ng-template>
           <div class="formContainer">
             <mat-card>
@@ -58,7 +58,7 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
         <mat-tab ngModelGroup="buttonBehaviour" #buttonBehaviourCtrl="ngModelGroup">
           <ng-template mat-tab-label>
             <mat-icon *ngIf="buttonBehaviourCtrl.invalid" class="invalidTab">error</mat-icon>
-            <span [class.invalidTab]="buttonBehaviourCtrl.invalid">Button press behaviour</span>
+            <span [class.invalidTab]="buttonBehaviourCtrl.invalid" name="buttonBehaviour">Button press behaviour</span>
           </ng-template>
           <div class="formContainer">
             <mat-card>
@@ -79,7 +79,7 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
         <mat-tab ngModelGroup="displayedButtons" #displayedButtonsCtrl="ngModelGroup">
           <ng-template mat-tab-label>
             <mat-icon *ngIf="displayedButtonsCtrl.invalid" class="invalidTab">error</mat-icon>
-            <span [class.invalidTab]="displayedButtonsCtrl.invalid">Permanent buttons</span>
+            <span [class.invalidTab]="displayedButtonsCtrl.invalid" name="displayedButtons">Permanent buttons</span>
           </ng-template>
           <div class="formContainer">
             <mat-card>
@@ -107,7 +107,7 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
         <mat-tab ngModelGroup="scanning" #scanningCtrl="ngModelGroup">
           <ng-template mat-tab-label>
             <mat-icon *ngIf="scanningCtrl.invalid" class="invalidTab">error</mat-icon>
-            <span [class.invalidTab]="scanningCtrl.invalid">Scanning</span>
+            <span [class.invalidTab]="scanningCtrl.invalid" name="scanning">Scanning</span>
           </ng-template>
           <div class="formContainer">
             <mat-card>
@@ -126,7 +126,7 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
         <mat-tab ngModelGroup="appearance" #appearanceCtrl="ngModelGroup">
           <ng-template mat-tab-label>
             <mat-icon *ngIf="appearanceCtrl.invalid" class="invalidTab">error</mat-icon>
-            <span [class.invalidTab]="appearanceCtrl.invalid">Appearance</span>
+            <span [class.invalidTab]="appearanceCtrl.invalid" name="appearance">Appearance</span>
           </ng-template>
           <div class="formContainer">
             <mat-card>
