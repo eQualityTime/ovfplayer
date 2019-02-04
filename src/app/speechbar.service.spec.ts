@@ -24,6 +24,10 @@ describe('SpeechbarService', () => {
     label: 'hello',
     vocalization: 'vocal'
   }, null);
+  const differentMockButton = new Button().deserialize({
+    id: 2,
+    label: 'goodbye'
+  }, null);
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -199,6 +203,89 @@ describe('SpeechbarService', () => {
       service.space();
       service.addButton(mockButton);
       service.appendButton(mockButton, '+less');
+    })();
+  });
+
+  it('should handle backspace actions', done => {
+    let counter = 0;
+
+    inject([SpeechbarService], (service: SpeechbarService) => {
+      service.getButtons().subscribe(buttons => {
+        counter++;
+        switch (counter) {
+          case 1:
+            // first instance will be empty
+            expect(buttons.length).toBe(0);
+            break;
+          case 2:
+            // should now have single button
+            expect(buttons.length).toBe(1);
+            expect(buttons[0].label).toBe('hello');
+            break;
+          case 3:
+            // two buttons
+            expect(buttons.length).toBe(2);
+            expect(buttons[0].label).toBe('hello');
+            expect(buttons[1].label).toBe('goodbye');
+            break;
+          case 4:
+            // just the first button
+            expect(buttons.length).toBe(1);
+            expect(buttons[0].label).toBe('hello');
+            done();
+            break;
+          default:
+            done();
+        }
+      });
+
+      // add a button
+      service.addButton(mockButton);
+      // add a different button
+      service.addButton(differentMockButton);
+      // backspace
+      service.backspace();
+    })();
+  });
+
+  it('should handle clear actions', done => {
+    let counter = 0;
+
+    inject([SpeechbarService], (service: SpeechbarService) => {
+      service.getButtons().subscribe(buttons => {
+        counter++;
+        switch (counter) {
+          case 1:
+            // first instance will be empty
+            expect(buttons.length).toBe(0);
+            break;
+          case 2:
+            // should now have single button
+            expect(buttons.length).toBe(1);
+            expect(buttons[0].label).toBe('hello');
+            break;
+          case 3:
+            // two buttons
+            expect(buttons.length).toBe(2);
+            expect(buttons[0].label).toBe('hello');
+            expect(buttons[1].label).toBe('goodbye');
+            break;
+          case 4:
+            // just the first button
+            expect(buttons.length).toBe(0);
+            done();
+            break;
+          default:
+            done();
+        }
+      });
+
+      // add a button
+      service.addButton(mockButton);
+      // add a different button
+      service.addButton(differentMockButton);
+      // clear
+      service.clear();
     })();
   });
 });

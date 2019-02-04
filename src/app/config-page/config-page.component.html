@@ -104,6 +104,24 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
             </mat-card>
           </div>
         </mat-tab>
+        <mat-tab ngModelGroup="voiceConfig" #voiceConfigCtrl="ngModelGroup">
+          <ng-template mat-tab-label>
+            <mat-icon *ngIf="voiceConfigCtrl.invalid" class="invalidTab">error</mat-icon>
+            <span [class.invalidTab]="voiceConfigCtrl.invalid" name="voiceConfig">Voice Settings</span>
+          </ng-template>
+          <div class="formContainer">
+            <mat-card>
+              <mat-form-field class="formInputSelection">
+                <mat-select [(ngModel)]="voiceConfig.userVoice" name="userVoice" placeholder="User Voice">
+                  <mat-option>Use default</mat-option>
+                  <mat-option *ngFor="let voice of availableVoices()" [value]="voice.voiceURI">
+                    {{voice.name + " (" + voice.lang +")"}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </mat-card>
+          </div>
+        </mat-tab>
         <mat-tab ngModelGroup="scanning" #scanningCtrl="ngModelGroup">
           <ng-template mat-tab-label>
             <mat-icon *ngIf="scanningCtrl.invalid" class="invalidTab">error</mat-icon>
