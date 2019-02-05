@@ -19,6 +19,7 @@ import { OBFBoard, Button, LoadBoardAction, Grid } from '../obfboard';
 import { Subscription, Subscriber } from 'rxjs';
 import { ScanningService, ScanningModel, ScannableCollectionProvider, ScannableCollection, Scannable } from '../scanning.service';
 import { ConfigService } from '../config.service';
+import { CustomActionService } from '../custom-action.service';
 
 @Component({
   selector: 'app-button-page',
@@ -42,8 +43,13 @@ export class ButtonPageComponent implements OnInit, OnDestroy {
     ':space': this.speechbarService.space.bind(this.speechbarService)
   };
 
-  constructor(private boardService: BoardService, private speechbarService: SpeechbarService,
-    private scanningService: ScanningService, private configService: ConfigService) { }
+  constructor(
+    private boardService: BoardService,
+    private speechbarService: SpeechbarService,
+    private scanningService: ScanningService,
+    private configService: ConfigService,
+    private customActionService: CustomActionService
+  ) { }
 
   ngOnInit() {
     this.loadBoard();
@@ -132,6 +138,8 @@ export class ButtonPageComponent implements OnInit, OnDestroy {
 
     if (action.startsWith('+')) {
       this.speechbarService.appendButton(button, action);
+    } else if (action.startsWith(':ext')) {
+      this.customActionService.handle(action);
     } else {
       const actionPerformer = this.actionPerformers[action];
 
