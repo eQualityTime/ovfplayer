@@ -67,11 +67,21 @@ export class CustomActionService {
 
   handle(action: string) {
 
-    if (action.startsWith(':ext:ovf')) {
+    if (action.startsWith(':ext_ovf_js:')) {
       console.log(action);
+      const jsCall = action.slice(12);
+      // TODO: this doesn't make sense now!  Load everything up front?
+      // Or interogate for namespace...(would still require loading!)
       this.load('lib1').then(data => {
         console.log('script loaded ', data);
-        window['helloLib']['hello']();
+        let func = window;
+        for (const ns of jsCall.split('.')) {
+          // TODO: sometimes this will fail!
+          func = func[ns];
+        }
+        if (typeof func === 'function') {
+          (<any>func)();
+        }
       }).catch(error => console.log(error));
     }
   }
