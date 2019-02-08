@@ -14,6 +14,7 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: */
 import { Injectable } from '@angular/core';
 import { LocalStorage } from 'ngx-store';
+import { Subject } from 'rxjs';
 
 export interface ButtonDisplayConfig {
   showSpeakButton: boolean;
@@ -38,7 +39,12 @@ export enum InteractionEventType {
 }
 
 export interface ButtonBehaviourConfig {
+  speakOnTrigger: boolean;
   triggerEvent: InteractionEventType;
+}
+
+export interface VoiceConfig {
+  userVoice: string;
 }
 
 @Injectable({
@@ -63,8 +69,15 @@ export class ConfigService {
     borderThickness: 2
   };
   @LocalStorage() _buttonBehaviourConfig: ButtonBehaviourConfig = {
+    speakOnTrigger: false,
     triggerEvent: InteractionEventType.click
   };
+  @LocalStorage() _voiceConfig: VoiceConfig = {
+    userVoice: undefined
+  };
+
+  private voiceConfigSource = new Subject<VoiceConfig>();
+  voiceConfig$ = this.voiceConfigSource.asObservable();
 
   constructor() { }
 
@@ -96,6 +109,10 @@ export class ConfigService {
     return this._buttonBehaviourConfig;
   }
 
+  get voiceConfig(): VoiceConfig {
+    return this._voiceConfig;
+  }
+
   set boardURL(boardURL: string) {
     this._boardURL = boardURL;
   }
@@ -121,5 +138,10 @@ export class ConfigService {
 
   set buttonBehaviourConfig(buttonBehaviourConfig: ButtonBehaviourConfig) {
     this._buttonBehaviourConfig = buttonBehaviourConfig;
+  }
+
+  set voiceConfig(voiceConfig: VoiceConfig) {
+    this._voiceConfig = voiceConfig;
+    this.voiceConfigSource.next(this._voiceConfig);
   }
 }
