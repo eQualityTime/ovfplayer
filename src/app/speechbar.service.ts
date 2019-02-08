@@ -12,9 +12,10 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: */
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { Button, Image, OBFBoard, LoadBoardAction } from './obfboard';
 import { Observable, Observer } from 'rxjs';
+import { ConfigService } from './config.service';
 
 export class ButtonFacade extends Button {
 
@@ -93,8 +94,17 @@ export class SpeechbarService {
   private listener: Observer<boolean>;
   private buttonObserver: Observer<Button[]>;
   private spaceJustPressed = false;
+  private userVoice: SpeechSynthesisVoice;
 
-  constructor() { }
+  constructor(private configService: ConfigService) {
+    this.configService.voiceConfig$.subscribe(
+      voiceConfig => {
+        if (voiceConfig.userVoice) {
+          this.userVoice = this.speechSynthesizer.getVoices().find(voice => voice.voiceURI === voiceConfig.userVoice);
+        }
+      }
+    );
+  }
 
   addButton(button: Button) {
     this.spaceJustPressed = false;
@@ -134,6 +144,11 @@ export class SpeechbarService {
 
   private createUtterance(): any {
     const msg = new SpeechSynthesisUtterance();
+
+    if (this.userVoice) {
+      msg.voice = this.userVoice;
+    }
+
     return msg;
   }
 

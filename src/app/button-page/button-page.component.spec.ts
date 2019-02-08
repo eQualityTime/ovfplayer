@@ -45,7 +45,10 @@ describe('ButtonPageComponent', () => {
       scanningConfig: {
         enabled: false,
         time: 0
-      }
+      },
+      voiceConfig$: of({
+        userVoice: undefined
+      })
     };
 
     TestBed.configureTestingModule({
@@ -208,7 +211,10 @@ describe('ButtonPageComponent - speak on trigger', () => {
       scanningConfig: {
         enabled: false,
         time: 0
-      }
+      },
+      voiceConfig$: of({
+        userVoice: undefined
+      })
     };
 
     TestBed.configureTestingModule({
