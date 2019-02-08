@@ -12,7 +12,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: */
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Button, Image, OBFBoard, LoadBoardAction } from './obfboard';
 import { Observable, Observer } from 'rxjs';
 import { ConfigService } from './config.service';
