@@ -26,7 +26,8 @@ import {
   MatTabsModule,
   MatSliderModule,
   MatIconModule,
-  MatRadioModule
+  MatRadioModule,
+  MatSelectModule
 } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Router, ActivatedRoute, ActivatedRouteSnapshot, UrlSegment, Params, Data, Route, ParamMap } from '@angular/router';
@@ -87,6 +88,9 @@ describe('ConfigPageComponent', () => {
       buttonBehaviourConfig: {
         speakOnTrigger: false,
         triggerEvent: InteractionEventType.click
+      },
+      voiceConfig: {
+        userVoice: undefined
       }
     };
     snackbarStub = {};
@@ -132,7 +136,8 @@ describe('ConfigPageComponent', () => {
         MatTabsModule,
         MatSliderModule,
         MatIconModule,
-        MatRadioModule
+        MatRadioModule,
+        MatSelectModule
       ]
     }).compileComponents();
   }));
@@ -154,6 +159,7 @@ describe('ConfigPageComponent', () => {
     expect(component.scanningConfig).not.toBe(configServiceStub.scanningConfig);
     expect(component.appearanceConfig).not.toBe(configServiceStub.appearanceConfig);
     expect(component.buttonBehaviourConfig).not.toBe(configServiceStub.buttonBehaviourConfig);
+    expect(component.voiceConfig).not.toBe(configServiceStub.voiceConfig);
   });
 
   it('should not save config changes if save is not pressed', done => {
