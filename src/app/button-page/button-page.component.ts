@@ -15,11 +15,100 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 import { Component, OnInit, Output, OnDestroy } from '@angular/core';
 import { BoardService } from '../board.service';
 import { SpeechbarService } from '../speechbar.service';
-import { OBFBoard, Button, LoadBoardAction, Grid } from '../obfboard';
+import { OBFBoard, Button, LoadBoardAction } from '../obfboard';
 import { Subscription, Subscriber } from 'rxjs';
 import { ScanningService, ScanningModel, ScannableCollectionProvider, ScannableCollection, Scannable } from '../scanning.service';
 import { ConfigService } from '../config.service';
 import { CustomActionService } from '../custom-action.service';
+
+class ScannableButton extends Scannable {
+  static TYPE = 'OBFButton';
+  private _button: Button;
+  private provider: ScannableButtonRowProvider;
+
+  constructor(provider: ScannableButtonRowProvider, button: Button, priority: number) {
+    super(priority, ScannableButton.TYPE);
+    this._button = button;
+    this.provider = provider;
+  }
+
+  get button(): Button {
+    return this._button;
+  }
+
+  set button(button: Button) {
+    this._button = button;
+  }
+
+  isHighlighted(): boolean {
+    return this.provider.getScanningHighlight() === this;
+  }
+
+  isSelection(): boolean {
+    return this.provider.getScanningSelection() === this;
+  }
+}
+
+class ScannableButtonRow extends ScannableCollection {
+  static TYPE = 'OBFButtonRow';
+  private provider: ScannableButtonRowProvider;
+  displayButtons = [];
+  rowHeight: string;
+
+  constructor(provider: ScannableButtonRowProvider, board: OBFBoard, row: string[], priority: number, rowHeight: string) {
+    super(priority, ScannableButtonRow.TYPE);
+    this.provider = provider;
+    this.rowHeight = rowHeight;
+
+    row.forEach((buttonId, index) => {
+      if (buttonId) {
+        const button = new ScannableButton(provider, board.getButton(buttonId), index);
+        this.addChild(button);
+        this.displayButtons.push(button);
+      } else {
+        this.displayButtons.push(undefined);
+      }
+    });
+  }
+
+  isHighlighted(): boolean {
+    return this.provider.getScanningHighlight() === this;
+  }
+
+  isSelection(): boolean {
+    return this.provider.getScanningSelection() === this;
+  }
+}
+
+class ScannableButtonRowProvider extends Subscriber<ScanningModel> implements ScannableCollectionProvider {
+  private rows: ScannableButtonRow[];
+  private scanningModel: ScanningModel;
+
+  constructor(board: OBFBoard, buttonPressHandler: (Button) => void) {
+    super((scanningModel: ScanningModel) => {
+      this.scanningModel = scanningModel;
+
+      if (this.scanningModel.currentSelection && this.scanningModel.currentSelection.type === ScannableButton.TYPE) {
+        const button = (<ScannableButton>this.scanningModel.currentSelection).button;
+        buttonPressHandler(button);
+      }
+    });
+    const rowHeight = (100 / board.grid.rows).toString() + '%';
+    this.rows = board.grid.order.map((row, index) => new ScannableButtonRow(this, board, row, index + 1, rowHeight));
+  }
+
+  getScannableCollections(): ScannableCollection[] {
+    return this.rows;
+  }
+
+  getScanningHighlight(): Scannable {
+    return this.scanningModel && this.scanningModel.currentHighlight;
+  }
+
+  getScanningSelection(): Scannable {
+    return this.scanningModel && this.scanningModel.currentSelection;
+  }
+}
 
 @Component({
   selector: 'app-button-page',
@@ -149,94 +238,5 @@ export class ButtonPageComponent implements OnInit, OnDestroy {
         console.log('Unsupported action: ' + action);
       }
     }
-  }
-}
-
-class ScannableButtonRowProvider extends Subscriber<ScanningModel> implements ScannableCollectionProvider {
-  private rows: ScannableButtonRow[];
-  private scanningModel: ScanningModel;
-
-  constructor(board: OBFBoard, buttonPressHandler: (Button) => void) {
-    super((scanningModel: ScanningModel) => {
-      this.scanningModel = scanningModel;
-
-      if (this.scanningModel.currentSelection && this.scanningModel.currentSelection.type === ScannableButton.TYPE) {
-        const button = (<ScannableButton> this.scanningModel.currentSelection).button;
-        buttonPressHandler(button);
-      }
-    });
-    const rowHeight = (100 / board.grid.rows).toString() + '%';
-    this.rows = board.grid.order.map((row, index) => new ScannableButtonRow(this, board, row, index + 1, rowHeight));
-  }
-
-  getScannableCollections(): ScannableCollection[] {
-    return this.rows;
-  }
-
-  getScanningHighlight(): Scannable {
-    return this.scanningModel && this.scanningModel.currentHighlight;
-  }
-
-  getScanningSelection(): Scannable {
-    return this.scanningModel && this.scanningModel.currentSelection;
-  }
-}
-
-class ScannableButtonRow extends ScannableCollection {
-  static TYPE = 'OBFButtonRow';
-  private provider: ScannableButtonRowProvider;
-  displayButtons = [];
-  rowHeight: string;
-
-  constructor(provider: ScannableButtonRowProvider, board: OBFBoard, row: string[], priority: number, rowHeight: string) {
-    super(priority, ScannableButtonRow.TYPE);
-    this.provider = provider;
-    this.rowHeight = rowHeight;
-
-    row.forEach((buttonId, index) => {
-      if (buttonId) {
-        const button = new ScannableButton(provider, board.getButton(buttonId), index);
-        this.addChild(button);
-        this.displayButtons.push(button);
-      } else {
-        this.displayButtons.push(undefined);
-      }
-    });
-  }
-
-  isHighlighted(): boolean {
-    return this.provider.getScanningHighlight() === this;
-  }
-
-  isSelection(): boolean {
-    return this.provider.getScanningSelection() === this;
-  }
-}
-
-class ScannableButton extends Scannable {
-  static TYPE = 'OBFButton';
-  private _button: Button;
-  private provider: ScannableButtonRowProvider;
-
-  constructor(provider: ScannableButtonRowProvider, button: Button, priority: number) {
-    super(priority, ScannableButton.TYPE);
-    this._button = button;
-    this.provider = provider;
-  }
-
-  get button(): Button {
-    return this._button;
-  }
-
-  set button(button: Button) {
-    this._button = button;
-  }
-
-  isHighlighted(): boolean {
-    return this.provider.getScanningHighlight() === this;
-  }
-
-  isSelection(): boolean {
-    return this.provider.getScanningSelection() === this;
   }
 }

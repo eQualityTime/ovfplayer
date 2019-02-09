@@ -14,9 +14,9 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: */
 export class OpenVoiceFactoryError extends Error {
 
-  private   cause:     Error;
+  public    cause:     Error;
   protected clz:       string;
-  private   errorCode: number;
+  public    errorCode: number;
 
   constructor(errorCode: number, message?: string, cause?: Error) {
     super(message);

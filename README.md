@@ -43,3 +43,6 @@ Then start server `http-server -p 8080 -c-1 dist/open-voice-factory`
 Add `::START::LICENCE::  ::END::LICENCE::` in a comment in the file at the top
 
 Run `npm run update-licence` to update the licence
+
+## Run linting locally
+Run `ng lint`
