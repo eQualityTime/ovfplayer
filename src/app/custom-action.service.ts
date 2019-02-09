@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Button } from './obfboard';
+import { LocalStorage } from 'ngx-store';
 
 interface Scripts {
   name: string;
@@ -25,6 +26,9 @@ export class CustomActionService {
 
   private scripts: any = {};
 
+  @LocalStorage()
+  private _iftttLibConfig;
+
   constructor() {
     ScriptStore.forEach((script: any) => {
       this.scripts[script.name] = {
@@ -40,6 +44,7 @@ export class CustomActionService {
     return Promise.all(promises);
   }
 
+  // TODO: tidy this up and get config involved
   loadScript(name: string) {
     return new Promise((resolve, reject) => {
       // resolve if already loaded
@@ -88,9 +93,7 @@ export class CustomActionService {
           const context = {
             'button': button
           };
-          const config = {
-            'key': 'p3TpnduBdAzMwwfgIkuzEB7fm3plXAyrd8pl2sOdCUp'
-          };
+          const config = this._iftttLibConfig;
           (<any>func)(context, config);
         }
       }).catch(error => console.log(error));
