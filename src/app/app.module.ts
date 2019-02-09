@@ -21,7 +21,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { LayoutModule } from '@angular/cdk/layout';
 
 import { MatMenuModule, MatIconModule, MatButtonModule, MatInputModule, MatRippleModule, MatGridListModule, MatCardModule,
-  MatFormFieldModule, MatCheckboxModule, MatSnackBarModule, MatTabsModule, MatSliderModule, MatRadioModule } from '@angular/material';
+  MatFormFieldModule, MatCheckboxModule, MatSnackBarModule, MatTabsModule, MatSliderModule, MatRadioModule,
+  MatSelectModule } from '@angular/material';
 
 import { WebStorageModule } from 'ngx-store';
 
@@ -71,7 +72,8 @@ import { InteractionEventHandlerDirective } from './interaction-event-handler.di
     WebStorageModule,
     MatRippleModule,
     MatSliderModule,
-    MatRadioModule
+    MatRadioModule,
+    MatSelectModule
   ],
   providers: [
     {

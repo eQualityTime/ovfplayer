@@ -26,7 +26,7 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
   padding: 20px;
 }
 
-.formInputUrl {
+.formInputUrl, .formInputSelection {
   width: 100%;
 }
 
