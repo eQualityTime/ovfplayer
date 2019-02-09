@@ -14,7 +14,7 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: */
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable, empty, throwError, from, of } from 'rxjs';
+import { Observable, throwError, from, of } from 'rxjs';
 import { flatMap, catchError, first } from 'rxjs/operators';
 import { ConfigService } from './config.service';
 import { UrlUtils } from './url-utils';

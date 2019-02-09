@@ -15,7 +15,7 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 import { Component, OnInit, Output, OnDestroy } from '@angular/core';
 import { BoardService } from '../board.service';
 import { SpeechbarService } from '../speechbar.service';
-import { OBFBoard, Button, LoadBoardAction, Grid } from '../obfboard';
+import { OBFBoard, Button, LoadBoardAction } from '../obfboard';
 import { Subscription, Subscriber } from 'rxjs';
 import { ScanningService, ScanningModel, ScannableCollectionProvider, ScannableCollection, Scannable } from '../scanning.service';
 import { ConfigService } from '../config.service';
