@@ -139,7 +139,7 @@ export class ButtonPageComponent implements OnInit, OnDestroy {
     if (action.startsWith('+')) {
       this.speechbarService.appendButton(button, action);
     } else if (action.startsWith(':ext')) {
-      this.customActionService.handle(action);
+      this.customActionService.handle(button, action);
     } else {
       const actionPerformer = this.actionPerformers[action];
 

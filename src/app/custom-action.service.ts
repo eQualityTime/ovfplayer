@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Button } from './obfboard';
 
 interface Scripts {
   name: string;
@@ -8,6 +9,10 @@ export const ScriptStore: Scripts[] = [
   {
     name: 'lib1',
     src: 'https://dl.dropbox.com/s/yf06gz438yz9ftb/helloLib.js?dl=1'
+  },
+  {
+    name: 'iftttLib',
+    src: '/assets/libraries/iftttLib.js'
   }
 ];
 
@@ -65,14 +70,14 @@ export class CustomActionService {
     });
   }
 
-  handle(action: string) {
+  handle(button: Button, action: string) {
 
     if (action.startsWith(':ext_ovf_js:')) {
       console.log(action);
       const jsCall = action.slice(12);
       // TODO: this doesn't make sense now!  Load everything up front?
       // Or interogate for namespace...(would still require loading!)
-      this.load('lib1').then(data => {
+      this.load('iftttLib').then(data => {
         console.log('script loaded ', data);
         let func = window;
         for (const ns of jsCall.split('.')) {
@@ -80,7 +85,13 @@ export class CustomActionService {
           func = func[ns];
         }
         if (typeof func === 'function') {
-          (<any>func)();
+          const context = {
+            'button': button
+          };
+          const config = {
+            'key': 'p3TpnduBdAzMwwfgIkuzEB7fm3plXAyrd8pl2sOdCUp'
+          };
+          (<any>func)(context, config);
         }
       }).catch(error => console.log(error));
     }
