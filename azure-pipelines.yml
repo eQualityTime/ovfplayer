@@ -22,6 +22,10 @@ jobs:
     displayName: 'npm install'
 
   - script: |
+      ng lint
+    displayName: 'tslint'
+
+  - script: |
       ng build --prod
     displayName: 'build distribution'
 
