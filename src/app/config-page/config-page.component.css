@@ -64,6 +64,16 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
   color: red;
 }
 
+.configInputField {
+  width: calc(50% - 10px);
+  padding-right: 10px;
+}
+
+.formConfigOptions {
+  margin-top: 25px;
+  margin-bottom: 25px;
+}
+
 mat-radio-button {
   padding: 25px;
 }

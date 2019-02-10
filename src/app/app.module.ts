@@ -22,7 +22,7 @@ import { LayoutModule } from '@angular/cdk/layout';
 
 import { MatMenuModule, MatIconModule, MatButtonModule, MatInputModule, MatRippleModule, MatGridListModule, MatCardModule,
   MatFormFieldModule, MatCheckboxModule, MatSnackBarModule, MatTabsModule, MatSliderModule, MatRadioModule,
-  MatSelectModule } from '@angular/material';
+  MatSelectModule, MatExpansionModule} from '@angular/material';
 
 import { WebStorageModule } from 'ngx-store';
 
@@ -73,7 +73,8 @@ import { InteractionEventHandlerDirective } from './interaction-event-handler.di
     MatRippleModule,
     MatSliderModule,
     MatRadioModule,
-    MatSelectModule
+    MatSelectModule,
+    MatExpansionModule
   ],
   providers: [
     {

@@ -47,6 +47,18 @@ export interface VoiceConfig {
   userVoice: string;
 }
 
+export interface ExternalLibraryConfig {
+  name: string;
+  libraryURL: string;
+  active: boolean;
+  configuration: NameValuePair[];
+}
+
+export interface NameValuePair {
+  name: string;
+  value: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -75,6 +87,7 @@ export class ConfigService {
   @LocalStorage() _voiceConfig: VoiceConfig = {
     userVoice: undefined
   };
+  @LocalStorage() _externalLibraryConfig: ExternalLibraryConfig[] = [];
 
   private voiceConfigSource = new Subject<VoiceConfig>();
   voiceConfig$ = this.voiceConfigSource.asObservable();
@@ -113,6 +126,10 @@ export class ConfigService {
     return this._voiceConfig;
   }
 
+  get externalLibraryConfig(): ExternalLibraryConfig[] {
+    return this._externalLibraryConfig;
+  }
+
   set boardURL(boardURL: string) {
     this._boardURL = boardURL;
   }
@@ -143,5 +160,9 @@ export class ConfigService {
   set voiceConfig(voiceConfig: VoiceConfig) {
     this._voiceConfig = voiceConfig;
     this.voiceConfigSource.next(this._voiceConfig);
+  }
+
+  set externalLibraryConfig(externalLibraryConfig: ExternalLibraryConfig[]) {
+    this._externalLibraryConfig = externalLibraryConfig;
   }
 }

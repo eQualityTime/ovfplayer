@@ -27,7 +27,8 @@ import {
   MatSliderModule,
   MatIconModule,
   MatRadioModule,
-  MatSelectModule
+  MatSelectModule,
+  MatExpansionModule
 } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Router, ActivatedRoute, ActivatedRouteSnapshot, UrlSegment, Params, Data, Route, ParamMap } from '@angular/router';
@@ -91,7 +92,8 @@ describe('ConfigPageComponent', () => {
       },
       voiceConfig: {
         userVoice: undefined
-      }
+      },
+      externalLibraryConfig: []
     };
     snackbarStub = {};
     mockActivatedRoute = new MockActivatedRoute();
@@ -137,7 +139,8 @@ describe('ConfigPageComponent', () => {
         MatSliderModule,
         MatIconModule,
         MatRadioModule,
-        MatSelectModule
+        MatSelectModule,
+        MatExpansionModule
       ]
     }).compileComponents();
   }));
@@ -160,6 +163,7 @@ describe('ConfigPageComponent', () => {
     expect(component.appearanceConfig).not.toBe(configServiceStub.appearanceConfig);
     expect(component.buttonBehaviourConfig).not.toBe(configServiceStub.buttonBehaviourConfig);
     expect(component.voiceConfig).not.toBe(configServiceStub.voiceConfig);
+    expect(component.externalLibraryConfig).not.toBe(configServiceStub.externalLibraryConfig);
   });
 
   it('should not save config changes if save is not pressed', done => {

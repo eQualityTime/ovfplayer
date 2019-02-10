@@ -15,7 +15,7 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ConfigService, ButtonDisplayConfig, ScanningConfig, AppearanceConfig, ButtonBehaviourConfig,
-  InteractionEventType, VoiceConfig} from '../config.service';
+  InteractionEventType, VoiceConfig, ExternalLibraryConfig} from '../config.service';
 import { MatSnackBar } from '@angular/material';
 import { VERSION } from '../../environments/version';
 import { BoardCacheService } from '../board-cache.service';
@@ -37,7 +37,15 @@ export class ConfigPageComponent implements OnInit {
   appearanceConfig: AppearanceConfig;
   buttonBehaviourConfig: ButtonBehaviourConfig;
   voiceConfig: VoiceConfig;
+  externalLibraryConfig: ExternalLibraryConfig[];
   interactionEventType = InteractionEventType;
+
+  newLibrary: ExternalLibraryConfig = {
+    name: '',
+    libraryURL: '',
+    active: true,
+    configuration: []
+  };
 
   constructor(
     private configService: ConfigService,
@@ -55,6 +63,7 @@ export class ConfigPageComponent implements OnInit {
     this.appearanceConfig = this.copyConfig(this.configService.appearanceConfig);
     this.buttonBehaviourConfig = this.copyConfig(this.configService.buttonBehaviourConfig);
     this.voiceConfig = this.copyConfig(this.configService.voiceConfig);
+    this.externalLibraryConfig = this.copyConfig(this.configService.externalLibraryConfig);
 
     const configURLParam = this.route.snapshot.queryParamMap.get(this.PAGESET_PARAM);
     if (configURLParam) {
@@ -76,6 +85,7 @@ export class ConfigPageComponent implements OnInit {
     this.configService.appearanceConfig = this.appearanceConfig;
     this.configService.buttonBehaviourConfig = this.buttonBehaviourConfig;
     this.configService.voiceConfig = this.voiceConfig;
+    this.configService.externalLibraryConfig = this.externalLibraryConfig;
     // TODO: some kind of validation
 
     // clear local cache of page to force a refresh
@@ -89,6 +99,33 @@ export class ConfigPageComponent implements OnInit {
         this.router.navigate(['/main']);
       }
     );
+  }
+
+  addLibrary() {
+    this.externalLibraryConfig.push(this.copyConfig(this.newLibrary));
+    this.newLibrary = {
+      name: '',
+      libraryURL: '',
+      active: true,
+      configuration: []
+    };
+  }
+
+  removeLibrary(index: number) {
+    this.externalLibraryConfig.splice(index, 1);
+  }
+
+  addLibraryConfigurationOption(library: ExternalLibraryConfig, name: HTMLInputElement, value: HTMLInputElement) {
+    library.configuration.push({
+      name: name.value,
+      value: value.value
+    });
+    name.value = '';
+    value.value = '';
+  }
+
+  removeLibraryConfigurationOption(library: ExternalLibraryConfig, index: number) {
+    library.configuration.splice(index, 1);
   }
 
   copyToClipboard() {

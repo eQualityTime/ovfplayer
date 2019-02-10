@@ -158,8 +158,103 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
             </mat-card>
           </div>
         </mat-tab>
+        <mat-tab ngModelGroup="advanced" #advancedCtrl="ngModelGroup">
+          <ng-template mat-tab-label>
+            <mat-icon *ngIf="advancedCtrl.invalid" class="invalidTab">error</mat-icon>
+            <span [class.invalidTab]="advancedCtrl.invalid" name="advanced">Advanced</span>
+          </ng-template>
+          <div class="formContainer">
+            <mat-card>
+              <mat-accordion>
+                <mat-expansion-panel>
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      Add new library
+                    </mat-panel-title>
+                    <mat-panel-description>
+                      Add and configure an external javascript library for use in your board
+                    </mat-panel-description>
+                  </mat-expansion-panel-header>
+
+                  <ng-container
+                      [ngTemplateOutlet]="libraryConfiguration"
+                      [ngTemplateOutletContext]="{library:newLibrary, fieldPrefix:'newLibrary'}">
+                  </ng-container>
+
+                  <div class="formButtons">
+                    <button type="button" (click)="addLibrary()" mat-raised-button color="primary">Add library</button>
+                  </div>
+                </mat-expansion-panel>
+
+                <mat-expansion-panel *ngFor="let lib of externalLibraryConfig; let index = index;">
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      {{lib.name}}
+                    </mat-panel-title>
+                    <mat-panel-description>
+                      {{lib.libraryURL}}
+                    </mat-panel-description>
+                  </mat-expansion-panel-header>
+
+                  <ng-container
+                      [ngTemplateOutlet]="libraryConfiguration"
+                      [ngTemplateOutletContext]="{library:lib, fieldPrefix:lib.name}">
+                  </ng-container>
+
+                  <div class="formButtons">
+                    <button type="button" (click)="removeLibrary(index)" mat-raised-button color="primary">Remove library</button>
+                  </div>
+                </mat-expansion-panel>
+              </mat-accordion>
+            </mat-card>
+          </div>
+        </mat-tab>
       </mat-tab-group>
     </form>
   </mat-card>
   <p>Version: {{getVersion()}}</p>
 </app-obfpage>
+
+<ng-template #libraryConfiguration let-library='library' let-fieldPrefix='fieldPrefix'>
+      <mat-form-field class="formInputField">
+        <input matInput [(ngModel)]="library.name" name="fieldPrefix.name"
+               placeholder="Library name (as referenced from your button)">
+      </mat-form-field>
+
+      <mat-form-field class="formInputField">
+        <input matInput [(ngModel)]="library.libraryURL" name="fieldPrefix.libraryURL"
+               placeholder="Library URL">
+      </mat-form-field>
+
+      <mat-checkbox [(ngModel)]="library.active" name="fieldPrefix.active">
+        <span class="formLabel">Library enabled</span>
+      </mat-checkbox>
+
+      <mat-card class="formConfigOptions">
+        <span class="formLabel">Configuration options</span>
+
+        <div class="formInputField">
+          <mat-form-field class="configInputField">
+            <input #optionName matInput placeholder="Option name (as used by the library)">
+          </mat-form-field>
+
+          <mat-form-field class="configInputField">
+            <input #optionValue matInput placeholder="Option value">
+          </mat-form-field>
+
+          <div class="formButtons">
+            <button type="button" (click)="addLibraryConfigurationOption(library, optionName, optionValue);" mat-raised-button color="primary">Add config option</button>
+          </div>
+        </div>
+
+        <div *ngFor="let option of library.configuration" class="formInputField">
+          <mat-form-field class="configInputField">
+            <input [(ngModel)]="option.name" matInput [name]="fieldPrefix + '.' + option.name + '.name'" placeholder="Option name (as used by the library)">
+          </mat-form-field>
+
+          <mat-form-field class="configInputField">
+            <input [(ngModel)]="option.value" matInput [name]="fieldPrefix + '.' + option.name + '.value'" placeholder="Option value">
+          </mat-form-field>
+        </div>
+      </mat-card>
+</ng-template>
