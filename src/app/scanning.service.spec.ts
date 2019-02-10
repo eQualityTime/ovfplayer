@@ -18,6 +18,19 @@ import { ScanningService, ScanningModel, ScannableCollection, ScannableCollectio
 import { ConfigService } from './config.service';
 import { Subscriber } from 'rxjs';
 
+class TestProvider extends Subscriber<ScanningModel> implements ScannableCollectionProvider {
+  private rows: ScannableCollection[];
+
+  constructor(rows: ScannableCollection[], next: (ScanningModel) => void) {
+    super(next);
+    this.rows = rows;
+  }
+
+  getScannableCollections(): ScannableCollection[] {
+    return this.rows;
+  }
+}
+
 describe('ScanningService', () => {
   let configServiceStub: Partial<ConfigService>;
 
@@ -334,16 +347,3 @@ describe('ScanningService', () => {
     })();
   });
 });
-
-class TestProvider extends Subscriber<ScanningModel> implements ScannableCollectionProvider {
-  private rows: ScannableCollection[];
-
-  constructor(rows: ScannableCollection[], next: (ScanningModel) => void) {
-    super(next);
-    this.rows = rows;
-  }
-
-  getScannableCollections(): ScannableCollection[] {
-    return this.rows;
-  }
-}
