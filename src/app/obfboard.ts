@@ -145,7 +145,7 @@ export class Button {
 
 export class Image {
 
-  @OneOf(['url', 'data', 'path'], { message: 'Image with id "$value" must specifiy data, a url or a path' })
+  @OneOf(['url', 'data', 'path', 'symbol'], { message: 'Image with id "$value" must specifiy data, a url or a path' })
   @IsString({ message: 'Image id must be a string' })
   @IsNotEmpty({ message: 'Image id must be specified'})
   id: string;
@@ -164,6 +164,9 @@ export class Image {
   @IsOptional()
   @IsUrl()
   url: string;
+
+  @IsOptional()
+  symbol: string;
 
   @IsOptional()
   @IsString()
@@ -187,6 +190,7 @@ export class Image {
     this.path = input.path;
     this.contentType = input.contentType || input.content_type;
     this.parent = parent;
+    this.symbol = JSON.stringify(input.symbol);
 
     return this;
   }
