@@ -138,7 +138,7 @@ export class SpeechbarService {
     const ret = vocalizations.join(' ');
     const lastChar = ret[ret.length - 1];
     const endsWithPunc = lastChar === '?' || lastChar === '!' || lastChar === '.';
-    return endsWithPunc ? ret : ret + '.';
+    return endsWithPunc ? ret : ret + ' .';
   }
 
   sayButton(button: Button) {

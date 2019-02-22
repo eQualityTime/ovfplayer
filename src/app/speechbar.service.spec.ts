@@ -322,7 +322,7 @@ describe('SpeechbarService.ButtonFacade', () => {
 describe('SpeechbarService.utteranceConstruction', () => {
   it('should append period if no punctuation', inject([SpeechbarService], (service: SpeechbarService) => {
     const vocals = ['I', 'hello'];
-    expect(service.buildSentence(vocals)).toBe('I hello.');
+    expect(service.buildSentence(vocals)).toBe('I hello .');
   }));
 
   it('should not append period if punctuation', inject([SpeechbarService], (service: SpeechbarService) => {
