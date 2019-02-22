@@ -318,3 +318,17 @@ describe('SpeechbarService.ButtonFacade', () => {
     expect(fb.vocalization).toBe('vocala');
   });
 });
+
+describe('SpeechbarService.utteranceConstruction', () => {
+  it('should append period if no punctuation', inject([SpeechbarService], (service: SpeechbarService) => {
+    const vocals = ['I', 'hello'];
+    expect(service.buildSentance(vocals)).toBe('I hello.');
+  }));
+
+  it('should not append period if punctuation', inject([SpeechbarService], (service: SpeechbarService) => {
+    let vocals = ['I', 'hello?'];
+    expect(service.buildSentance(vocals)).toBe('I hello?');
+    vocals = ['I', 'hello!'];
+    expect(service.buildSentance(vocals)).toBe('I hello!');
+  }));
+});

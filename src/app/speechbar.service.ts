@@ -126,12 +126,19 @@ export class SpeechbarService {
     // don't queue up multiple speak actions
     if (!this.speechSynthesizer.speaking) {
       const msg = this.createUtterance();
-      const vocalizations = this.buttons.map(button => button.getVocalization());
-      msg.text = vocalizations.join(' ');
+      msg.text = this.buildSentance(this.buttons.map(button => button.getVocalization()));
+
       msg.onstart = () => this.listener.next(true);
       msg.onend = () => this.listener.next(false);
       this.speechSynthesizer.speak(msg);
     }
+  }
+
+  buildSentance(vocalizations: string[]): string {
+    const ret = vocalizations.join(' ');
+    const lastChar = ret[ret.length - 1];
+    const endsWithPunc = lastChar === '?' || lastChar === '!' || lastChar === '.';
+    return endsWithPunc ? ret : ret + '.';
   }
 
   sayButton(button: Button) {
