@@ -331,4 +331,9 @@ describe('SpeechbarService.utteranceConstruction', () => {
     vocals = ['I', 'hello!'];
     expect(service.buildSentence(vocals)).toBe('I hello!');
   }));
+
+  it('should not append period if no vocalisations', inject([SpeechbarService], (service: SpeechbarService) => {
+    const vocals = [];
+    expect(service.buildSentence(vocals)).toBe('');
+  }));
 });

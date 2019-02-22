@@ -135,6 +135,9 @@ export class SpeechbarService {
   }
 
   buildSentence(vocalizations: string[]): string {
+    if (vocalizations.length === 0) {
+      return '';
+    }
     const ret = vocalizations.join(' ');
     const lastChar = ret[ret.length - 1];
     const endsWithPunc = lastChar === '?' || lastChar === '!' || lastChar === '.';
