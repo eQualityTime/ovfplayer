@@ -293,7 +293,7 @@ export class OBFBoard {
     this.descriptionHtml = input.descriptionHtml || input.description_html;
     this.grid = new Grid().deserialize(input.grid);
     this.buttons = input.buttons.map(button => new Button().deserialize(button, this));
-    this.images = input.images.map(image => new Image().deserialize(image, this)).filter(image => image.data || image.path || image.url);
+    this.images = input.images.map(image => new Image().deserialize(image, this));
     this.sounds = input.sounds.map(sound => new Sound().deserialize(sound, this));
 
     const errors = validateSync(this);
@@ -303,6 +303,9 @@ export class OBFBoard {
       console.log(all_errors.join('\n'));
       throw new FatalOpenVoiceFactoryError(ErrorCodes.OBF_VALIDATION, all_errors.join('\n'));
     }
+
+    // filter out images we can't display AFTER collecting error messages
+    this.images = this.images.filter(image => image.data || image.path || image.url);
 
     return this;
   }
