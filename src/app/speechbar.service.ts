@@ -126,19 +126,29 @@ export class SpeechbarService {
     // don't queue up multiple speak actions
     if (!this.speechSynthesizer.speaking) {
       const msg = this.createUtterance();
-      const vocalizations = this.buttons.map(button => button.getVocalization());
-      msg.text = vocalizations.join(' ');
+      msg.text = this.buildSentence(this.buttons.map(button => button.getVocalization()));
+
       msg.onstart = () => this.listener.next(true);
       msg.onend = () => this.listener.next(false);
       this.speechSynthesizer.speak(msg);
     }
   }
 
+  buildSentence(vocalizations: string[]): string {
+    if (vocalizations.length === 0) {
+      return '';
+    }
+    const ret = vocalizations.join(' ');
+    const lastChar = ret[ret.length - 1];
+    const endsWithPunc = lastChar === '?' || lastChar === '!' || lastChar === '.';
+    return endsWithPunc ? ret : ret + ' .';
+  }
+
   sayButton(button: Button) {
     // we do want to queue these up, so no speaking check
     // we also want the speak button to stay enabled for queing up the actual message, so no listener updates
     const msg = this.createUtterance();
-    msg.text = button.getVocalization();
+    msg.text = this.buildSentence([button.getVocalization()]);
     this.speechSynthesizer.speak(msg);
   }
 
