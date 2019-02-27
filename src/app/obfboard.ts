@@ -293,7 +293,7 @@ export class OBFBoard {
     this.descriptionHtml = input.descriptionHtml || input.description_html;
     this.grid = new Grid().deserialize(input.grid);
     this.buttons = input.buttons.map(button => new Button().deserialize(button, this));
-    this.images = input.images.map(image => new Image().deserialize(image, this));
+    this.images = input.images.map(image => new Image().deserialize(image, this)).filter(image => image.data || image.path || image.url);
     this.sounds = input.sounds.map(sound => new Sound().deserialize(sound, this));
 
     const errors = validateSync(this);
