@@ -164,4 +164,17 @@ describe('ObzService', () => {
       });
     })();
   });
+
+  it('parseOBZFile should not throw error if image uses symbol set', (done) => {
+    inject([ObzService], (service: ObzService) => {
+      const blob = OBZFixture.load('symbolset');
+      // test parseOBZFile
+      service.parseOBZFile(blob).subscribe({
+        next(value) {
+          expect(value).toBeTruthy();
+          done();
+        },
+      });
+    })();
+  });
 });

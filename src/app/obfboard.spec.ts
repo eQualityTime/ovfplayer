@@ -17,7 +17,7 @@ import { ErrorCodes } from './errors';
 
 describe('OBFBoard', () => {
 
-  const testBoard = new OBFBoard().deserialize({
+  const testBoardJSON = {
     format: 'board_format',
     id: 5,
     locale: 'en_GB',
@@ -51,7 +51,8 @@ describe('OBFBoard', () => {
         url: 'http://another.com'
       }
     ]
-  });
+  };
+  const testBoard = new OBFBoard().deserialize(testBoardJSON);
 
   it('should be created', () => {
     const board = new OBFBoard();
@@ -107,6 +108,29 @@ describe('OBFBoard', () => {
     const sound = board.getSound('1');
     expect(sound).toBeTruthy();
     expect(sound.url).toBe('http://another.com');
+  });
+
+  it('should filter out valid but undisplayable images', () => {
+    const boardJSON = JSON.parse(JSON.stringify(testBoardJSON));
+    boardJSON.images[1] = {
+      id: 2,
+      symbol: {}
+    };
+    const board = new OBFBoard().deserialize(boardJSON);
+    expect(board.images.length).toBe(1);
+    expect(board.getImage('2')).toBeFalsy();
+  });
+
+  it('should not filter out displayable images', () => {
+    const boardJSON = JSON.parse(JSON.stringify(testBoardJSON));
+    boardJSON.images[1] = {
+      id: 2,
+      symbol: {},
+      url: 'http://example.com'
+    };
+    const board = new OBFBoard().deserialize(boardJSON);
+    expect(board.images.length).toBe(2);
+    expect(board.getImage('2')).toBeTruthy();
   });
 });
 
