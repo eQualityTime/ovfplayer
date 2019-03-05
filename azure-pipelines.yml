@@ -84,3 +84,31 @@ jobs:
   - script: |
       npx ngh --dir=dist/open-voice-factory --repo=https://$GH_TOKEN@github.com/eQualityTime/ovfplayer.git --name="eQualityTimeDevs" --email="support@equalitytime.co.uk"
     displayName: 'deploy to gh-pages'
+
+- job: Deploy to Staging
+  dependsOn: BuildAndTest
+  pool:
+    vmImage: 'Ubuntu 16.04'
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/simon/issue#119/staging'))
+
+  steps:
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '8.x'
+    displayName: 'Install Node.js'
+
+  - script: |
+      npm install -g @angular/cli
+      npm install -g workbox-cli@3.6.3
+      npm install
+      npm i angular-cli-ghpages --save-dev
+    displayName: 'npm install'
+
+  - script: |
+      ng build --prod --base-href "https://equalitytime.github.io/teststaging/"
+      workbox injectManifest
+    displayName: 'build with correct HREF'
+
+  - script: |
+      npx ngh --dir=dist/open-voice-factory --repo=https://$GH_TOKEN@github.com/eQualityTime/teststaging.git --name="eQualityTimeDevs" --email="support@equalitytime.co.uk"
+    displayName: 'deploy to gh-pages'
