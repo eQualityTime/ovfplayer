@@ -111,5 +111,5 @@ jobs:
     displayName: 'build with correct HREF'
 
   - script: |
-      npx ngh --dir=dist/open-voice-factory --repo=https://$GH_TOKEN@github.com/eQualityTime/teststaging.git --name="eQualityTimeDevs" --email="support@equalitytime.co.uk" --no-silent
+      npx ngh --dir=dist/open-voice-factory --repo=https://$GH_TOKEN@github.com/eQualityTime/teststaging.git --name="eQualityTimeDevs" --email="support@equalitytime.co.uk"
     displayName: 'deploy to gh-pages'
