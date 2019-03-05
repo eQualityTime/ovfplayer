@@ -89,8 +89,7 @@ jobs:
   dependsOn: BuildAndTest
   pool:
     vmImage: 'Ubuntu 16.04'
-  # TODO: put back to develop
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/simon/issue#119/staging'))
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
 
   steps:
   - task: NodeTool@0
@@ -113,5 +112,3 @@ jobs:
   - script: |
       npx ngh --dir=dist/open-voice-factory --repo=https://$GH_TOKEN@github.com/eQualityTime/teststaging.git --name="eQualityTimeDevs" --email="support@equalitytime.co.uk"
     displayName: 'deploy to gh-pages'
-    env:
-      GH_TOKEN: ${GH_TOKEN}
