@@ -89,6 +89,7 @@ jobs:
   dependsOn: BuildAndTest
   pool:
     vmImage: 'Ubuntu 16.04'
+  # TODO: change to develop
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/simon/issue#119/staging'))
 
   steps:
