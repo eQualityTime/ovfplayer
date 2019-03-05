@@ -61,7 +61,7 @@ jobs:
       npm install -g @angular/cli
       npm install -g workbox-cli@3.6.3
       npm install
-      npm i angular-cli-ghpages --save-dev
+      npm i angular-cli-ghpages@0.5.3 --save-dev
     displayName: 'npm install'
 
   - script: |
@@ -101,11 +101,11 @@ jobs:
       npm install -g @angular/cli
       npm install -g workbox-cli@3.6.3
       npm install
-      npm i angular-cli-ghpages --save-dev
+      npm i angular-cli-ghpages@0.5.3 --save-dev
     displayName: 'npm install'
 
   - script: |
-      ng build --prod --base-href "https://equalitytime.github.io/teststaging/"
+      ng build --base-href "https://equalitytime.github.io/teststaging/"
       workbox injectManifest
     displayName: 'build with correct HREF'
 
