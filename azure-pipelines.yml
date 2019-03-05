@@ -82,6 +82,7 @@ jobs:
     displayName: 'build with correct HREF'
 
   - script: |
+      # TODO: maybe remove $
       npx ngh --dir=dist/open-voice-factory --repo=https://$GH_TOKEN@github.com/eQualityTime/ovfplayer.git --name="eQualityTimeDevs" --email="support@equalitytime.co.uk"
     displayName: 'deploy to gh-pages'
 
@@ -111,5 +112,5 @@ jobs:
     displayName: 'build with correct HREF'
 
   - script: |
-      npx ngh --dir=dist/open-voice-factory --repo=https://$GH_TOKEN@github.com/eQualityTime/teststaging.git --name="eQualityTimeDevs" --email="support@equalitytime.co.uk" --no-silent
+      npx ngh --dir=dist/open-voice-factory --repo=https://GH_TOKEN@github.com/eQualityTime/teststaging.git --name="eQualityTimeDevs" --email="support@equalitytime.co.uk"
     displayName: 'deploy to gh-pages'
