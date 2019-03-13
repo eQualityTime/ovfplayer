@@ -89,8 +89,7 @@ jobs:
   dependsOn: BuildAndTest
   pool:
     vmImage: 'Ubuntu 16.04'
-  # TODO: put back to develop
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/simon/issue#143/sw'))
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
 
   steps:
   - task: NodeTool@0
