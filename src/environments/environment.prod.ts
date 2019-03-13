@@ -13,5 +13,6 @@ You should have received a copy of the GNU General Public License
 along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: */
 export const environment = {
-  production: true
+  production: true,
+  context: 'ovfplayer'
 };

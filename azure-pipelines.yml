@@ -89,7 +89,8 @@ jobs:
   dependsOn: BuildAndTest
   pool:
     vmImage: 'Ubuntu 16.04'
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
+  # TODO: put back to develop
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/simon/issue#143/sw'))
 
   steps:
   - task: NodeTool@0
@@ -105,7 +106,7 @@ jobs:
     displayName: 'npm install'
 
   - script: |
-      ng build --base-href "https://equalitytime.github.io/teststaging/"
+      ng build --base-href "https://equalitytime.github.io/teststaging/" --configuration=staging
       workbox injectManifest
     displayName: 'build with correct HREF'
 
