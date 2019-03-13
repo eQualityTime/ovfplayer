@@ -105,7 +105,7 @@ jobs:
     displayName: 'npm install'
 
   - script: |
-      ng build --base-href "https://equalitytime.github.io/teststaging/"
+      ng build --base-href "https://equalitytime.github.io/teststaging/" --configuration=staging
       workbox injectManifest
     displayName: 'build with correct HREF'
 

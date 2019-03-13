@@ -31,7 +31,7 @@ platformBrowserDynamic()
 function registerServiceWorker(swName: string) {
   if (environment.production && 'serviceWorker' in navigator) {
     navigator.serviceWorker
-      .register(`/ovfplayer/${swName}.js`)
+      .register(`/${environment.context}/${swName}.js`)
       .then(reg => {
         console.log('Successful service worker registration', reg);
       })
