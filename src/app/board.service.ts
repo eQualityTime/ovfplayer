@@ -17,6 +17,7 @@ import { ObzService } from './obz.service';
 import { Observable, Observer } from 'rxjs';
 import { OBFBoard } from './obfboard';
 import { OBZBoardSet } from './obzboard-set';
+import { PageStackService } from './page-stack.service';
 
 @Injectable({
   providedIn: 'root'
@@ -26,7 +27,10 @@ export class BoardService {
   private currentBoardKey: string;
   private observer: Observer<OBFBoard>;
 
-  constructor(private obzService: ObzService) {}
+  constructor(
+    private obzService: ObzService,
+    private pageStackService: PageStackService
+  ) {}
 
   private addObserver = (observer: Observer<OBFBoard>) => {
     this.observer = observer;
@@ -49,6 +53,14 @@ export class BoardService {
     this.currentBoardKey = boardKey;
     const board = this.boardSet.getBoard(this.currentBoardKey);
     this.observer.next(board);
+    this.pageStackService.addPage(boardKey);
+  }
+
+  back() {
+    const boardKey = this.pageStackService.back();
+    if (boardKey) {
+      this.navigateToBoard(boardKey);
+    }
   }
 
   navigateToExternalBoard(boardKey: string) {

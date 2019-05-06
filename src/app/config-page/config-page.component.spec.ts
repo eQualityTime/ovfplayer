@@ -76,7 +76,8 @@ describe('ConfigPageComponent', () => {
         showSpeakButton: false,
         showHomeButton: false,
         showBackspaceButton: false,
-        showClearButton: false
+        showClearButton: false,
+        showBackButton: false
       },
       scanningConfig: {
         enabled: false,

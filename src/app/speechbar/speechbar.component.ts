@@ -19,6 +19,7 @@ import { Subscription, Subscriber } from 'rxjs';
 import { BoardService } from '../board.service';
 import { Button } from '../obfboard';
 import { ScanningService, ScanningModel, Scannable, ScannableCollection, ScannableCollectionProvider } from '../scanning.service';
+import { PageStackService } from '../page-stack.service';
 
 class ScannableButton extends Scannable {
   static TYPE = 'SpeechbarButton';
@@ -65,6 +66,7 @@ class ScannableSpeechbarRow extends ScannableCollection {
   speechbar: ScannableButton;
   backspace: ScannableButton;
   clear: ScannableButton;
+  back: ScannableButton;
   private speechbarComponent: SpeechbarComponent;
 
   constructor(displayedButtons: ButtonDisplayConfig, speakOnSpeechbarClick: boolean, speechbarComponent: SpeechbarComponent) {
@@ -90,6 +92,10 @@ class ScannableSpeechbarRow extends ScannableCollection {
     if (displayedButtons.showClearButton) {
       this.clear = new ScannableButton('Clear', speechbarComponent.clear.bind(speechbarComponent), 4, speechbarComponent);
       this.addChild(this.clear);
+    }
+    if (displayedButtons.showBackButton) {
+      this.back = new ScannableButton('Back', speechbarComponent.back.bind(speechbarComponent), 5, speechbarComponent);
+      this.addChild(this.back);
     }
   }
 
@@ -201,5 +207,9 @@ export class SpeechbarComponent implements OnInit, OnDestroy {
 
   clear() {
     this.speechbarService.clear();
+  }
+
+  back() {
+    this.boardService.back();
   }
 }

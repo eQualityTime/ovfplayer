@@ -59,5 +59,10 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
             [class.scanSelect]="buttonRow.clear.isSelected()"
             style="--button-image: url('assets/images/erase.png')"
             *ngIf="buttonRow.clear">{{buttonRow.clear.label}}</button>
+    <button class="stackedButton" mat-raised-button [appInteractionEventHandler]="buttonRow.back.handler"
+            [class.scanHighlight]="buttonRow.back.isHighlighted()"
+            [class.scanSelect]="buttonRow.back.isSelected()"
+            style="--button-image: url('assets/images/left.png')"
+            *ngIf="buttonRow.back">{{buttonRow.back.label}}</button>
   </div>
 </div>

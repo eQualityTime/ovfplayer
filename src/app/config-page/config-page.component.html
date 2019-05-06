@@ -102,6 +102,11 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
                 <span class="formLabel">Home button always shown</span>
               </mat-checkbox>
             </mat-card>
+            <mat-card>
+              <mat-checkbox [(ngModel)]="displayedButtons.showBackButton" name="showBackButton">
+                <span class="formLabel">Back button always shown</span>
+              </mat-checkbox>
+            </mat-card>
           </div>
         </mat-tab>
         <mat-tab ngModelGroup="voiceConfig" #voiceConfigCtrl="ngModelGroup">

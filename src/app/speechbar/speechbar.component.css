@@ -48,7 +48,7 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 
 .stackedButton {
   flex-grow: 1;
-  padding-top: 30%;
+  padding-top: 20%;
   background: var(--button-image) no-repeat 50% 35%;
   background-size: auto 25%;
 }
