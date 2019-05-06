@@ -6,9 +6,9 @@ interface StackBehaviour {
   back(): string;
 }
 
-class FullStackBehaviour implements StackBehaviour {
+export class FullStackBehaviour implements StackBehaviour {
 
-  private pageStack: string[] = [];
+  protected pageStack: string[] = [];
 
   addPage(boardKey: string): void {
     this.pageStack.push(boardKey);
@@ -25,12 +25,24 @@ class FullStackBehaviour implements StackBehaviour {
   }
 }
 
+export class OptimisedStackBehaviour extends FullStackBehaviour {
+
+  addPage(boardKey: string): void {
+    const index = this.pageStack.indexOf(boardKey);
+    if (index > -1) {
+      this.pageStack = this.pageStack.slice(0, index + 1);
+    } else {
+      super.addPage(boardKey);
+    }
+  }
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class PageStackService {
 
-  private behaviour: StackBehaviour = new FullStackBehaviour();
+  private behaviour: StackBehaviour = new OptimisedStackBehaviour();
 
   constructor() { }
 
