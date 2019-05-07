@@ -19,7 +19,6 @@ import { Subscription, Subscriber } from 'rxjs';
 import { BoardService } from '../board.service';
 import { Button } from '../obfboard';
 import { ScanningService, ScanningModel, Scannable, ScannableCollection, ScannableCollectionProvider } from '../scanning.service';
-import { PageStackService } from '../page-stack.service';
 
 class ScannableButton extends Scannable {
   static TYPE = 'SpeechbarButton';
