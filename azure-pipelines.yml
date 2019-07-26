@@ -6,14 +6,14 @@
 jobs:
 - job: BuildAndTest
   pool:
-    vmImage: 'Ubuntu 16.04'
+    vmImage: 'Ubuntu 18.04'
 
   condition: ne(variables['Build.SourceBranch'], 'refs/heads/gh-pages')
 
   steps:
   - task: NodeTool@0
     inputs:
-      versionSpec: '8.x'
+      versionSpec: '10.9'
     displayName: 'Install Node.js'
 
   - script: |
@@ -48,13 +48,13 @@ jobs:
 - job: Deploy
   dependsOn: BuildAndTest
   pool:
-    vmImage: 'Ubuntu 16.04'
+    vmImage: 'Ubuntu 18.04'
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
 
   steps:
   - task: NodeTool@0
     inputs:
-      versionSpec: '8.x'
+      versionSpec: '10.9'
     displayName: 'Install Node.js'
 
   - script: |
@@ -88,13 +88,13 @@ jobs:
 - job: DeployStaging
   dependsOn: BuildAndTest
   pool:
-    vmImage: 'Ubuntu 16.04'
+    vmImage: 'Ubuntu 18.04'
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
 
   steps:
   - task: NodeTool@0
     inputs:
-      versionSpec: '8.x'
+      versionSpec: '10.9'
     displayName: 'Install Node.js'
 
   - script: |
