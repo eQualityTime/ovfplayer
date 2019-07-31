@@ -19,6 +19,7 @@ import { Subscription, Subscriber } from 'rxjs';
 import { BoardService } from '../board.service';
 import { Button } from '../obfboard';
 import { ScanningService, ScanningModel, Scannable, ScannableCollection, ScannableCollectionProvider } from '../scanning.service';
+import { PageStackService } from '../page-stack.service';
 
 class ScannableButton extends Scannable {
   static TYPE = 'SpeechbarButton';
@@ -142,13 +143,15 @@ export class SpeechbarComponent implements OnInit, OnDestroy {
   buttons: Button[];
   scanningModel: ScanningModel;
   buttonRow: ScannableSpeechbarRow;
+  stackContents: boolean;
 
   constructor(
     private boardService: BoardService,
     private speechbarService: SpeechbarService,
     private config: ConfigService,
     private scanningService: ScanningService,
-    private cdRef: ChangeDetectorRef
+    private cdRef: ChangeDetectorRef,
+    private pageStackService: PageStackService
   ) { }
 
   ngOnInit() {
@@ -164,6 +167,10 @@ export class SpeechbarComponent implements OnInit, OnDestroy {
     this.buttonsSubscription = this.speechbarService.getButtons().subscribe(buttons => {
       this.buttons = buttons;
     });
+    this.pageStackService.hasContent.subscribe(val => {
+      this.stackContents = val;
+    });
+    this.stackContents = this.pageStackService.stackHasContent();
   }
 
   ngOnDestroy() {

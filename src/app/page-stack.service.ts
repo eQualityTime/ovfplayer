@@ -1,9 +1,12 @@
 import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs';
 
 interface StackBehaviour {
   addPage(boardKey: string): void;
 
-  back(): string;
+  getPrevious(): string;
+
+  size(): number;
 }
 
 export class FullStackBehaviour implements StackBehaviour {
@@ -14,7 +17,7 @@ export class FullStackBehaviour implements StackBehaviour {
     this.pageStack.push(boardKey);
   }
 
-  back(): string {
+  getPrevious(): string {
     // top of stack will be current page, only remove if we can go back
     if (this.pageStack.length > 1) {
       this.pageStack.pop();
@@ -22,6 +25,10 @@ export class FullStackBehaviour implements StackBehaviour {
     } else {
       return null;
     }
+  }
+
+  size(): number {
+    return this.pageStack.length;
   }
 }
 
@@ -44,13 +51,26 @@ export class PageStackService {
 
   private behaviour: StackBehaviour = new OptimisedStackBehaviour();
 
+  public hasContent = new Subject<boolean>();
+
   constructor() { }
+
+  private updateContentObservable(): void {
+    this.hasContent.next(this.behaviour.size() > 1);
+  }
+
+  public stackHasContent(): boolean {
+    return this.behaviour.size() > 1;
+  }
 
   public addPage(boardKey: string): void {
     this.behaviour.addPage(boardKey);
+    this.updateContentObservable();
   }
 
-  public back(): string {
-    return this.behaviour.back();
+  public getPrevious(): string {
+    const ret = this.behaviour.getPrevious();
+    this.updateContentObservable();
+    return ret;
   }
 }

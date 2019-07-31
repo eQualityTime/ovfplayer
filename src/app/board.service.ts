@@ -57,7 +57,7 @@ export class BoardService {
   }
 
   back() {
-    const boardKey = this.pageStackService.back();
+    const boardKey = this.pageStackService.getPrevious();
     if (boardKey) {
       this.navigateToBoard(boardKey);
     }
