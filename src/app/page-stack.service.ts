@@ -56,7 +56,7 @@ export class PageStackService {
   constructor() { }
 
   private updateContentObservable(): void {
-    this.hasContent.next(this.behaviour.size() > 1);
+    this.hasContent.next(this.stackHasContent());
   }
 
   public stackHasContent(): boolean {
