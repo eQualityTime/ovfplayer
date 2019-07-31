@@ -21,6 +21,7 @@ export interface ButtonDisplayConfig {
   showBackspaceButton: boolean;
   showClearButton: boolean;
   showHomeButton: boolean;
+  showBackButton: boolean;
 }
 
 export interface ScanningConfig {
@@ -59,7 +60,8 @@ export class ConfigService {
     showSpeakButton: true,
     showBackspaceButton: true,
     showClearButton: true,
-    showHomeButton: false
+    showHomeButton: false,
+    showBackButton: false
   };
   @LocalStorage() _scanningConfig: ScanningConfig = {
     enabled: false,

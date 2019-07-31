@@ -13,7 +13,7 @@ jobs:
   steps:
   - task: NodeTool@0
     inputs:
-      versionSpec: '8.x'
+      versionSpec: '10.9'
     displayName: 'Install Node.js'
 
   - script: |
@@ -54,7 +54,7 @@ jobs:
   steps:
   - task: NodeTool@0
     inputs:
-      versionSpec: '8.x'
+      versionSpec: '10.9'
     displayName: 'Install Node.js'
 
   - script: |
@@ -94,7 +94,7 @@ jobs:
   steps:
   - task: NodeTool@0
     inputs:
-      versionSpec: '8.x'
+      versionSpec: '10.9'
     displayName: 'Install Node.js'
 
   - script: |
