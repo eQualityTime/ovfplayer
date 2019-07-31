@@ -44,7 +44,7 @@ describe('PageStackService', () => {
       if (test.startsWith('+')) {
         behaviour.addPage(test.substr(1));
       } else if (test.startsWith('-')) {
-        const nextBoard = behaviour.back();
+        const nextBoard = behaviour.getPrevious();
         if (nextBoard) {
           expect(nextBoard).toBe(test.substr(1));
         } else {
@@ -90,7 +90,7 @@ describe('PageStackService', () => {
       if (test.startsWith('+')) {
         behaviour.addPage(test.substr(1));
       } else if (test.startsWith('-')) {
-        const nextBoard = behaviour.back();
+        const nextBoard = behaviour.getPrevious();
         if (nextBoard) {
           expect(nextBoard).toBe(test.substr(1));
         } else {
