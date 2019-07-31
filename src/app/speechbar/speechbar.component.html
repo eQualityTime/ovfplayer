@@ -63,6 +63,7 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
             [class.scanHighlight]="buttonRow.back.isHighlighted()"
             [class.scanSelect]="buttonRow.back.isSelected()"
             style="--button-image: url('assets/images/undo.png')"
+            [disabled]="!stackContents"
             *ngIf="buttonRow.back">{{buttonRow.back.label}}</button>
   </div>
 </div>
