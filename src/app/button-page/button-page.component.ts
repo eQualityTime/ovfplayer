@@ -17,7 +17,13 @@ import { BoardService } from '../services/board-cache/board.service';
 import { SpeechbarService } from '../services/speechbar/speechbar.service';
 import { OBFBoard, Button, LoadBoardAction } from '../obfboard';
 import { Subscription, Subscriber } from 'rxjs';
-import { ScanningService, ScanningModel, ScannableCollectionProvider, ScannableCollection, Scannable } from '../services/scanning/scanning.service';
+import {
+  ScanningService,
+  ScanningModel,
+  ScannableCollectionProvider,
+  ScannableCollection,
+  Scannable
+} from '../services/scanning/scanning.service';
 import { ConfigService } from '../services/config/config.service';
 
 class ScannableButton extends Scannable {
