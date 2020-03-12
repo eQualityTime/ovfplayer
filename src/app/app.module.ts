@@ -33,7 +33,7 @@ import { ConfigPageComponent } from './config-page/config-page.component';
 import { MainPageComponent } from './main-page/main-page.component';
 import { ObfButtonComponent } from './obf-button/obf-button.component';
 import { SpeechbarComponent } from './speechbar/speechbar.component';
-import { GlobalErrorHandlerService } from './global-error-handler.service';
+import { GlobalErrorHandlerService } from './services/global-error-handler/global-error-handler.service';
 import { ErrorPageComponent } from './error-page/error-page.component';
 import { OBFPageComponent } from './obfpage/obfpage.component';
 import { ProgressComponent } from './progress/progress.component';

@@ -13,8 +13,8 @@ You should have received a copy of the GNU General Public License
 along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: */
 import { Component, OnInit } from '@angular/core';
-import { ScanningService } from '../scanning.service';
-import { ConfigService } from '../config.service';
+import { ScanningService } from '../services/scanning/scanning.service';
+import { ConfigService } from '../services/config/config.service';
 
 @Component({
   selector: 'app-main-page',

@@ -13,7 +13,7 @@ You should have received a copy of the GNU General Public License
 along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: */
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ProgressObject, ProgressService } from '../progress.service';
+import { ProgressObject, ProgressService } from '../services/progress/progress.service';
 import { Subscription } from 'rxjs';
 
 @Component({

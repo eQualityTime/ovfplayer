@@ -16,7 +16,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 
 import { ConfigPageComponent } from './config-page.component';
-import { ConfigService, InteractionEventType } from '../config.service';
+import { ConfigService, InteractionEventType } from '../services/config/config.service';
 import {
   MatFormFieldModule,
   MatCardModule,

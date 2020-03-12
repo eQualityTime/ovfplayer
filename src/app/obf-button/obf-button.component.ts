@@ -15,7 +15,7 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 import { Component, OnInit, Input, OnDestroy, HostBinding } from '@angular/core';
 import { Button } from '../obfboard';
 import { DomSanitizer } from '@angular/platform-browser';
-import { AppearanceConfig, ConfigService } from '../config.service';
+import { AppearanceConfig, ConfigService } from '../services/config/config.service';
 
 @Component({
   selector: 'app-obf-button',
