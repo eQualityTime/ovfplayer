@@ -15,7 +15,7 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 import { TestBed, inject } from '@angular/core/testing';
 
 import { SpeechbarService, ButtonFacade } from './speechbar.service';
-import { Button } from './obfboard';
+import { Button } from '../../obfboard';
 
 describe('SpeechbarService', () => {
 

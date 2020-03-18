@@ -16,7 +16,7 @@ import { OBZBoardSet } from './obzboard-set';
 import { OBFBoard } from './obfboard';
 import { inject, TestBed } from '@angular/core/testing';
 import { HttpClient } from '@angular/common/http';
-import { ProgressService } from './progress.service';
+import { ProgressService } from './services/progress/progress.service';
 import { of } from 'rxjs';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 

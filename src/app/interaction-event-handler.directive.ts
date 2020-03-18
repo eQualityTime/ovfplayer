@@ -1,5 +1,5 @@
 import { Directive, HostListener, Input } from '@angular/core';
-import { ConfigService, InteractionEventType } from './config.service';
+import { ConfigService, InteractionEventType } from './services/config/config.service';
 
 @Directive({
   selector: '[appInteractionEventHandler]'

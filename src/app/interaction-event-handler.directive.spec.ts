@@ -1,5 +1,5 @@
 import { InteractionEventHandlerDirective } from './interaction-event-handler.directive';
-import { ConfigService, InteractionEventType } from './config.service';
+import { ConfigService, InteractionEventType } from './services/config/config.service';
 import { TestBed, ComponentFixture, async, fakeAsync, tick } from '@angular/core/testing';
 import { Component } from '@angular/core';
 import { By } from '@angular/platform-browser';

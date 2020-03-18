@@ -15,9 +15,9 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 import { Injectable } from '@angular/core';
 import { ObzService } from './obz.service';
 import { Observable, Observer } from 'rxjs';
-import { OBFBoard } from './obfboard';
-import { OBZBoardSet } from './obzboard-set';
-import { PageStackService } from './page-stack.service';
+import { OBFBoard } from '../../obfboard';
+import { OBZBoardSet } from '../../obzboard-set';
+import { PageStackService } from '../page-stack/page-stack.service';
 
 @Injectable({
   providedIn: 'root'

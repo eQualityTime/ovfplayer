@@ -16,7 +16,7 @@ import { TestBed, inject } from '@angular/core/testing';
 import { BoardCacheService } from './board-cache.service';
 import { LocalStorage } from '@ngx-pwa/local-storage';
 import { of } from 'rxjs';
-import { OBZBoardSet } from './obzboard-set';
+import { OBZBoardSet } from '../../obzboard-set';
 
 describe('BoardCacheService', () => {
   beforeEach(() => {

@@ -14,10 +14,10 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: */
 import { Injectable } from '@angular/core';
 import { LocalStorage } from '@ngx-pwa/local-storage';
-import { OBZBoardSet } from './obzboard-set';
+import { OBZBoardSet } from '../../obzboard-set';
 import { Observable } from 'rxjs';
 import { map, first } from 'rxjs/operators';
-import { OBFBoard } from './obfboard';
+import { OBFBoard } from '../../obfboard';
 
 @Injectable({
   providedIn: 'root'

@@ -16,15 +16,15 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError, from, of } from 'rxjs';
 import { flatMap, catchError, first } from 'rxjs/operators';
-import { ConfigService } from './config.service';
-import { UrlUtils } from './url-utils';
-import { OBZBoardSet } from './obzboard-set';
-import { OBFBoard } from './obfboard';
+import { ConfigService } from '../config/config.service';
+import { UrlUtils } from '../../url-utils';
+import { OBZBoardSet } from '../../obzboard-set';
+import { OBFBoard } from '../../obfboard';
 
 import * as JSZip from 'jszip';
-import { FatalOpenVoiceFactoryError, ErrorCodes } from './errors';
+import { FatalOpenVoiceFactoryError, ErrorCodes } from '../../errors';
 import { BoardCacheService } from './board-cache.service';
-import { ProgressService } from './progress.service';
+import { ProgressService } from '../progress/progress.service';
 
 @Injectable({
   providedIn: 'root'

@@ -15,7 +15,7 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 import { TestBed, inject } from '@angular/core/testing';
 
 import { ScanningService, ScanningModel, ScannableCollection, ScannableCollectionProvider, Scannable } from './scanning.service';
-import { ConfigService } from './config.service';
+import { ConfigService } from '../config/config.service';
 import { Subscriber } from 'rxjs';
 
 class TestProvider extends Subscriber<ScanningModel> implements ScannableCollectionProvider {

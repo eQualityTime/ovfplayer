@@ -15,9 +15,9 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SpeechbarComponent } from './speechbar.component';
-import { ConfigService } from '../config.service';
-import { BoardService } from '../board.service';
-import { SpeechbarService } from '../speechbar.service';
+import { ConfigService } from '../services/config/config.service';
+import { BoardService } from '../services/board/board.service';
+import { SpeechbarService } from '../services/speechbar/speechbar.service';
 import { ObfButtonComponent } from '../obf-button/obf-button.component';
 import { MatRippleModule, MatCardModule } from '@angular/material';
 import { Observable } from 'rxjs';

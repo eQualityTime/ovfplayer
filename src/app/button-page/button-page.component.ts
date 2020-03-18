@@ -13,12 +13,18 @@ You should have received a copy of the GNU General Public License
 along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: */
 import { Component, OnInit, Output, OnDestroy } from '@angular/core';
-import { BoardService } from '../board.service';
-import { SpeechbarService } from '../speechbar.service';
+import { BoardService } from '../services/board/board.service';
+import { SpeechbarService } from '../services/speechbar/speechbar.service';
 import { OBFBoard, Button, LoadBoardAction } from '../obfboard';
 import { Subscription, Subscriber } from 'rxjs';
-import { ScanningService, ScanningModel, ScannableCollectionProvider, ScannableCollection, Scannable } from '../scanning.service';
-import { ConfigService } from '../config.service';
+import {
+  ScanningService,
+  ScanningModel,
+  ScannableCollectionProvider,
+  ScannableCollection,
+  Scannable
+} from '../services/scanning/scanning.service';
+import { ConfigService } from '../services/config/config.service';
 
 class ScannableButton extends Scannable {
   static TYPE = 'OBFButton';

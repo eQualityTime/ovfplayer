@@ -14,12 +14,12 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: */
 import { TestBed, inject } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { OBZFixture } from '../test-utils/OBZFixture';
+import { OBZFixture } from '../../../test-utils/OBZFixture';
 import { ObzService } from './obz.service';
-import { ErrorCodes } from './errors';
+import { ErrorCodes } from '../../errors';
 import { BoardCacheService } from './board-cache.service';
 import { of, throwError } from 'rxjs';
-import { OBZBoardSet } from './obzboard-set';
+import { OBZBoardSet } from '../../obzboard-set';
 
 describe('ObzService', () => {
 

@@ -18,7 +18,7 @@ import { SoundResolver } from './sound-resolver';
 import { HttpClient } from '@angular/common/http';
 import { tap, map } from 'rxjs/operators';
 import { Observable, forkJoin, of } from 'rxjs';
-import { ProgressService } from './progress.service';
+import { ProgressService } from './services/progress/progress.service';
 
 export class OBZBoardSet implements ImageResolver, SoundResolver {
 

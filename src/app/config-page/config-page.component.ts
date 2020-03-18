@@ -15,10 +15,10 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ConfigService, ButtonDisplayConfig, ScanningConfig, AppearanceConfig, ButtonBehaviourConfig,
-  InteractionEventType, VoiceConfig} from '../config.service';
+  InteractionEventType, VoiceConfig} from '../services/config/config.service';
 import { MatSnackBar } from '@angular/material';
 import { VERSION } from '../../environments/version';
-import { BoardCacheService } from '../board-cache.service';
+import { BoardCacheService } from '../services/board/board-cache.service';
 
 @Component({
   selector: 'app-config-page',

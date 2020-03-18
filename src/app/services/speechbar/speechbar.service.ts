@@ -13,9 +13,9 @@ You should have received a copy of the GNU General Public License
 along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: */
 import { Injectable } from '@angular/core';
-import { Button, Image, OBFBoard, LoadBoardAction } from './obfboard';
+import { Button, Image, OBFBoard, LoadBoardAction } from '../../obfboard';
 import { Observable, Observer } from 'rxjs';
-import { ConfigService } from './config.service';
+import { ConfigService } from '../config/config.service';
 
 export class ButtonFacade extends Button {
 

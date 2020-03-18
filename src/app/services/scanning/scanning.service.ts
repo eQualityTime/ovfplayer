@@ -13,7 +13,7 @@ You should have received a copy of the GNU General Public License
 along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: */
 import { Injectable } from '@angular/core';
-import { ConfigService } from './config.service';
+import { ConfigService } from '../config/config.service';
 import { Observable, Subscriber, Subscription } from 'rxjs';
 
 export class Scannable {

@@ -13,7 +13,7 @@ You should have received a copy of the GNU General Public License
 along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: */
 import { Component, OnInit } from '@angular/core';
-import { ErrorService, ErrorDetails } from '../error.service';
+import { ErrorService, ErrorDetails } from '../services/error/error.service';
 import { Router } from '@angular/router';
 
 @Component({
