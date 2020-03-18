@@ -18,7 +18,7 @@ import { ConfigService, ButtonDisplayConfig, ScanningConfig, AppearanceConfig, B
   InteractionEventType, VoiceConfig} from '../services/config/config.service';
 import { MatSnackBar } from '@angular/material';
 import { VERSION } from '../../environments/version';
-import { BoardCacheService } from '../services/board-cache/board-cache.service';
+import { BoardCacheService } from '../services/board/board-cache.service';
 
 @Component({
   selector: 'app-config-page',

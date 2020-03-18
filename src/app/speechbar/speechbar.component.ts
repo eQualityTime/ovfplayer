@@ -16,7 +16,7 @@ import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { ConfigService, ButtonDisplayConfig } from '../services/config/config.service';
 import { SpeechbarService } from '../services/speechbar/speechbar.service';
 import { Subscription, Subscriber } from 'rxjs';
-import { BoardService } from '../services/board-cache/board.service';
+import { BoardService } from '../services/board/board.service';
 import { Button } from '../obfboard';
 import {
   ScanningService,

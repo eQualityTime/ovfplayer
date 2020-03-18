@@ -15,7 +15,7 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ButtonPageComponent } from './button-page.component';
-import { BoardService } from '../services/board-cache/board.service';
+import { BoardService } from '../services/board/board.service';
 import { SpeechbarService } from '../services/speechbar/speechbar.service';
 import { of } from 'rxjs';
 import { OBFBoard, Button } from '../obfboard';

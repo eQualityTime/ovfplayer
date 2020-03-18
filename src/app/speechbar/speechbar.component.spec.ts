@@ -16,7 +16,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SpeechbarComponent } from './speechbar.component';
 import { ConfigService } from '../services/config/config.service';
-import { BoardService } from '../services/board-cache/board.service';
+import { BoardService } from '../services/board/board.service';
 import { SpeechbarService } from '../services/speechbar/speechbar.service';
 import { ObfButtonComponent } from '../obf-button/obf-button.component';
 import { MatRippleModule, MatCardModule } from '@angular/material';
