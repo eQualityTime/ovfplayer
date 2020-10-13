@@ -40,6 +40,8 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 }
 
 .highContrast {
+  padding-right: 1em;
+  padding-left: 1em;
   background-color: white;
   color: black;
 }
