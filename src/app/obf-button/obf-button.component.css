@@ -39,6 +39,11 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
   text-align: center;
 }
 
+.highContrast {
+  background-color: white;
+  color: black;
+}
+
 .ripple {
   position: relative;
   overflow: hidden;

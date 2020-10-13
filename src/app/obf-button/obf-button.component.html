@@ -22,6 +22,6 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
     <img class="buttonImage" [src]="getDataURL()"/>
   </div>
   <div class="buttonLabel">
-    {{butt.label}}
+    <span [class.highContrast]="appearanceConfig.highContrastText">{{butt.label}}</span>
   </div>
 </div>
