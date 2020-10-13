@@ -52,6 +52,7 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
   padding-top: 20%;
   background: var(--button-image) no-repeat 50% 35%;
   background-size: auto 25%;
+  line-height: normal;
 }
 
 .scanHighlight {
