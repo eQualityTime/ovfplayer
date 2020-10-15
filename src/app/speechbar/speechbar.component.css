@@ -33,6 +33,7 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
   min-height: 33%;
   max-width: 20%;
   min-width: 10%;
+  margin-right: 5px;
 }
 
 .speechbarText {
