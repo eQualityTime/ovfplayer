@@ -40,7 +40,8 @@ describe('ButtonPageComponent', () => {
         speakOnTrigger: false
       },
       appearanceConfig: {
-        borderThickness: 2
+        borderThickness: 2,
+        highContrastText: false
       },
       scanningConfig: {
         enabled: false,
@@ -206,7 +207,8 @@ describe('ButtonPageComponent - speak on trigger', () => {
         speakOnTrigger: true
       },
       appearanceConfig: {
-        borderThickness: 2
+        borderThickness: 2,
+        highContrastText: false
       },
       scanningConfig: {
         enabled: false,

@@ -84,7 +84,8 @@ describe('ConfigPageComponent', () => {
         time: 0
       },
       appearanceConfig: {
-        borderThickness: 2
+        borderThickness: 2,
+        highContrastText: false
       },
       buttonBehaviourConfig: {
         speakOnTrigger: false,

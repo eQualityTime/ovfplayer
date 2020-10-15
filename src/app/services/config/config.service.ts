@@ -31,6 +31,7 @@ export interface ScanningConfig {
 
 export interface AppearanceConfig {
   borderThickness: number;
+  highContrastText: boolean;
 }
 
 export enum InteractionEventType {
@@ -68,7 +69,8 @@ export class ConfigService {
     time: 1000,
   };
   @LocalStorage() _appearanceConfig: AppearanceConfig = {
-    borderThickness: 2
+    borderThickness: 2,
+    highContrastText: false
   };
   @LocalStorage() _buttonBehaviourConfig: ButtonBehaviourConfig = {
     speakOnTrigger: false,
