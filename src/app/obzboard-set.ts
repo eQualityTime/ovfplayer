@@ -128,7 +128,7 @@ export class OBZBoardSet implements ImageResolver, SoundResolver {
             // remove data as we don't need to cache it too
             sound.data = null;
           } else if (sound.url) {
-            // load url into blob
+            // load url into base64 string
             console.log(`Loading sound ${sound.url}`);
             observables.push(httpClient.get(sound.url, { responseType: 'blob' }).pipe(
               mergeMap((blob: Blob): Observable<Event> => {
