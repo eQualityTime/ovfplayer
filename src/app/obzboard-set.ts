@@ -28,6 +28,10 @@ export class OBZBoardSet implements ImageResolver, SoundResolver {
 
   rootBoardKey: string;
 
+  private static progressObservable(message: string, progress: ProgressService): Observable<boolean> {
+    return of(true).pipe(tap(() => progress.progress(ProgressService.message(message))));
+  }
+
   public getBoard(boardKey: string): OBFBoard {
     return this.boards.get(boardKey);
   }
@@ -66,16 +70,12 @@ export class OBZBoardSet implements ImageResolver, SoundResolver {
     );
   }
 
-  private progressObservable(message: string, progress: ProgressService): Observable<boolean> {
-    return of(true).pipe(tap(() => progress.progress(ProgressService.message(message))));
-  }
-
   private blobifyImages(httpClient: HttpClient, progress: ProgressService): Observable<boolean> {
 
     const observables = [];
+    observables.push(OBZBoardSet.progressObservable('Pre-caching images.', progress));
 
     this.boards.forEach((board: OBFBoard) => {
-      observables.push(this.progressObservable('Pre-caching images.', progress));
       board.images.forEach((image: Image) => {
         // if image already has a path, then don't worry
         if (!image.path) {
@@ -111,9 +111,9 @@ export class OBZBoardSet implements ImageResolver, SoundResolver {
   private blobifySounds(httpClient: HttpClient, progress: ProgressService): Observable<boolean> {
 
     const observables = [];
+    observables.push(OBZBoardSet.progressObservable('Pre-caching sounds.', progress));
 
     this.boards.forEach((board: OBFBoard) => {
-      observables.push(this.progressObservable('Pre-caching sounds.', progress));
       board.sounds.forEach((sound: Sound) => {
         // if sound already has a path, then don't worry
         if (!sound.path) {
