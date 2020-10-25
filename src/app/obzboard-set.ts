@@ -12,12 +12,12 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: */
-import { OBFBoard } from './obfboard';
+import { OBFBoard, Image, Sound } from './obfboard';
 import { ImageResolver } from './image-resolver';
 import { SoundResolver } from './sound-resolver';
 import { HttpClient } from '@angular/common/http';
-import { tap, map } from 'rxjs/operators';
-import { Observable, forkJoin, of } from 'rxjs';
+import { tap, map, mergeMap, first } from 'rxjs/operators';
+import { Observable, forkJoin, of, fromEvent } from 'rxjs';
 import { ProgressService } from './services/progress/progress.service';
 
 export class OBZBoardSet implements ImageResolver, SoundResolver {
@@ -61,20 +61,22 @@ export class OBZBoardSet implements ImageResolver, SoundResolver {
     // TODO: error handling might be nice...
 
     // go through all url & data images & sounds and blobify into maps
-    progress.progress(ProgressService.message('Pre-caching images'));
-    return this.blobifyImages(httpClient).pipe(
-      map(imageResult => this)
+    return forkJoin(this.blobifyImages(httpClient, progress), this.blobifySounds(httpClient, progress)).pipe(
+      map(result => this)
     );
-
-    // TODO: sounds
   }
 
-  private blobifyImages(httpClient: HttpClient): Observable<boolean> {
+  private progressObservable(message: string, progress: ProgressService): Observable<boolean> {
+    return of(true).pipe(tap(() => progress.progress(ProgressService.message(message))));
+  }
+
+  private blobifyImages(httpClient: HttpClient, progress: ProgressService): Observable<boolean> {
 
     const observables = [];
 
-    this.boards.forEach(board => {
-      board.images.forEach(image => {
+    this.boards.forEach((board: OBFBoard) => {
+      observables.push(this.progressObservable('Pre-caching images.', progress));
+      board.images.forEach((image: Image) => {
         // if image already has a path, then don't worry
         if (!image.path) {
           // try data first
@@ -97,6 +99,53 @@ export class OBZBoardSet implements ImageResolver, SoundResolver {
                 image.path = key;
                 image.url = null;
               })
+            ));
+          }
+        }
+      });
+    });
+
+    return observables.length > 0 ? forkJoin(...observables) : of(true);
+  }
+
+  private blobifySounds(httpClient: HttpClient, progress: ProgressService): Observable<boolean> {
+
+    const observables = [];
+
+    this.boards.forEach((board: OBFBoard) => {
+      observables.push(this.progressObservable('Pre-caching sounds.', progress));
+      board.sounds.forEach((sound: Sound) => {
+        // if sound already has a path, then don't worry
+        if (!sound.path) {
+          // try data first
+          if (sound.data && sound.contentType) {
+            const key = `data:${sound.id}`;
+            // TODO: we could use the content type from here that we're stripping off
+            const data = sound.data.substr(sound.data.indexOf(',') + 1);
+            this.setSound(key, data);
+            // set path to key so render code will look up blob in sounds
+            sound.path = key;
+            // remove data as we don't need to cache it too
+            sound.data = null;
+          } else if (sound.url) {
+            // load url into blob
+            console.log(`Loading sound ${sound.url}`);
+            observables.push(httpClient.get(sound.url, { responseType: 'blob' }).pipe(
+              mergeMap((blob: Blob): Observable<Event> => {
+                const reader = new FileReader();
+                const obs = fromEvent(reader, 'load');
+                reader.readAsDataURL(blob);
+                return obs;
+              }),
+              first(),
+              tap((ev: Event) => {
+                const textResult = (ev.target as FileReader).result as string;
+                const data = textResult.substr(textResult.indexOf(',') + 1);
+                const key = `url:${sound.id}`;
+                this.setSound(key, data);
+                sound.path = key;
+                sound.url = null;
+              }),
             ));
           }
         }
