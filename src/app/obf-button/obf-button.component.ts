@@ -46,8 +46,13 @@ export class ObfButtonComponent implements OnInit, OnDestroy {
   }
 
   getDataURL() {
-    this.url = URL.createObjectURL(this.butt.getImage().getDataBlob());
-    return this.domSanit.bypassSecurityTrustUrl(this.url);
+    try {
+      this.url = URL.createObjectURL(this.butt.getImage().getDataBlob());
+      return this.domSanit.bypassSecurityTrustUrl(this.url);
+    } catch (e) {
+      // TODO: poke global error handler to add error to buffer
+      return '';
+    }
   }
 
   ngOnDestroy() {
