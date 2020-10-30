@@ -59,7 +59,6 @@ export class OBZBoardSet implements ImageResolver, SoundResolver {
   }
 
   public blobify(httpClient: HttpClient, progress: ProgressService): Observable<OBZBoardSet> {
-
     // TODO: go through boards and load other boards from board actions (until there are no more new ones!)
 
     // TODO: error handling might be nice...
