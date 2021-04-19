@@ -50,4 +50,5 @@ export class ErrorCodes {
   static IMAGE_NOT_THERE     = 12;
   static OBF_VALIDATION      = 13;
   static INVALID_ROOT        = 14;
+  static NOT_A_BLOB          = 15;
 }

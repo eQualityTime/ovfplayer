@@ -22,7 +22,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('OBZBoardSet', () => {
 
-  const testBoard = new OBFBoard().deserialize({
+  const testBoard = () => new OBFBoard().deserialize({
     format: 'board_format',
     id: 5,
     locale: 'en_GB',
@@ -78,7 +78,7 @@ describe('OBZBoardSet', () => {
 
       const boardSet = new OBZBoardSet();
       boardSet.rootBoardKey = 'root';
-      boardSet.setBoard('root', testBoard);
+      boardSet.setBoard('root', testBoard());
 
       boardSet.blobify(httpClient, progress).subscribe({
         next(value) {
@@ -92,6 +92,55 @@ describe('OBZBoardSet', () => {
           expect(path).toBe('url:1');
           const data = value.getImageData(path);
           expect(data).toBe(dataBlob);
+          done();
+        },
+      });
+    })();
+  });
+
+  it('should blobify sounds', (done) => {
+    inject([HttpClient, ProgressService], (httpClient: HttpClient, progress: ProgressService) => {
+
+      const rawData = 'hello';
+      const dataBlob = new Blob([rawData]);
+      spyOn(httpClient, 'get').and.returnValue(of(dataBlob));
+
+      const boardSet = new OBZBoardSet();
+      boardSet.rootBoardKey = 'root';
+      boardSet.setBoard('root', testBoard());
+
+      boardSet.blobify(httpClient, progress).subscribe({
+        next(value) {
+          expect(value).toBe(boardSet);
+          const board = value.getBoard('root');
+          expect(board).toBeTruthy();
+          expect(board.sounds.length).toBe(1);
+          const sound = board.sounds[0];
+          expect(sound.url).toBeNull();
+          const path = sound.path;
+          expect(path).toBe('url:1');
+          const data = value.getSoundData(path);
+          expect(data).toBe(rawData);
+          done();
+        },
+      });
+    })();
+  });
+
+  it('should error if blob is not sound', (done) => {
+    inject([HttpClient, ProgressService], (httpClient: HttpClient, progress: ProgressService) => {
+
+      const rawData = 'hello';
+      spyOn(httpClient, 'get').and.returnValue(of(rawData));
+
+      const boardSet = new OBZBoardSet();
+      boardSet.rootBoardKey = 'root';
+      boardSet.setBoard('root', testBoard());
+
+      boardSet.blobify(httpClient, progress).subscribe({
+        next(value) {
+        },
+        error(err) {
           done();
         },
       });
