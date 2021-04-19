@@ -16,7 +16,7 @@ import { OBFBoard, Image, Sound } from './obfboard';
 import { ImageResolver } from './image-resolver';
 import { SoundResolver } from './sound-resolver';
 import { HttpClient } from '@angular/common/http';
-import { tap, map, mergeMap, first, delay } from 'rxjs/operators';
+import { tap, map, mergeMap, first } from 'rxjs/operators';
 import { Observable, forkJoin, of } from 'rxjs';
 import { ProgressService } from './services/progress/progress.service';
 import { OpenVoiceFactoryError, ErrorCodes } from './errors';
