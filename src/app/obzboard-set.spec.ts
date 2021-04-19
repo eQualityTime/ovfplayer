@@ -101,8 +101,7 @@ describe('OBZBoardSet', () => {
   it('should blobify sounds', (done) => {
     inject([HttpClient, ProgressService], (httpClient: HttpClient, progress: ProgressService) => {
 
-      const rawData = 'hello';
-      const dataBlob = new Blob([rawData]);
+      const dataBlob = new Blob(['hello']);
       spyOn(httpClient, 'get').and.returnValue(of(dataBlob));
 
       const boardSet = new OBZBoardSet();
@@ -120,7 +119,7 @@ describe('OBZBoardSet', () => {
           const path = sound.path;
           expect(path).toBe('url:1');
           const data = value.getSoundData(path);
-          expect(data).toBe(rawData);
+          expect(data).toBe('aGVsbG8=');  // base64 encoded 'hello'
           done();
         },
       });

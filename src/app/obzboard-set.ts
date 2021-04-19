@@ -35,7 +35,7 @@ const readFile = (blob: Blob): Observable<string> => Observable.create(obs => {
   reader.onload = () => obs.next(reader.result);
   reader.onloadend = () => obs.complete();
 
-  return reader.readAsText(blob);
+  return reader.readAsDataURL(blob);
 });
 
 export class OBZBoardSet implements ImageResolver, SoundResolver {
