@@ -122,12 +122,12 @@ export class OBZBoardSet implements ImageResolver, SoundResolver {
       });
     });
 
-    return observables.length > 0 ? forkJoin(...observables) : of(true);
+    return observables.length > 0 ? forkJoin(observables).pipe(map(() => true)) : of(true);
   }
 
   private blobifySounds(httpClient: HttpClient, progress: ProgressService): Observable<boolean> {
 
-    const observables = [];
+    const observables: Observable<any>[] = [];
     observables.push(OBZBoardSet.progressObservable('Pre-caching sounds.', progress));
 
     this.boards.forEach((board: OBFBoard) => {
@@ -165,7 +165,7 @@ export class OBZBoardSet implements ImageResolver, SoundResolver {
       });
     });
 
-    return observables.length > 0 ? forkJoin(...observables) : of(true);
+    return observables.length > 0 ? forkJoin(observables).pipe(map(() => true)) : of(true);
   }
 
   private base64ToBlob(data: string, type: string): Blob {
