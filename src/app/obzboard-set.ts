@@ -17,8 +17,26 @@ import { ImageResolver } from './image-resolver';
 import { SoundResolver } from './sound-resolver';
 import { HttpClient } from '@angular/common/http';
 import { tap, map, mergeMap, first } from 'rxjs/operators';
-import { Observable, forkJoin, of, fromEvent } from 'rxjs';
+import { Observable, forkJoin, of } from 'rxjs';
 import { ProgressService } from './services/progress/progress.service';
+import { OpenVoiceFactoryError, ErrorCodes } from './errors';
+
+/* Read file util to turn event handling into observable. */
+const readFile = (blob: Blob): Observable<string> => Observable.create(obs => {
+  if (!(blob instanceof Blob)) {
+    obs.error(new OpenVoiceFactoryError(ErrorCodes.NOT_A_BLOB, 'Attempt to read a blob that was not a blob.'));
+    return;
+  }
+
+  const reader = new FileReader();
+
+  reader.onerror = err => obs.error(err);
+  reader.onabort = err => obs.error(err);
+  reader.onload = () => obs.next(reader.result);
+  reader.onloadend = () => obs.complete();
+
+  return reader.readAsDataURL(blob);
+});
 
 export class OBZBoardSet implements ImageResolver, SoundResolver {
 
@@ -104,12 +122,12 @@ export class OBZBoardSet implements ImageResolver, SoundResolver {
       });
     });
 
-    return observables.length > 0 ? forkJoin(...observables) : of(true);
+    return observables.length > 0 ? forkJoin(observables).pipe(map(() => true)) : of(true);
   }
 
   private blobifySounds(httpClient: HttpClient, progress: ProgressService): Observable<boolean> {
 
-    const observables = [];
+    const observables: Observable<any>[] = [];
     observables.push(OBZBoardSet.progressObservable('Pre-caching sounds.', progress));
 
     this.boards.forEach((board: OBFBoard) => {
@@ -130,16 +148,12 @@ export class OBZBoardSet implements ImageResolver, SoundResolver {
             // load url into base64 string
             console.log(`Loading sound ${sound.url}`);
             observables.push(httpClient.get(sound.url, { responseType: 'blob' }).pipe(
-              mergeMap((blob: Blob): Observable<Event> => {
-                const reader = new FileReader();
-                const obs = fromEvent(reader, 'load');
-                reader.readAsDataURL(blob);
-                return obs;
+              mergeMap((blob: Blob): Observable<string> => {
+                return readFile(blob);
               }),
               first(),
-              tap((ev: Event) => {
-                const textResult = (ev.target as FileReader).result as string;
-                const data = textResult.substr(textResult.indexOf(',') + 1);
+              tap((result: string) => {
+                const data = result.substr(result.indexOf(',') + 1);
                 const key = `url:${sound.id}`;
                 this.setSound(key, data);
                 sound.path = key;
@@ -151,7 +165,7 @@ export class OBZBoardSet implements ImageResolver, SoundResolver {
       });
     });
 
-    return observables.length > 0 ? forkJoin(...observables) : of(true);
+    return observables.length > 0 ? forkJoin(observables).pipe(map(() => true)) : of(true);
   }
 
   private base64ToBlob(data: string, type: string): Blob {
