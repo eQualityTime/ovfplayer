@@ -17,7 +17,7 @@ jobs:
     displayName: 'Install Node.js'
 
   - script: |
-      npm install -g @angular/cli
+      npm install -g @angular/cli@11.2.12
       npm install
     displayName: 'npm install'
 
@@ -58,7 +58,7 @@ jobs:
     displayName: 'Install Node.js'
 
   - script: |
-      npm install -g @angular/cli
+      npm install -g @angular/cli@11.2.12
       npm install -g workbox-cli@3.6.3
       npm install
       npm i angular-cli-ghpages@0.5.3 --save-dev
@@ -98,7 +98,7 @@ jobs:
     displayName: 'Install Node.js'
 
   - script: |
-      npm install -g @angular/cli
+      npm install -g @angular/cli@11.2.12
       npm install -g workbox-cli@3.6.3
       npm install
       npm i angular-cli-ghpages@0.5.3 --save-dev
