@@ -1,5 +1,5 @@
 /* ::START::LICENCE::
-Copyright eQualityTime ©2018
+Copyright eQualityTime ©2018, ©2019, ©2020, ©2021
 This file is part of OVFPlayer.
 OVFPlayer is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -15,9 +15,9 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ObfButtonComponent } from './obf-button.component';
-import { SafePipe } from '../safe.pipe';
 import { Button, OBFBoard } from '../obfboard';
 import { MatRippleModule } from '@angular/material';
+import { InteractionEventHandlerDirective } from '../interaction-event-handler.directive';
 
 describe('ObfButtonComponent', () => {
   let component: ObfButtonComponent;
@@ -41,7 +41,7 @@ describe('ObfButtonComponent', () => {
 
     TestBed.configureTestingModule({
       imports: [ MatRippleModule ],
-      declarations: [ ObfButtonComponent, SafePipe ]
+      declarations: [ ObfButtonComponent, InteractionEventHandlerDirective ]
     })
     .compileComponents();
   }));

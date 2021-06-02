@@ -1,5 +1,5 @@
 /* ::START::LICENCE::
-Copyright eQualityTime ©2018
+Copyright eQualityTime ©2018, ©2019, ©2020, ©2021
 This file is part of OVFPlayer.
 OVFPlayer is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -15,13 +15,13 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SpeechbarComponent } from './speechbar.component';
-import { ConfigService } from '../config.service';
-import { BoardService } from '../board.service';
-import { SpeechbarService } from '../speechbar.service';
+import { ConfigService } from '../services/config/config.service';
+import { BoardService } from '../services/board/board.service';
+import { SpeechbarService } from '../services/speechbar/speechbar.service';
 import { ObfButtonComponent } from '../obf-button/obf-button.component';
-import { SafePipe } from '../safe.pipe';
 import { MatRippleModule, MatCardModule } from '@angular/material';
 import { Observable } from 'rxjs';
+import { InteractionEventHandlerDirective } from '../interaction-event-handler.directive';
 
 describe('SpeechbarComponent', () => {
   let component: SpeechbarComponent;
@@ -36,7 +36,8 @@ describe('SpeechbarComponent', () => {
         showSpeakButton: false,
         showHomeButton: false,
         showBackspaceButton: false,
-        showClearButton: false
+        showClearButton: false,
+        showBackButton: false
       },
       scanningConfig: {
         enabled: false,
@@ -50,7 +51,7 @@ describe('SpeechbarComponent', () => {
     };
 
     TestBed.configureTestingModule({
-      declarations: [ SpeechbarComponent, ObfButtonComponent, SafePipe ],
+      declarations: [ SpeechbarComponent, ObfButtonComponent, InteractionEventHandlerDirective ],
       providers: [
         {provide: ConfigService, useValue: configServiceStub},
         {provide: BoardService, useValue: boardServiceStub},

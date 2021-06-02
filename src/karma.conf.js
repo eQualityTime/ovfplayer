@@ -19,15 +19,19 @@ module.exports = function (config) {
     },
     coverageIstanbulReporter: {
       dir: require('path').join(__dirname, '../coverage'),
-      reports: ['html', 'lcovonly'],
-      fixWebpackSourcePaths: true
+      reports: ['html', 'lcovonly', 'cobertura'],
+      fixWebpackSourcePaths: true,
+      thresholds: {
+        statements: 80,
+        lines: 80,
+        branches: 70,
+        functions: 70
+      }
     },
     preprocessors: {
       '../test/fixtures/obz/*.obz': ['obz']
     },
-    files: [
-      '../test/fixtures/obz/*.obz'
-    ],
+    files: ['../test/fixtures/obz/*.obz'],
     reporters: ['progress', 'kjhtml', 'junit'],
     junitReporter: {
       outputDir: '../test-results',

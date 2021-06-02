@@ -1,5 +1,5 @@
 /* ::START::LICENCE::
-Copyright eQualityTime ©2018
+Copyright eQualityTime ©2018, ©2019, ©2020, ©2021
 This file is part of OVFPlayer.
 OVFPlayer is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -17,7 +17,8 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  context: 'ovfplayer'
 };
 
 /*

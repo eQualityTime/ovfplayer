@@ -1,5 +1,5 @@
 /* ::START::LICENCE::
-Copyright eQualityTime ©2018
+Copyright eQualityTime ©2018, ©2019, ©2020, ©2021
 This file is part of OVFPlayer.
 OVFPlayer is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
   padding: 20px;
 }
 
-.formInputUrl {
+.formInputUrl, .formInputSelection {
   width: 100%;
 }
 
@@ -52,4 +52,18 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 .clickable, i {
   position: relative;
   top: 6px;
+}
+
+.borderExample {
+  border: solid black;
+  width: fit-content;
+  display: inline-block;
+}
+
+.invalidTab {
+  color: red;
+}
+
+mat-radio-button {
+  padding: 25px;
 }

@@ -1,5 +1,5 @@
 /* ::START::LICENCE::
-Copyright eQualityTime ©2018
+Copyright eQualityTime ©2018, ©2019, ©2020, ©2021
 This file is part of OVFPlayer.
 OVFPlayer is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -12,6 +12,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: */
+import 'hammerjs';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule, ErrorHandler } from '@angular/core';
@@ -20,7 +21,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { LayoutModule } from '@angular/cdk/layout';
 
 import { MatMenuModule, MatIconModule, MatButtonModule, MatInputModule, MatRippleModule, MatGridListModule, MatCardModule,
-  MatFormFieldModule, MatCheckboxModule, MatSnackBarModule, MatTabsModule } from '@angular/material';
+  MatFormFieldModule, MatCheckboxModule, MatSnackBarModule, MatTabsModule, MatSliderModule, MatRadioModule,
+  MatSelectModule } from '@angular/material';
 
 import { WebStorageModule } from 'ngx-store';
 
@@ -31,10 +33,11 @@ import { ConfigPageComponent } from './config-page/config-page.component';
 import { MainPageComponent } from './main-page/main-page.component';
 import { ObfButtonComponent } from './obf-button/obf-button.component';
 import { SpeechbarComponent } from './speechbar/speechbar.component';
-import { SafePipe } from './safe.pipe';
-import { GlobalErrorHandlerService } from './global-error-handler.service';
+import { GlobalErrorHandlerService } from './services/error/global-error-handler.service';
 import { ErrorPageComponent } from './error-page/error-page.component';
 import { OBFPageComponent } from './obfpage/obfpage.component';
+import { ProgressComponent } from './progress/progress.component';
+import { InteractionEventHandlerDirective } from './interaction-event-handler.directive';
 
 @NgModule({
   declarations: [
@@ -43,10 +46,11 @@ import { OBFPageComponent } from './obfpage/obfpage.component';
     SpeechbarComponent,
     ConfigPageComponent,
     MainPageComponent,
-    SafePipe,
     ObfButtonComponent,
     ErrorPageComponent,
-    OBFPageComponent
+    OBFPageComponent,
+    ProgressComponent,
+    InteractionEventHandlerDirective
   ],
   imports: [
     BrowserModule,
@@ -66,7 +70,10 @@ import { OBFPageComponent } from './obfpage/obfpage.component';
     LayoutModule,
     AppRoutingModule,
     WebStorageModule,
-    MatRippleModule
+    MatRippleModule,
+    MatSliderModule,
+    MatRadioModule,
+    MatSelectModule
   ],
   providers: [
     {

@@ -1,6 +1,10 @@
 {
     "extends": "../tslint.json",
     "rules": {
+        "no-duplicate-variable": true,
+        "no-unused-variable": [
+          true
+        ],
         "directive-selector": [
             true,
             "attribute",

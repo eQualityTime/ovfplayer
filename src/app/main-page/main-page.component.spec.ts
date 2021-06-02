@@ -1,5 +1,5 @@
 /* ::START::LICENCE::
-Copyright eQualityTime ©2018
+Copyright eQualityTime ©2018, ©2019, ©2020, ©2021
 This file is part of OVFPlayer.
 OVFPlayer is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -19,8 +19,9 @@ import { MatCardModule, MatRippleModule } from '@angular/material';
 import { MainPageComponent } from './main-page.component';
 import { SpeechbarComponent } from '../speechbar/speechbar.component';
 import { ButtonPageComponent } from '../button-page/button-page.component';
-import { SafePipe } from '../safe.pipe';
 import { ObfButtonComponent } from '../obf-button/obf-button.component';
+import { ProgressComponent } from '../progress/progress.component';
+import { InteractionEventHandlerDirective } from '../interaction-event-handler.directive';
 
 describe('MainPageComponent', () => {
   let component: MainPageComponent;
@@ -32,8 +33,9 @@ describe('MainPageComponent', () => {
         MainPageComponent,
         SpeechbarComponent,
         ButtonPageComponent,
-        SafePipe,
-        ObfButtonComponent
+        ObfButtonComponent,
+        ProgressComponent,
+        InteractionEventHandlerDirective
       ],
       imports: [ MatCardModule, HttpClientTestingModule, MatRippleModule ]
     })

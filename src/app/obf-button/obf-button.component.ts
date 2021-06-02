@@ -1,5 +1,5 @@
 /* ::START::LICENCE::
-Copyright eQualityTime ©2018
+Copyright eQualityTime ©2018, ©2019, ©2020, ©2021
 This file is part of OVFPlayer.
 OVFPlayer is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -12,23 +12,63 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: */
-import { Component, OnInit, Input } from '@angular/core';
-import { Button, Image } from '../obfboard';
+import { Component, OnInit, Input, OnDestroy, HostBinding } from '@angular/core';
+import { Button } from '../obfboard';
+import { DomSanitizer } from '@angular/platform-browser';
+import { AppearanceConfig, ConfigService } from '../services/config/config.service';
 
 @Component({
   selector: 'app-obf-button',
   templateUrl: './obf-button.component.html',
   styleUrls: ['./obf-button.component.css']
 })
-export class ObfButtonComponent implements OnInit {
+export class ObfButtonComponent implements OnInit, OnDestroy {
 
-  @Input()butt: Button;
-  @Input()image: Image;
-  @Input()clickHandler: (Button) => void;
+  @Input()
+  butt: Button;
 
-  constructor() { }
+  @Input()
+  clickHandler: (Button) => void;
 
-  ngOnInit() {
+  appearanceConfig: AppearanceConfig;
+
+  private url: string;
+
+  constructor(private domSanit: DomSanitizer, private config: ConfigService) {}
+
+  @HostBinding('attr.style')
+  public get valueAsStyle(): any {
+    return this.domSanit.bypassSecurityTrustStyle(`--borderWidth: ${this.appearanceConfig.borderThickness + 'px'}`);
   }
 
+  ngOnInit() {
+    this.appearanceConfig = this.config.appearanceConfig;
+  }
+
+  getDataURL() {
+    try {
+      this.url = URL.createObjectURL(this.butt.getImage().getDataBlob());
+      return this.domSanit.bypassSecurityTrustUrl(this.url);
+    } catch (e) {
+      // TODO: poke global error handler to add error to buffer
+      return '';
+    }
+  }
+
+  ngOnDestroy() {
+    this.unload();
+  }
+
+  private unload() {
+    if (this.url) {
+      URL.revokeObjectURL(this.url);
+      this.url = undefined;
+    }
+  }
+
+  handleClick() {
+    if (this.clickHandler) {
+      this.clickHandler(this.butt);
+    }
+  }
 }

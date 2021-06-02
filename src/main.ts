@@ -1,5 +1,5 @@
 /* ::START::LICENCE::
-Copyright eQualityTime ©2018
+Copyright eQualityTime ©2018, ©2019, ©2020, ©2021
 This file is part of OVFPlayer.
 OVFPlayer is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -22,5 +22,23 @@ if (environment.production) {
   enableProdMode();
 }
 
-platformBrowserDynamic().bootstrapModule(AppModule)
-  .catch(err => console.log(err));
+platformBrowserDynamic()
+  .bootstrapModule(AppModule)
+  .then(() => {
+    registerServiceWorker('service-worker');
+  });
+
+function registerServiceWorker(swName: string) {
+  if (environment.production && 'serviceWorker' in navigator) {
+    navigator.serviceWorker
+      .register(`/${environment.context}/${swName}.js`)
+      .then(reg => {
+        console.log('Successful service worker registration', reg);
+      })
+      .catch(err =>
+        console.error('Service worker registration failed', err)
+      );
+  } else if (environment.production) {
+    console.error('Service Worker API is not supported in current browser');
+  }
+}

@@ -1,5 +1,5 @@
 <!-- ::START::LICENCE::
-Copyright eQualityTime ©2018
+Copyright eQualityTime ©2018, ©2019, ©2020, ©2021
 This file is part of OVFPlayer.
 OVFPlayer is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -12,20 +12,16 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: -->
-<div class="buttonDiv"
+<div class="buttonDiv" [appInteractionEventHandler]="handleClick.bind(this)"
      [class.pageTurn]="clickHandler && butt.loadBoardAction"
      [class.ripple]="clickHandler"
      [style.background-color]="butt.backgroundColor"
      [style.border-color]="butt.borderColor"
-     mat-ripple [matRippleDisabled]="!clickHandler"
-     (click)="clickHandler && clickHandler(butt)">
+     mat-ripple [matRippleDisabled]="!clickHandler">
   <div class="buttonImageDiv" *ngIf="butt.getImage() as image">
-    <div *ngIf="image.isSVG(); else normalImage" [innerHTML]="image.getSource() | safe">SVG Image</div>
-    <ng-template #normalImage>
-      <img class="buttonImage" [src]="image.getSource()" *ngIf="image.getSource()" />
-    </ng-template>
+    <img class="buttonImage" [src]="getDataURL()"/>
   </div>
   <div class="buttonLabel">
-    {{butt.label}}
+    <span [class.highContrast]="appearanceConfig.highContrastText">{{butt.label}}</span>
   </div>
 </div>

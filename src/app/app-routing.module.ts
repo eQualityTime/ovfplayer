@@ -1,5 +1,5 @@
 /* ::START::LICENCE::
-Copyright eQualityTime ©2018
+Copyright eQualityTime ©2018, ©2019, ©2020, ©2021
 This file is part of OVFPlayer.
 OVFPlayer is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -12,7 +12,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: */
-import { ConfigGuardService } from './config-guard.service';
+import { ConfigGuardService } from './services/config/config-guard.service';
 import { ConfigPageComponent } from './config-page/config-page.component';
 import { MainPageComponent } from './main-page/main-page.component';
 import { NgModule } from '@angular/core';

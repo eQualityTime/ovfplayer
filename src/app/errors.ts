@@ -1,5 +1,5 @@
 /* ::START::LICENCE::
-Copyright eQualityTime ©2018
+Copyright eQualityTime ©2018, ©2019, ©2020, ©2021
 This file is part of OVFPlayer.
 OVFPlayer is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -14,9 +14,9 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: */
 export class OpenVoiceFactoryError extends Error {
 
-  private   cause:     Error;
+  public    cause:     Error;
   protected clz:       string;
-  private   errorCode: number;
+  public    errorCode: number;
 
   constructor(errorCode: number, message?: string, cause?: Error) {
     super(message);
@@ -49,4 +49,6 @@ export class ErrorCodes {
   static SOUND_NOT_THERE     = 11;
   static IMAGE_NOT_THERE     = 12;
   static OBF_VALIDATION      = 13;
+  static INVALID_ROOT        = 14;
+  static NOT_A_BLOB          = 15;
 }

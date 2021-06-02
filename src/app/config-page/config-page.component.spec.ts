@@ -1,5 +1,5 @@
 /* ::START::LICENCE::
-Copyright eQualityTime ©2018
+Copyright eQualityTime ©2018, ©2019, ©2020, ©2021
 This file is part of OVFPlayer.
 OVFPlayer is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -16,13 +16,25 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 
 import { ConfigPageComponent } from './config-page.component';
-import { ConfigService } from '../config.service';
-import { MatFormFieldModule, MatCardModule, MatCheckboxModule, MatInputModule, MatSnackBar, MatTabsModule } from '@angular/material';
+import { ConfigService, InteractionEventType } from '../services/config/config.service';
+import {
+  MatFormFieldModule,
+  MatCardModule,
+  MatCheckboxModule,
+  MatInputModule,
+  MatSnackBar,
+  MatTabsModule,
+  MatSliderModule,
+  MatIconModule,
+  MatRadioModule,
+  MatSelectModule
+} from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Router, ActivatedRoute, ActivatedRouteSnapshot, UrlSegment, Params, Data, Route, ParamMap } from '@angular/router';
 import { Observable } from 'rxjs';
-import { Type } from '@angular/core';
+import { Type, DebugElement } from '@angular/core';
 import { OBFPageComponent } from '../obfpage/obfpage.component';
+import { By } from '@angular/platform-browser';
 
 // we might not need this, the current tests can all be done with RouterTestingModule.withRoutes([])
 export class MockActivatedRoute implements ActivatedRoute {
@@ -64,11 +76,23 @@ describe('ConfigPageComponent', () => {
         showSpeakButton: false,
         showHomeButton: false,
         showBackspaceButton: false,
-        showClearButton: false
+        showClearButton: false,
+        showBackButton: false
       },
       scanningConfig: {
         enabled: false,
         time: 0
+      },
+      appearanceConfig: {
+        borderThickness: 2,
+        highContrastText: false
+      },
+      buttonBehaviourConfig: {
+        speakOnTrigger: false,
+        triggerEvent: InteractionEventType.click
+      },
+      voiceConfig: {
+        userVoice: undefined
       }
     };
     snackbarStub = {};
@@ -104,7 +128,19 @@ describe('ConfigPageComponent', () => {
         {provide: ActivatedRoute, useValue: mockActivatedRoute},
         {provide: MatSnackBar, useValue: snackbarStub }
       ],
-      imports: [ FormsModule, MatFormFieldModule, MatCardModule, MatCheckboxModule, MatInputModule, BrowserAnimationsModule, MatTabsModule ]
+      imports: [
+        FormsModule,
+        MatFormFieldModule,
+        MatCardModule,
+        MatCheckboxModule,
+        MatInputModule,
+        BrowserAnimationsModule,
+        MatTabsModule,
+        MatSliderModule,
+        MatIconModule,
+        MatRadioModule,
+        MatSelectModule
+      ]
     }).compileComponents();
   }));
 
@@ -112,9 +148,78 @@ describe('ConfigPageComponent', () => {
     fixture = TestBed.createComponent(ConfigPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+    configServiceStub = TestBed.get(ConfigService);
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should not directly reference config service config', () => {
+    fixture.detectChanges();
+    expect(component.displayedButtons).not.toBe(configServiceStub.displayedButtons);
+    expect(component.scanningConfig).not.toBe(configServiceStub.scanningConfig);
+    expect(component.appearanceConfig).not.toBe(configServiceStub.appearanceConfig);
+    expect(component.buttonBehaviourConfig).not.toBe(configServiceStub.buttonBehaviourConfig);
+    expect(component.voiceConfig).not.toBe(configServiceStub.voiceConfig);
+  });
+
+  it('should not save config changes if save is not pressed', done => {
+    fixture.detectChanges();
+    expect(component.displayedButtons).not.toBe(configServiceStub.displayedButtons);
+    const displayTab = fixture.nativeElement.querySelector('div.mat-tab-label span[name="displayedButtons"]');
+    displayTab.click();
+    fixture.detectChanges();
+    fixture.whenStable().then(() => {
+      fixture.detectChanges();
+      const showSpeakButton = fixture.debugElement.query(By.css('mat-checkbox[name="showSpeakButton"] label'));
+      const theDiv = <DebugElement>showSpeakButton.childNodes[0];
+      const theInput = <DebugElement>theDiv.childNodes[0];
+      expect(theInput.attributes['aria-checked']).toBe('false');
+      expect(configServiceStub.displayedButtons.showSpeakButton).toBeFalsy();
+      showSpeakButton.nativeElement.click();
+      fixture.detectChanges();
+      fixture.whenStable().then(() => {
+        // checkbox should now be checked
+        expect(theInput.attributes['aria-checked']).toBe('true');
+        // internal component state should also be true
+        expect(component.displayedButtons.showSpeakButton).toBeTruthy();
+        // but actual config should still be false
+        expect(configServiceStub.displayedButtons.showSpeakButton).toBeFalsy();
+        done();
+      });
+    });
+  });
+
+  it('should save config changes if save is pressed', done => {
+    fixture.detectChanges();
+    expect(component.displayedButtons).not.toBe(configServiceStub.displayedButtons);
+    const displayTab = fixture.nativeElement.querySelector('div.mat-tab-label span[name="displayedButtons"]');
+    displayTab.click();
+    fixture.detectChanges();
+    fixture.whenStable().then(() => {
+      fixture.detectChanges();
+      const showSpeakButton = fixture.debugElement.query(By.css('mat-checkbox[name="showSpeakButton"] label'));
+      const theDiv = <DebugElement>showSpeakButton.childNodes[0];
+      const theInput = <DebugElement>theDiv.childNodes[0];
+      expect(theInput.attributes['aria-checked']).toBe('false');
+      expect(configServiceStub.displayedButtons.showSpeakButton).toBeFalsy();
+      showSpeakButton.nativeElement.click();
+      fixture.detectChanges();
+      fixture.whenStable().then(() => {
+        // checkbox should now be checked
+        expect(theInput.attributes['aria-checked']).toBe('true');
+
+        // call save
+        component.save();
+        fixture.detectChanges();
+
+        // internal component state should also be true
+        expect(component.displayedButtons.showSpeakButton).toBeTruthy();
+        // config should now also be true
+        expect(configServiceStub.displayedButtons.showSpeakButton).toBeTruthy();
+        done();
+      });
+    });
   });
 });
