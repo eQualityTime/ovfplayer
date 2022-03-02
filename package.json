@@ -31,7 +31,7 @@
     "jszip": "^3.1.5",
     "ngx-store": "^2.0.0",
     "rxjs": "^6.0.0",
-    "url-parse": "^1.4.4",
+    "url-parse": "^1.5.9",
     "workbox-core": "^3.6.3",
     "workbox-precaching": "^3.6.3",
     "workbox-sw": "^3.6.3",
