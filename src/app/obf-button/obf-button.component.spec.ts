@@ -16,7 +16,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ObfButtonComponent } from './obf-button.component';
 import { Button, OBFBoard } from '../obfboard';
-import { MatRippleModule } from '@angular/material';
+import { MatRippleModule } from '@angular/material/core';
 import { InteractionEventHandlerDirective } from '../interaction-event-handler.directive';
 
 describe('ObfButtonComponent', () => {

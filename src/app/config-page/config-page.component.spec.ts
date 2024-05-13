@@ -17,18 +17,16 @@ import { FormsModule } from '@angular/forms';
 
 import { ConfigPageComponent } from './config-page.component';
 import { ConfigService, InteractionEventType } from '../services/config/config.service';
-import {
-  MatFormFieldModule,
-  MatCardModule,
-  MatCheckboxModule,
-  MatInputModule,
-  MatSnackBar,
-  MatTabsModule,
-  MatSliderModule,
-  MatIconModule,
-  MatRadioModule,
-  MatSelectModule
-} from '@angular/material';
+import { MatCardModule } from '@angular/material/card';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSliderModule } from '@angular/material/slider';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatTabsModule } from '@angular/material/tabs';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Router, ActivatedRoute, ActivatedRouteSnapshot, UrlSegment, Params, Data, Route, ParamMap } from '@angular/router';
 import { Observable } from 'rxjs';
