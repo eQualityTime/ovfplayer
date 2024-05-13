@@ -14,7 +14,7 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: */
 import { Injectable } from '@angular/core';
 import { LocalStorage } from '@ngx-pwa/local-storage';
-import { OBZBoardSet } from '../../obzboard-set';
+import { OBZBoardSet, SavedOBZBoardSet } from '../../obzboard-set';
 import { Observable } from 'rxjs';
 import { map, first } from 'rxjs/operators';
 import { OBFBoard } from '../../obfboard';
@@ -34,7 +34,7 @@ export class BoardCacheService {
   }
 
   public retrieve(): Observable<OBZBoardSet> {
-    return this.localStorage.getItem(BoardCacheService.BOARD_CACHE_KEY).pipe(map(data => {
+    return this.localStorage.getItem(BoardCacheService.BOARD_CACHE_KEY).pipe(map((data: SavedOBZBoardSet) => {
       if (data) {
         this.log('Successfully loaded board from cache');
 

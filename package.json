@@ -24,7 +24,7 @@
     "@angular/platform-browser": "^7.2.6",
     "@angular/platform-browser-dynamic": "^7.2.6",
     "@angular/router": "^7.2.6",
-    "@ngx-pwa/local-storage": "^6.2.1",
+    "@ngx-pwa/local-storage": "^7.2.6",
     "class-validator": "^0.9.1",
     "core-js": "^2.5.4",
     "hammerjs": "^2.0.8",
