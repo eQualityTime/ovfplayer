@@ -14,7 +14,8 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { MatCardModule, MatRippleModule } from '@angular/material';
+import { MatCardModule } from '@angular/material/card';
+import { MatRippleModule } from '@angular/material/core';
 
 import { MainPageComponent } from './main-page.component';
 import { SpeechbarComponent } from '../speechbar/speechbar.component';

@@ -20,7 +20,7 @@ import { SpeechbarService } from '../services/speechbar/speechbar.service';
 import { of } from 'rxjs';
 import { OBFBoard, Button } from '../obfboard';
 import { ObfButtonComponent } from '../obf-button/obf-button.component';
-import { MatRippleModule } from '@angular/material';
+import { MatRippleModule } from '@angular/material/core';
 import { ProgressComponent } from '../progress/progress.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { InteractionEventHandlerDirective } from '../interaction-event-handler.directive';
