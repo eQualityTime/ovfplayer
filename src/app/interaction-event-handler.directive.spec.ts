@@ -14,7 +14,7 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: */
 import { InteractionEventHandlerDirective } from './interaction-event-handler.directive';
 import { ConfigService, InteractionEventType } from './services/config/config.service';
-import { TestBed, ComponentFixture, async, fakeAsync, tick } from '@angular/core/testing';
+import { TestBed, ComponentFixture, fakeAsync, tick, waitForAsync  } from '@angular/core/testing';
 import { Component } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
@@ -34,7 +34,7 @@ describe('ClickHandlerDirective', () => {
   let fixture: ComponentFixture<TestClickHandlerComponent>;
   let configServiceStub: Partial<ConfigService>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     configServiceStub = {
       buttonBehaviourConfig: {
         speakOnTrigger: false,
