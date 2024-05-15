@@ -34,7 +34,6 @@
     "lodash.merge": "^4.6.2",
     "lodash.set": "^4.3.2",
     "ngx-store": "^3.1.1",
-    "node-sass": "^4.14.1",
     "rxjs": "^6.6.7",
     "tslib": "^1.10.0",
     "url-parse": "^1.4.4",
