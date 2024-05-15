@@ -12,7 +12,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: */
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ObfButtonComponent } from './obf-button.component';
 import { Button, OBFBoard } from '../obfboard';
@@ -24,7 +24,7 @@ describe('ObfButtonComponent', () => {
   let fixture: ComponentFixture<ObfButtonComponent>;
   let buttonStub: Button;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     buttonStub = new Button().deserialize({
       label: 'button'
     }, new OBFBoard().deserialize({

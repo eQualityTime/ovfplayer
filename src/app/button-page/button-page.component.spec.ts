@@ -12,7 +12,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: */
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ButtonPageComponent } from './button-page.component';
 import { BoardService } from '../services/board/board.service';
@@ -33,7 +33,7 @@ describe('ButtonPageComponent', () => {
   let boardService: BoardService;
   let configServiceStub: Partial<ConfigService>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     configServiceStub = {
       buttonBehaviourConfig: {
         triggerEvent: InteractionEventType.click,
@@ -200,7 +200,7 @@ describe('ButtonPageComponent - speak on trigger', () => {
   let boardService: BoardService;
   let configServiceStub: Partial<ConfigService>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     configServiceStub = {
       buttonBehaviourConfig: {
         triggerEvent: InteractionEventType.click,
@@ -264,7 +264,7 @@ describe('ButtonPageComponent - speak on trigger', () => {
     spyOn(boardService, 'navigateToBoard');
     spyOn(boardService, 'navigateToExternalBoard');
     // this is to actually ensure this gets treated as a sound
-    spyOn(board.sounds[0], 'getSource').and.returnValue(true);
+    spyOn(board.sounds[0], 'getSource').and.returnValue("true");
 
     fixture = TestBed.createComponent(ButtonPageComponent);
     component = fixture.componentInstance;

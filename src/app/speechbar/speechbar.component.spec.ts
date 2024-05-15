@@ -12,7 +12,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: */
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { SpeechbarComponent } from './speechbar.component';
 import { ConfigService } from '../services/config/config.service';
@@ -31,7 +31,7 @@ describe('SpeechbarComponent', () => {
   let boardServiceStub: Partial<BoardService>;
   let speechbarServiceStub: Partial<SpeechbarService>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     configServiceStub = {
       displayedButtons: {
         showSpeakButton: false,

@@ -12,12 +12,12 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: */
-import { TestBed, async } from '@angular/core/testing';
+import { TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
 
 describe('AppComponent', () => {
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [
         AppComponent
@@ -27,12 +27,12 @@ describe('AppComponent', () => {
       ],
     }).compileComponents();
   }));
-  it('should create the app', async(() => {
+  it('should create the app', waitForAsync(() => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.debugElement.componentInstance;
     expect(app).toBeTruthy();
   }));
-  it('should put the router outlet in the page', async(() => {
+  it('should put the router outlet in the page', waitForAsync(() => {
     const routerOutlets = document.getElementsByTagName('router-outlet');
     expect(routerOutlets.length).toBe(1);
   }));
