@@ -61,7 +61,7 @@ describe('ButtonPageComponent', () => {
   }));
 
   beforeEach(() => {
-    speechbarService = TestBed.get(SpeechbarService);
+    speechbarService = TestBed.inject(SpeechbarService);
     spyOn(speechbarService, 'clear');
     spyOn(speechbarService, 'appendButton');
     spyOn(speechbarService, 'backspace');
@@ -70,7 +70,7 @@ describe('ButtonPageComponent', () => {
     spyOn(speechbarService, 'addButton');
     spyOn(speechbarService, 'sayButton');
 
-    boardService = TestBed.get(BoardService);
+    boardService = TestBed.inject(BoardService);
     spyOn(boardService, 'getBoard').and.returnValue(of(new OBFBoard().deserialize({
       id: 'test',
       grid: {
@@ -228,7 +228,7 @@ describe('ButtonPageComponent - speak on trigger', () => {
   }));
 
   beforeEach(() => {
-    speechbarService = TestBed.get(SpeechbarService);
+    speechbarService = TestBed.inject(SpeechbarService);
     // these spies are to prevent the methods from being called on the real service
     spyOn(speechbarService, 'clear');
     spyOn(speechbarService, 'appendButton');
@@ -238,7 +238,7 @@ describe('ButtonPageComponent - speak on trigger', () => {
     spyOn(speechbarService, 'addButton');
     spyOn(speechbarService, 'sayButton');
 
-    boardService = TestBed.get(BoardService);
+    boardService = TestBed.inject(BoardService);
     const board = new OBFBoard().deserialize({
       id: 'test',
       grid: {

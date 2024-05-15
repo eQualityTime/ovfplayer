@@ -146,7 +146,7 @@ describe('ConfigPageComponent', () => {
     fixture = TestBed.createComponent(ConfigPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    configServiceStub = TestBed.get(ConfigService);
+    configServiceStub = TestBed.inject(ConfigService);
   });
 
   it('should create', () => {
