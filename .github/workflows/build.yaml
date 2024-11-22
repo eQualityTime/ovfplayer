@@ -31,7 +31,7 @@ jobs:
     - name: npm install
       run: npm ci
     - name: tslint
-      run: npm run ng lint
+      run: npm run lint
     - name: build distribution
       run: npm run build --prod
     - name: execute tests
