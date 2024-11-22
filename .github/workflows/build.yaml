@@ -52,12 +52,12 @@ jobs:
         reporttypes: HtmlInline
       continue-on-error: false
     - name: Upload CoverageReport
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: CoverageReport
         path: coveragereport_${{ github.run_number }}
     - name: Upload CoverageReportFiles
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: CoverageReportFiles
         path: "${{ github.workspace }}/**/results.xml"
