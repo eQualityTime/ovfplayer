@@ -46,7 +46,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: CodeCoverageResults
-        path: coverage/**
+        path: coverage/
 
     - name: Publish test results
       uses: EnricoMi/publish-unit-test-result-action@v2.4.1
@@ -74,3 +74,4 @@ jobs:
       with:
         recreate: true
         path: code-coverage-comment.md
+    
