@@ -79,7 +79,7 @@ jobs:
       uses: QwerMike/xpath-action@v1
       with:
         filename: 'coverage/cobertura-coverage.xml'
-        expression: 'coverage[1]/@line-rate'
+        expression: 'string(coverage[1]/@line-rate)'
     - name: Code Coverage Check
       uses: LouisBrunner/checks-action@v2.0.0
       if: always()
