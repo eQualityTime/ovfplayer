@@ -65,7 +65,7 @@ jobs:
         thresholds: '60 80'
     - name: Write to Coverage to Job Summary
       run: |
-        echo "###Code Coverage Results" > code-coverage-comment.md
+        echo "### Code Coverage Results" > code-coverage-comment.md
         cat code-coverage-results.md >> code-coverage-comment.md
         cat code-coverage-comment.md >> $GITHUB_STEP_SUMMARY
     - name: Add Coverage PR Comment
