@@ -58,6 +58,11 @@ jobs:
       uses: irongut/CodeCoverageSummary@v1.3.0
       with:
         filename: "coverage/cobertura-coverage.xml"
+        badge: true
+        fail_below_min: true
+        format: markdown
+        output: both
+        thresholds: '60 80'
 
     # - name: Generate Coverage Report
     #   uses: danielpalme/ReportGenerator-GitHub-Action@4.8.12
