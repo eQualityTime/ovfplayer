@@ -35,7 +35,7 @@ jobs:
     - name: build distribution
       run: npm run build --prod
     - name: execute tests
-      run: npm run ng test --watch=false --browsers=ChromeHeadlessCI --code-coverage
+      run: npm run ng test -- --watch=false --browsers=ChromeHeadless --code-coverage
       
     - name: Publish test results
       uses: EnricoMi/publish-unit-test-result-action@v2.4.1
