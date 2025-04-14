@@ -1,0 +1,63 @@
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
+
+name: Build and Test
+
+on:
+  push:
+    branches-ignore:
+      - 'gh-pages'
+  pull_request:
+    branches-ignore:
+      - 'gh-pages'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [10.13.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - name: npm install
+      run: npm ci
+    - name: tslint
+      run: npm run lint
+    - name: build distribution
+      run: npm run build --prod
+    - name: execute tests
+      run: npm run ng test --watch=false --browsers ChromeHeadless --code-coverage
+      
+    - name: Publish test results
+      uses: EnricoMi/publish-unit-test-result-action@v2.4.1
+      if: always()
+      with:
+        files: "**./test-results/junit.xml"
+        
+    - name: Generate Coverage Report
+      uses: danielpalme/ReportGenerator-GitHub-Action@4.8.12
+      with:
+        reports: "${{ github.workspace }}/**/*coverage.xml"
+        sourcedirs: "${{ github.workspace }}/src/"
+        targetdir: coveragereport_${{ github.run_number }}
+        reporttypes: HtmlInline
+      continue-on-error: false
+    - name: Upload CoverageReport
+      uses: actions/upload-artifact@v4
+      with:
+        name: CoverageReport
+        path: coveragereport_${{ github.run_number }}
+    - name: Upload CoverageReportFiles
+      uses: actions/upload-artifact@v4
+      with:
+        name: CoverageReportFiles
+        path: "${{ github.workspace }}/**/results.xml"
