@@ -34,15 +34,24 @@ jobs:
       run: npm run lint
     - name: build distribution
       run: npm run build --prod
-    - name: execute tests
+
+    - name: Execute tests
       run: npm run ng test -- --watch=false --browsers=ChromeHeadless --code-coverage
-      
+    - name: Upload test results artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: TestResults
+        path: test-results/junit.xml
     - name: Publish test results
       uses: EnricoMi/publish-unit-test-result-action@v2.4.1
       if: always()
       with:
         files: "test-results/junit.xml"
         
+    - name: Code Coverage Summary Report
+      uses: irongut/CodeCoverageSummary@v1.3.0
+      with:
+        filename: coverage.cobertura.xml
     - name: Generate Coverage Report
       uses: danielpalme/ReportGenerator-GitHub-Action@4.8.12
       with:
@@ -51,7 +60,7 @@ jobs:
         targetdir: coveragereport_${{ github.run_number }}
         reporttypes: HtmlInline
       continue-on-error: false
-    - name: Upload CoverageReport
+    - name: Upload Coverage Report
       uses: actions/upload-artifact@v4
       with:
         name: CoverageReport
