@@ -41,7 +41,7 @@ jobs:
       uses: EnricoMi/publish-unit-test-result-action@v2.4.1
       if: always()
       with:
-        files: "**./test-results/junit.xml"
+        files: "test-results/junit.xml"
         
     - name: Generate Coverage Report
       uses: danielpalme/ReportGenerator-GitHub-Action@4.8.12
