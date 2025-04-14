@@ -85,8 +85,8 @@ jobs:
       with:
         token: ${{ github.token }}
         name: Code Coverage
-        conclusion: ${{ echo steps.coverage_extraction.outputs.result 0.8 | awk '$1 >= $2 {print "success"} $1 < $2 {print "failure"}' }}
+        conclusion: $( ${{ steps.coverage_extraction.outputs.result }} 0.8 | awk '$1 >= $2 {print "success"} $1 < $2 {print "failure"}' )
         output: |
-          {"summary":"Code coverage was ${{ steps.coverage_extraction.outputs.result }}%. Minimum required is 80%."}
+          {"summary":"Code coverage: ${{ steps.coverage_extraction.outputs.result }}\nMinimum coverage required: 0.8"}
         output_text_description_file: code-coverage-comment.md
     
