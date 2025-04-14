@@ -46,7 +46,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: CodeCoverageResults
-        path: coverage/cobertura-coverage.xml
+        path: coverage/**
 
     - name: Publish test results
       uses: EnricoMi/publish-unit-test-result-action@v2.4.1
@@ -68,25 +68,9 @@ jobs:
       if: github.event_name == 'pull_request'
       with:
         recreate: true
+        header: 'Code Coverage'
         path: code-coverage-results.md
     - name: Write to Coverage to Job Summary
-      run: cat code-coverage-results.md >> $GITHUB_STEP_SUMMARY
-
-    # - name: Generate Coverage Report
-    #   uses: danielpalme/ReportGenerator-GitHub-Action@4.8.12
-    #   with:
-    #     reports: "${{ github.workspace }}/**/*coverage.xml"
-    #     sourcedirs: "${{ github.workspace }}/src/"
-    #     targetdir: coveragereport_${{ github.run_number }}
-    #     reporttypes: HtmlInline
-    #   continue-on-error: false
-    # - name: Upload Coverage Report
-    #   uses: actions/upload-artifact@v4
-    #   with:
-    #     name: CoverageReport
-    #     path: coveragereport_${{ github.run_number }}
-    # - name: Upload CoverageReportFiles
-    #   uses: actions/upload-artifact@v4
-    #   with:
-    #     name: CoverageReportFiles
-    #     path: "${{ github.workspace }}/**/results.xml"
+      run: |
+        echo "###Code Coverage Results" >> $GITHUB_STEP_SUMMARY
+        cat code-coverage-results.md >> $GITHUB_STEP_SUMMARY
