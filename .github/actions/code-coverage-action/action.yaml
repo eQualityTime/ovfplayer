@@ -64,7 +64,7 @@ runs:
       shell: bash
       run: |
         status=$( echo ${{ steps.percentage.outputs.percentage }} ${{ inputs.check-minimum }} | awk '$1 >= $2 {print "success"} $1 < $2 {print "failure"}' )
-        echo "status=$coverage" >> $GITHUB_OUTPUT
+        echo "status=$status" >> $GITHUB_OUTPUT
 
     - name: Code Coverage Check
       uses: LouisBrunner/checks-action@v2.0.0
