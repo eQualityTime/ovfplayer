@@ -51,19 +51,20 @@ runs:
       run: |
         coverage=$(xmllint --xpath "string(coverage[1]/@line-rate)" ${{ inputs.coverage-filename }})
         echo "coverage=$(echo $coverage)" >> $GITHUB_OUTPUT
+        echo "coverage=${{ coverage }}" >> $GITHUB_OUTPUT
     
     - name: Coverage percentage
       id: percentage
       shell: bash
       run: |
-        percentage=$( ${{ steps.coverage.outputs.coverage }} | awk '{print $1*100}' )
+        percentage=$( echo ${{ steps.coverage.outputs.coverage }} | awk '{print $1*100}' )
         echo "percentage=$(echo $percentage)" >> GITHUB_OUTPUT
     
     - name: Coverage success
       id: threshold
       shell: bash
       run: |
-        status=$( ${{ steps.percentage.outputs.percentage }} ${{ inputs.check-minimum }} | awk '$1 >= $2 {print "success"} $1 < $2 {print "failure"}' )
+        status=$( echo ${{ steps.percentage.outputs.percentage }} ${{ inputs.check-minimum }} | awk '$1 >= $2 {print "success"} $1 < $2 {print "failure"}' )
         echo "status=$(echo $coverage)" >> GITHUB_OUTPUT
 
     - name: Code Coverage Check
