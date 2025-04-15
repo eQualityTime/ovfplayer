@@ -51,7 +51,6 @@ runs:
       run: |
         coverage=$(xmllint --xpath "string(coverage[1]/@line-rate)" ${{ inputs.coverage-filename }})
         echo "coverage=$(echo $coverage)" >> $GITHUB_OUTPUT
-        echo "coverage=${{ coverage }}" >> $GITHUB_OUTPUT
     
     - name: Coverage percentage
       id: percentage
