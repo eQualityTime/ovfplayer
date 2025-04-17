@@ -23,7 +23,7 @@ outputs:
     value: ${{ steps.coverage.outputs.percentage }}
   status:
     description: "Coverage was above minimum check threshold"
-    value: ${{ steps.coverage.outputs.sttaus }}
+    value: ${{ steps.coverage.outputs.status }}
 
 runs:
   using: "composite"

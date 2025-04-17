@@ -1,0 +1,84 @@
+name: 'Deploy'
+description: 'Deploy the build to a given href'
+
+inputs:
+  branch-name: 
+    description: 'Only execute on this branch name'
+    required: true
+  node-version:
+    description: 'Node version to use'
+    required: true
+  build-href:  
+    description: 'HREF to build with'
+    required: true
+  additional-build-args:
+    description: 'Any additional build args, eg "--prod" or "--configuration=staging", space separated if multiple'
+    required: false
+    default: ''
+  release-version:
+    description: 'The version number to use for a tag and release, if set. If unset, no tag or release will be made.'
+    required: false
+    default: false
+  ghpages-repo:
+    description: 'GH Pages repo to deploy to'
+    required: true
+  # These next two should be changed to required with no default if releasing this publicly as a generic action 
+  user-name:
+    description: 'GH user name to use for deploy and release'
+    required: false
+    default: 'eQualityTimeDevs'
+  user-email:
+    description: 'GH user email to use for deploy and release'
+    required: false
+    default: 'support@equalitytime.co.uk'
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v4
+    - name: Use Node.js ${{ inputs.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+        cache: 'npm'
+
+    - name: Npm install
+      shell: bash
+      run: |
+        npm install -g @angular/cli@11.2.12
+        npm install -g workbox-cli@3.6.3
+        npm install
+        npm i angular-cli-ghpages@0.5.3 --save-dev
+
+    - name: Tag and release
+      if: ${{ inputs.release-version }}
+      uses: avakar/tag-and-release@v1
+      with:
+        tag_name: ${{ inputs.release-verion }}
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+
+    - name: 'Git describe'
+      shell: bash
+      run: node git_version.js
+
+    - name: 'Build with correct HREF'
+      shell: bash
+      run: |
+        ng build --base-href ${{ inputs.build-href }} ${{ inputs.additional-build-args }}
+        workbox injectManifest
+
+    - name: Deploy to GH Pages
+      uses: JamesIves/github-pages-deploy-action@v4
+      with:
+        folder: dist/open-voice-factory 
+        git-config-name: ${{ inputs.user-name }}
+        git-config-email: ${{ inputs.user-email }}
+        tag: ${{ inputs.release-verion }}
+
+    - name: Deploy to GH Pages
+      shell: bash
+      run: npx ngh --dir=dist/open-voice-factory --repo=${{ inputs.ghpages-repo }} --name="${{ inputs.user-name }}" --email="${{ inputs.user-email }}"
+
+
+
