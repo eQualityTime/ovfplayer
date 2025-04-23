@@ -1,6 +1,7 @@
 # OpenVoiceFactory
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.0.8.
+Check the Wiki for more information on usage and contributions.
 
 ## Deployments
 The production deployment is made from the 'master' branch, and can be accessed at https://equalitytime.github.io/ovfplayer/
