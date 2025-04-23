@@ -51,5 +51,3 @@ jobs:
         release-version: ${{ steps.generate_release_tag.outputs.release_tag }}
         ghpages-repo: 'eQualityTime/ovfplayer'
         token: ${{ github.token }}
-
-    
