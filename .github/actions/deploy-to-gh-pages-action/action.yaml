@@ -60,8 +60,7 @@ runs:
       shell: bash
       run: |
         release=${{ inputs.release-version != '' }}
-        non_release_version="$( echo Development only: ${{ github.sha }} )"
-        if $release; then version=${{ inputs.release-version }}; else version=$non_release_version; fi
+        if $release; then version=${{ inputs.release-version }}; else version="DEV ${{ github.sha }}"; fi
         echo "version=$version" >> $GITHUB_OUTPUT
 
         version_file='src/environments/version.ts'
@@ -69,7 +68,7 @@ runs:
         echo '/* tslint:disable */' >> $version_file
         echo 'export const VERSION = {"tag": "'$version'"};' >> $version_file
         echo '/* tslint:enable */' >> $version_file
-        echo Wrote version $version to file $version_file
+        echo 'Wrote version "'$version'" to file "'$version_file'"'
 
     - name: 'Build with correct HREF'
       shell: bash
