@@ -67,7 +67,7 @@ runs:
         version_file='src/environments/version.ts'
         echo '// IMPORTANT: THIS FILE IS AUTO GENERATED! DO NOT MANUALLY EDIT OR CHECKIN!' > $version_file
         echo '/* tslint:disable */' >> $version_file
-        echo export const VERSION = {"tag": "$( echo $version )"}; >> $version_file
+        echo 'export const VERSION = {"tag": "'$version'"};' >> $version_file
         echo '/* tslint:enable */' >> $version_file
         echo Wrote version $version to file $version_file
 
