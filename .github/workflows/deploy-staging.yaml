@@ -27,5 +27,5 @@ jobs:
         build-href: 'https://equalitytime.github.io/teststaging/'
         additional-build-args: '--configuration=staging'
         ghpages-repo: 'eQualityTime/teststaging'
-        token: ${{ secrets.CONTENTSTAGING }}
+        token: ${{ secrets.STAGINGDEPLOYMENT }}
     
