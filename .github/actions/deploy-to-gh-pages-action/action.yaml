@@ -54,10 +54,22 @@ runs:
         tag_name: ${{ inputs.release-version }}
       env:
         GITHUB_TOKEN: ${{ github.token }}
-
-    - name: 'Git describe'
+    
+    - name: 'Generate displayed version'
+      id: display-version
       shell: bash
-      run: node git_version.js
+      run: |
+        release=${{ inputs.release-version != '' }}
+        non_release_version="$( echo Development only: ${{ github.sha }} )"
+        if $release; then version=${{ inputs.release-version }}; else message=$non_release_version; fi
+        echo "version=$version" >> $GITHUB_OUTPUT
+
+        version_file='src/environments/version.ts'
+        echo '// IMPORTANT: THIS FILE IS AUTO GENERATED! DO NOT MANUALLY EDIT OR CHECKIN!' > $version_file
+        echo '/* tslint:disable */' >> $version_file
+        echo export const VERSION = {"tag": "$( echo $version )"}; >> $version_file
+        echo '/* tslint:enable */' >> $version_file
+        echo Wrote version $version to file $version_file
 
     - name: 'Build with correct HREF'
       shell: bash
