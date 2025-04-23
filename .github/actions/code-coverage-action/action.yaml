@@ -54,7 +54,7 @@ runs:
 
     - name: Extract coverage
       id: coverage
-      if: always()
+      if: ${{ !cancelled() }}
       shell: bash
       run: |
         sudo apt update
