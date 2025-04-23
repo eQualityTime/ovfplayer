@@ -1,6 +1,15 @@
 # OpenVoiceFactory
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.0.8.
+Check the Wiki for more information on usage and contributions.
+
+## Deployments
+The production deployment is made from the 'master' branch, and can be accessed at https://equalitytime.github.io/ovfplayer/
+The staging deployment is made from the 'develop' branch, and can be accessed at https://equalitytime.github.io/teststaging/
+
+## Release flow
+All feature PRs to develop should use "squash and merge" to avoid broken commits being added to develop.
+A release PR (from develop to master) should use "merge", followed by a PR back to develop using "merge", to avoid develop being out of sync with master.
 
 ## Development server
 

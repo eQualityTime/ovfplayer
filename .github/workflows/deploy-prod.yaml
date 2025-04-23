@@ -1,0 +1,53 @@
+# This workflow will build and deploy the master branch to the production environment whenever there's a new push to master
+
+name: Deploy Production
+
+on:
+  push:
+    branches:
+      - 'master'
+
+jobs:
+  update-develop:
+    name: Update develop
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Create Pull Request
+      shell: bash
+      run: |
+        echo pr_url=$(gh pr create -B develop -H master --title 'Update develop to latest master release' --body 'Automaticaly created' -r @eQualityTime/coders )
+      env:
+          GH_TOKEN: ${{ github.token }}
+
+  build:
+    uses: ./.github/workflows/build.yaml
+    
+  deploy-prod:
+    name: Deploy Production
+    runs-on: ubuntu-latest
+    environment: production
+    needs: build
+    if: ${{ needs.build.outputs.tests == 'success' && needs.build.outputs.coverage == 'success' }}
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Generate release tag
+      id: generate_release_tag
+      uses: alexvingg/next-release-tag@v1.0.4
+      with:
+        github_token: ${{ github.token }}
+        tag_prefix: ''
+
+    - name: Deploy production
+      uses: ./.github/actions/deploy-to-gh-pages-action
+      with: 
+        node-version: 10.13.x
+        build-href: 'https://equalitytime.github.io/ovfplayer/'
+        additional-build-args: '--prod'
+        release-version: ${{ steps.generate_release_tag.outputs.release_tag }}
+        ghpages-repo: 'eQualityTime/ovfplayer'
+        token: ${{ github.token }}

@@ -1,0 +1,19 @@
+# This workflow will fail for any PRs targetting master from any branch other than develop
+
+name: Master Branch Protection
+
+on:
+  pull_request:
+    branches:
+      - 'master'
+
+jobs:
+  check-branch:
+    name: Check PR is from 'develop'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check branch is develop
+        if: ${{ github.head_ref != 'develop' }}
+        uses: actions/github-script@v3
+        with:
+          script: core.setFailed('Pull request to 'master' must come from 'develop' branch.')

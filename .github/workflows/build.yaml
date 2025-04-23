@@ -1,0 +1,88 @@
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
+
+name: Build and Test
+
+on:
+  pull_request:
+    branches:
+      - 'develop'
+  workflow_call:
+    outputs:
+      tests:
+        description: "Whether all the tests passed"
+        value: ${{ jobs.build.outputs.tests }}
+      coverage:
+        description: "Whether the minimum code coverage was met"
+        value: ${{ jobs.build.outputs.coverage }}
+
+
+jobs:
+  build:
+    name: Build and Test
+    runs-on: ubuntu-latest
+    outputs:
+      tests: ${{ steps.test.conclusion }}
+      coverage: ${{ steps.coverage.outputs.status }}
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Use Node.js 10.13.x
+      uses: actions/setup-node@v4
+      with:
+        node-version: 10.13.x
+        cache: 'npm'
+    - name: npm install
+      run: npm ci
+    - name: tslint
+      run: npm run lint
+    - name: build distribution
+      run: npm run build --prod
+
+    - name: Execute tests
+      id: test
+      run: npm run ng test -- --watch=false --browsers=ChromeHeadless --code-coverage
+    
+    - name: Check test and code coverage reports were generated
+      if: ${{ !cancelled() }}
+      id: check_reports
+      uses: andstor/file-existence-action@v3
+      with:
+        files: "test-results/junit.xml, coverage/cobertura-coverage.xml"
+        fail: true
+
+    - name: Upload test results artifact
+      if: ${{ !cancelled() && steps.check_reports.outputs.files_exists == 'true' }}
+      uses: actions/upload-artifact@v4
+      with:
+        name: TestResults
+        path: test-results/junit.xml
+
+    - name: Upload code coverage artifact
+      if: ${{ !cancelled() && steps.check_reports.outputs.files_exists == 'true' }}
+      uses: actions/upload-artifact@v4
+      with:
+        name: CodeCoverageResults
+        path: coverage/
+
+    - name: Publish test results
+      uses: EnricoMi/publish-unit-test-result-action@v2.4.1
+      if: ${{ !cancelled() && steps.check_reports.outputs.files_exists == 'true' }}
+      with:
+        files: "test-results/junit.xml"
+        
+    - name: Publish code coverage results
+      id: coverage
+      uses: ./.github/actions/code-coverage-action
+      if: ${{ !cancelled() && steps.check_reports.outputs.files_exists == 'true' }}
+      with: 
+        coverage-filename: 'coverage/cobertura-coverage.xml'
+        check-minimum: 80
+        summary-thresholds: '75 85'
+
+    - name: Fail on coverage
+      if: ${{ !cancelled() && steps.check_reports.outputs.files_exists == 'true' && steps.coverage.outputs.status != 'success' }}
+      uses: actions/github-script@v3
+      with:
+        script: core.setFailed('Insufficient code coverage.')
+        

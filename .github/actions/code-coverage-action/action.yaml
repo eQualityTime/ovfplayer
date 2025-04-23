@@ -1,0 +1,82 @@
+name: 'Publish Code Coverage'
+description: 'Generate a code coverage summary, with comment, check, and job summary'
+
+inputs:
+  coverage-filename: 
+    description: 'Path to the coverage file'
+    required: true
+  check-minimum:  
+    description: 'Minimum threshold for the check'
+    required: false
+    default: 80
+  summary-thresholds:
+    description: 'Space separated thresholds to use for generating the summary'
+    required: false
+    default: '70 80'
+
+outputs:
+  coverage:
+    description: "Raw code coverage"
+    value: ${{ steps.coverage.outputs.coverage }}
+  percentage:
+    description: "Percentage code coverage"
+    value: ${{ steps.coverage.outputs.percentage }}
+  status:
+    description: "Coverage was above minimum check threshold"
+    value: ${{ steps.coverage.outputs.status }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Code Coverage Summary Report
+      uses: irongut/CodeCoverageSummary@v1.3.0
+      with:
+        filename: 'coverage/cobertura-coverage.xml'
+        badge: true
+        fail_below_min: false
+        format: 'markdown'
+        output: 'both'
+        thresholds: ${{ inputs.summary-thresholds }}
+
+    - name: Write to Coverage to Job Summary
+      shell: bash
+      run: |
+        echo "## Code Coverage Results" > code-coverage-comment.md
+        cat code-coverage-results.md >> code-coverage-comment.md
+        cat code-coverage-comment.md >> $GITHUB_STEP_SUMMARY
+
+    - name: Add Coverage PR Comment
+      uses: marocchino/sticky-pull-request-comment@v2
+      if: github.event_name == 'pull_request'
+      with:
+        header: 'coverage'
+        path: 'code-coverage-comment.md'
+
+    - name: Extract coverage
+      id: coverage
+      if: ${{ !cancelled() }}
+      shell: bash
+      run: |
+        sudo apt update
+        sudo apt install -y libxml2-utils
+
+        coverage=$( xmllint --xpath "string(coverage[1]/@line-rate)" ${{ inputs.coverage-filename }} )
+        echo "coverage=$coverage" >> $GITHUB_OUTPUT
+
+        percentage=$( echo $coverage | awk '{print $1*100}' )
+        echo "percentage=$percentage" >> $GITHUB_OUTPUT
+
+        status=$( echo $percentage ${{ inputs.check-minimum }} | awk '$1 >= $2 {print "success"} $1 < $2 {print "failure"}' )
+        echo "status=$status" >> $GITHUB_OUTPUT
+
+    - name: Code Coverage Check
+      uses: LouisBrunner/checks-action@v2.0.0
+      if: steps.coverage.outputs.status
+      with:
+        token: ${{ github.token }}
+        name: Code Coverage
+        conclusion: ${{ steps.coverage.outputs.status }}
+        output: |
+          {"summary":"Code coverage: ${{ steps.coverage.outputs.percentage }}%\nMinimum coverage required: ${{ inputs.check-minimum }}%"}
+        output_text_description_file: code-coverage-comment.md
+
