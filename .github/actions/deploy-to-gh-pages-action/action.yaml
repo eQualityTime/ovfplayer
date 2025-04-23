@@ -61,7 +61,7 @@ runs:
       run: |
         release=${{ inputs.release-version != '' }}
         non_release_version="$( echo Development only: ${{ github.sha }} )"
-        if $release; then version=${{ inputs.release-version }}; else message=$non_release_version; fi
+        if $release; then version=${{ inputs.release-version }}; else version=$non_release_version; fi
         echo "version=$version" >> $GITHUB_OUTPUT
 
         version_file='src/environments/version.ts'
