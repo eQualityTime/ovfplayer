@@ -2,9 +2,6 @@ name: 'Deploy'
 description: 'Deploy the build to a given href'
 
 inputs:
-  branch-name: 
-    description: 'Only execute on this branch name'
-    required: true
   node-version:
     description: 'Node version to use'
     required: true
@@ -18,9 +15,12 @@ inputs:
   release-version:
     description: 'The version number to use for a tag and release, if set. If unset, no tag or release will be made.'
     required: false
-    default: false
+    default: ''
   ghpages-repo:
     description: 'GH Pages repo to deploy to'
+    required: true
+  token: 
+    description: 'GH token to use for the deployment action'
     required: true
   # These next two should be changed to required with no default if releasing this publicly as a generic action 
   user-name:
@@ -35,26 +35,23 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - uses: actions/checkout@v4
     - name: Use Node.js ${{ inputs.node-version }}
       uses: actions/setup-node@v4
       with:
         node-version: ${{ inputs.node-version }}
         cache: 'npm'
-
-    - name: Npm install
+    - name: Npm install extras
       shell: bash
       run: |
         npm install -g @angular/cli@11.2.12
         npm install -g workbox-cli@3.6.3
         npm install
-        npm i angular-cli-ghpages@0.5.3 --save-dev
 
     - name: Tag and release
-      if: ${{ inputs.release-version }}
+      if: ${{ inputs.release-version != '' }}
       uses: avakar/tag-and-release@v1
       with:
-        tag_name: ${{ inputs.release-verion }}
+        tag_name: ${{ inputs.release-version }}
       env:
         GITHUB_TOKEN: ${{ github.token }}
 
@@ -67,6 +64,16 @@ runs:
       run: |
         ng build --base-href ${{ inputs.build-href }} ${{ inputs.additional-build-args }}
         workbox injectManifest
+    
+    - name: 'Generate GH pages commit message'
+      id: commit_message
+      shell: bash
+      run: |
+        release=${{ inputs.release-version != '' }}
+        release_message="$( echo Deploying release version ${{ inputs.release-version }} )"
+        non_release_message="$( echo Deploying commit ${{ github.sha }} )"
+        if $release; then message=$release_message; else message=$non_release_message; fi
+        echo "commit_message=$message" >> $GITHUB_OUTPUT
 
     - name: Deploy to GH Pages
       uses: JamesIves/github-pages-deploy-action@v4
@@ -74,11 +81,10 @@ runs:
         folder: dist/open-voice-factory 
         git-config-name: ${{ inputs.user-name }}
         git-config-email: ${{ inputs.user-email }}
-        tag: ${{ inputs.release-verion }}
-
-    - name: Deploy to GH Pages
-      shell: bash
-      run: npx ngh --dir=dist/open-voice-factory --repo=${{ inputs.ghpages-repo }} --name="${{ inputs.user-name }}" --email="${{ inputs.user-email }}"
+        repository-name: ${{ inputs.ghpages-repo }}
+        token: ${{ inputs.token }}
+        commit-message: ${{ steps.commit_message.outputs.commit_message}}
+        force: false
 
 
 

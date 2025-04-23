@@ -1,0 +1,31 @@
+# This workflow will build and deploy the develop branch to the staging environment whenever there's a new push to develop
+
+name: Deploy Staging
+
+on:
+  push:
+    branches:
+      - 'develop'
+
+jobs:
+  build:
+    uses: ./.github/workflows/build.yaml
+  deploy-staging:
+    name: Deploy Staging
+    runs-on: ubuntu-latest
+    environment: staging
+    needs: build
+    if: ${{ needs.build.outputs.tests == 'success' && needs.build.outputs.coverage == 'success' }}
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Deploy staging
+      uses: ./.github/actions/deploy-to-gh-pages-action
+      with: 
+        node-version: 10.13.x
+        build-href: 'https://equalitytime.github.io/teststaging/'
+        additional-build-args: '--configuration=staging'
+        ghpages-repo: 'eQualityTime/teststaging'
+        token: ${{ secrets.CONTENTSTAGING }}
+    
