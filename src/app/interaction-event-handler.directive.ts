@@ -20,7 +20,7 @@ import { ConfigService, InteractionEventType } from './services/config/config.se
 })
 export class InteractionEventHandlerDirective {
 
-  @Input('appInteractionEventHandler')
+  @Input()
   private appInteractionEventHandler: () => void;
 
   constructor(private config: ConfigService) { }
