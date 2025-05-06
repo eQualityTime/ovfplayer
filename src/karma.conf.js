@@ -32,7 +32,7 @@ module.exports = function (config) {
       '../test/fixtures/obz/*.obz': ['obz']
     },
     files: ['../test/fixtures/obz/*.obz'],
-    reporters: ['progress', 'kjhtml', 'junit'],
+    reporters: ['progress', 'kjhtml', 'junit', 'coverage-istanbul'],
     junitReporter: {
       outputDir: '../test-results',
       outputFile: 'junit.xml',
