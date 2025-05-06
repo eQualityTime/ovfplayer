@@ -45,7 +45,7 @@ jobs:
     - name: Deploy production
       uses: ./.github/actions/deploy-to-gh-pages-action
       with: 
-        node-version: 12.22.x
+        node-version: 16.10.x
         build-href: 'https://equalitytime.github.io/ovfplayer/'
         additional-build-args: '--prod'
         release-version: ${{ steps.generate_release_tag.outputs.release_tag }}
