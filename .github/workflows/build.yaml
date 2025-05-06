@@ -34,7 +34,7 @@ jobs:
         cache: 'npm'
     - name: npm install
       run: npm ci
-    - name: tslint
+    - name: lint
       run: npm run lint
     - name: build distribution
       run: npm run build --prod
