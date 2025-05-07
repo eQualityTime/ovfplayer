@@ -31,16 +31,14 @@ describe('ErrorPageComponent', () => {
       providers: [ErrorService]
     })
     .compileComponents();
-  }));
-
-  beforeEach(() => {
+    
     const errorService = TestBed.inject(ErrorService);
     const errorDetails: ErrorDetails = {"location": "test", "message": "testing", "causeChain": "none"};
     errorService.lastError = errorDetails;
     fixture = TestBed.createComponent(ErrorPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-  });
+  }));
 
   it('should create', () => {
     expect(component).toBeTruthy();
