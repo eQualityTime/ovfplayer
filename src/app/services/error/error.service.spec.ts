@@ -14,7 +14,7 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: */
 import { TestBed, inject } from '@angular/core/testing';
 
-import { ErrorService } from './error.service';
+import { ErrorDetails, ErrorService } from './error.service';
 
 describe('ErrorServiceService', () => {
   beforeEach(() => {
@@ -25,5 +25,15 @@ describe('ErrorServiceService', () => {
 
   it('should be created', inject([ErrorService], (service: ErrorService) => {
     expect(service).toBeTruthy();
+  }));
+
+  it('should start with no errors', inject([ErrorService], (service: ErrorService) => {
+    expect(service.lastError).toBeFalsy();
+  }));
+
+  it('should be able to keep and retrieve the last error', inject([ErrorService], (service: ErrorService) => {
+    const errorDetails: ErrorDetails = {"location": "test", "message": "testing", "causeChain": "none"};
+    service.lastError = errorDetails;
+    expect(service.lastError).toBe(errorDetails);
   }));
 });
