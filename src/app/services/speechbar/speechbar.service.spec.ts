@@ -339,3 +339,56 @@ describe('SpeechbarService.utteranceConstruction', () => {
     expect(service.buildSentence(vocals)).toBe('');
   }));
 });
+
+describe('SpeechbarService.speechSynthesis', () => {
+  let service: SpeechbarService;
+  let synthSpeakSpy: jasmine.Spy;
+
+  const mockButton = new Button().deserialize({
+    id: 1,
+    label: 'hello',
+    vocalization: 'vocal'
+  }, null);
+  
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [SpeechbarService]
+    });
+
+    service = TestBed.inject(SpeechbarService);
+    service.getButtons().subscribe((buttons) => {});
+    synthSpeakSpy = spyOn(window.speechSynthesis, 'speak');
+  });
+
+  it('should speak', () => {
+    spyOnProperty(window.speechSynthesis, 'speaking', 'get').and.returnValue(false);
+    service.addButton(mockButton);
+    service.speak();
+    expect(synthSpeakSpy).toHaveBeenCalledTimes(1);
+    expect(synthSpeakSpy.calls.all()[0].args[0].text).toBe('vocal .');
+  });
+
+  it('should not queue multiple speak actions', () => {
+    spyOnProperty(window.speechSynthesis, 'speaking', 'get').and.returnValue(true);
+    service.addButton(mockButton);
+    service.speak();
+    expect(synthSpeakSpy).not.toHaveBeenCalled();
+  });
+
+  it('should say buttons', () => {
+    spyOnProperty(window.speechSynthesis, 'speaking', 'get').and.returnValue(false);
+    service.sayButton(mockButton);
+    expect(synthSpeakSpy).toHaveBeenCalledTimes(1);
+    expect(synthSpeakSpy.calls.all()[0].args[0].text).toBe('vocal .');
+  });
+
+  it('should queue multiple say button actions', () => {
+    spyOnProperty(window.speechSynthesis, 'speaking', 'get').and.returnValue(true);
+    service.sayButton(mockButton);
+    service.sayButton(mockButton);
+    expect(synthSpeakSpy).toHaveBeenCalledTimes(2);
+    expect(synthSpeakSpy.calls.all()[0].args[0].text).toBe('vocal .');
+    expect(synthSpeakSpy.calls.all()[1].args[0].text).toBe('vocal .');
+  });
+
+});
