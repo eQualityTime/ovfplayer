@@ -48,7 +48,7 @@ describe('ObzService', () => {
           done();
         }
       });
-      const request = httpMock.expectOne('https://dl.dropboxusercontent.com/s/oiwfo47fprv3jl4/ck20.obz?dl=1');
+      const request = httpMock.expectOne('https://designs.theopenvoicefactory.org/525da59342a732b0557204f2d658b273.obz');
       request.error(new ErrorEvent('ERROR_LOADING_OBZ'));
       httpMock.verify();
     })();

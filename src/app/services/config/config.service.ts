@@ -54,7 +54,7 @@ export interface VoiceConfig {
 })
 export class ConfigService {
 
-  @LocalStorage() _boardURL = 'https://dl.dropboxusercontent.com/s/oiwfo47fprv3jl4/ck20.obz?dl=1';
+  @LocalStorage() _boardURL = 'https://designs.theopenvoicefactory.org/525da59342a732b0557204f2d658b273.obz';
   @LocalStorage() _showIconsInSpeechbar = true;
   @LocalStorage() _speakOnSpeechbarClick = true;
   @LocalStorage() _displayedButtons: ButtonDisplayConfig = {
