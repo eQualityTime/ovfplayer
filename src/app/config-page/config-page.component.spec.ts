@@ -33,40 +33,16 @@ import { Observable } from 'rxjs';
 import { Type, DebugElement } from '@angular/core';
 import { OBFPageComponent } from '../obfpage/obfpage.component';
 import { By } from '@angular/platform-browser';
+import { RouterTestingModule } from '@angular/router/testing';
 
-// we might not need this, the current tests can all be done with RouterTestingModule.withRoutes([])
-export class MockActivatedRoute implements ActivatedRoute {
-  snapshot: ActivatedRouteSnapshot;
-  url: Observable<UrlSegment[]>;
-  params: Observable<Params>;
-  queryParams: Observable<Params>;
-  fragment: Observable<string>;
-  data: Observable<Data>;
-  outlet: string;
-  component: Type<any> | string;
-  routeConfig: Route;
-  root: ActivatedRoute;
-  parent: ActivatedRoute;
-  firstChild: ActivatedRoute;
-  children: ActivatedRoute[];
-  pathFromRoot: ActivatedRoute[];
-  paramMap: Observable<ParamMap>;
-  queryParamMap: Observable<ParamMap>;
-  toString(): string {
-    return '';
-  }
-}
 
 describe('ConfigPageComponent', () => {
   let component: ConfigPageComponent;
   let fixture: ComponentFixture<ConfigPageComponent>;
   let configServiceStub: Partial<ConfigService>;
-  let routerStub: Partial<Router>;
   let snackbarStub: Partial<MatSnackBar>;
-  let mockActivatedRoute: MockActivatedRoute;
 
   beforeEach(waitForAsync(() => {
-    routerStub = {};
     configServiceStub = {
       boardURL: '',
       showIconsInSpeechbar: false,
@@ -94,36 +70,11 @@ describe('ConfigPageComponent', () => {
       }
     };
     snackbarStub = {};
-    mockActivatedRoute = new MockActivatedRoute();
-    mockActivatedRoute.snapshot = {
-      url: null,
-      params: null,
-      queryParamMap: {
-        has: (name) => false,
-        get: (name) => null,
-        getAll: () => null,
-        keys: []
-      },
-      queryParams: null,
-      fragment: null,
-      data: null,
-      outlet: null,
-      component: null,
-      routeConfig: null,
-      root: null,
-      parent: null,
-      firstChild: null,
-      children: [],
-      pathFromRoot: null,
-      paramMap: null
-    };
 
     TestBed.configureTestingModule({
       declarations: [ ConfigPageComponent, OBFPageComponent ],
       providers: [
-        {provide: Router, useValue: routerStub},
         {provide: ConfigService, useValue: configServiceStub},
-        {provide: ActivatedRoute, useValue: mockActivatedRoute},
         {provide: MatSnackBar, useValue: snackbarStub }
       ],
       imports: [
@@ -137,7 +88,11 @@ describe('ConfigPageComponent', () => {
         MatSliderModule,
         MatIconModule,
         MatRadioModule,
-        MatSelectModule
+        MatSelectModule, 
+        RouterTestingModule.withRoutes([
+          {path: 'config', component: ConfigPageComponent}, 
+          {path: 'main', component: ConfigPageComponent}
+        ])
       ]
     }).compileComponents();
   }));
