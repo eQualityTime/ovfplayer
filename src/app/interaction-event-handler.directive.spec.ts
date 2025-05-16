@@ -1,5 +1,5 @@
 /* ::START::LICENCE::
-Copyright eQualityTime ©2018, ©2019, ©2020, ©2021
+Copyright eQualityTime ©2018, ©2019, ©2020, ©2021, ©2022, ©2023, ©2024, ©2025
 This file is part of OVFPlayer.
 OVFPlayer is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -14,7 +14,7 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: */
 import { InteractionEventHandlerDirective } from './interaction-event-handler.directive';
 import { ConfigService, InteractionEventType } from './services/config/config.service';
-import { TestBed, ComponentFixture, async, fakeAsync, tick } from '@angular/core/testing';
+import { TestBed, ComponentFixture, fakeAsync, tick, waitForAsync  } from '@angular/core/testing';
 import { Component } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
@@ -34,7 +34,7 @@ describe('ClickHandlerDirective', () => {
   let fixture: ComponentFixture<TestClickHandlerComponent>;
   let configServiceStub: Partial<ConfigService>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     configServiceStub = {
       buttonBehaviourConfig: {
         speakOnTrigger: false,

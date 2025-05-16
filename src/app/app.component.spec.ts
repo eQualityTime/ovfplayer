@@ -1,5 +1,5 @@
 /* ::START::LICENCE::
-Copyright eQualityTime ©2018, ©2019, ©2020, ©2021
+Copyright eQualityTime ©2018, ©2019, ©2020, ©2021, ©2022, ©2023, ©2024, ©2025
 This file is part of OVFPlayer.
 OVFPlayer is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -12,12 +12,16 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: */
-import { TestBed, async } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
+import { By } from '@angular/platform-browser';
 
 describe('AppComponent', () => {
-  beforeEach(async(() => {
+  let app : AppComponent;
+  let fixture : ComponentFixture<AppComponent>;
+
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [
         AppComponent
@@ -27,13 +31,19 @@ describe('AppComponent', () => {
       ],
     }).compileComponents();
   }));
-  it('should create the app', async(() => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(AppComponent);
+    app = fixture.debugElement.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should create the app', waitForAsync(() => {
     expect(app).toBeTruthy();
   }));
-  it('should put the router outlet in the page', async(() => {
-    const routerOutlets = document.getElementsByTagName('router-outlet');
+
+  it('should put the router outlet in the page', waitForAsync(() => {
+    const routerOutlets = fixture.debugElement.queryAll(By.css('router-outlet'));
     expect(routerOutlets.length).toBe(1);
   }));
 });

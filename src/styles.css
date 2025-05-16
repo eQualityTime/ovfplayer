@@ -1,5 +1,5 @@
 /* ::START::LICENCE::
-Copyright eQualityTime ©2018, ©2019, ©2020, ©2021
+Copyright eQualityTime ©2018, ©2019, ©2020, ©2021, ©2022, ©2023, ©2024, ©2025
 This file is part of OVFPlayer.
 OVFPlayer is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@ You should have received a copy of the GNU General Public License
 along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: */
 /* You can add global styles to this file, and also import other style files */
-@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+@import "@angular/material/prebuilt-themes/indigo-pink.css";
 
 html, body { height: 100%; }
 body { margin: 0; font-family: 'Roboto', sans-serif; }

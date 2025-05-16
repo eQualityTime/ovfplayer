@@ -1,5 +1,5 @@
 /* ::START::LICENCE::
-Copyright eQualityTime ©2018, ©2019, ©2020, ©2021
+Copyright eQualityTime ©2018, ©2019, ©2020, ©2021, ©2022, ©2023, ©2024, ©2025
 This file is part of OVFPlayer.
 OVFPlayer is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -12,7 +12,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: */
-import 'hammerjs';
+
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule, ErrorHandler } from '@angular/core';
@@ -20,9 +20,20 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { LayoutModule } from '@angular/cdk/layout';
 
-import { MatMenuModule, MatIconModule, MatButtonModule, MatInputModule, MatRippleModule, MatGridListModule, MatCardModule,
-  MatFormFieldModule, MatCheckboxModule, MatSnackBarModule, MatTabsModule, MatSliderModule, MatRadioModule,
-  MatSelectModule } from '@angular/material';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatRippleModule } from '@angular/material/core';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSliderModule } from '@angular/material/slider';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatTabsModule } from '@angular/material/tabs';
 
 import { WebStorageModule } from 'ngx-store';
 

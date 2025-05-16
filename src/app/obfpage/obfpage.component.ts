@@ -1,5 +1,5 @@
 /* ::START::LICENCE::
-Copyright eQualityTime ©2018, ©2019, ©2020, ©2021
+Copyright eQualityTime ©2018, ©2019, ©2020, ©2021, ©2022, ©2023, ©2024, ©2025
 This file is part of OVFPlayer.
 OVFPlayer is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -12,7 +12,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: */
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-obfpage',
@@ -29,11 +29,8 @@ import { Component, OnInit } from '@angular/core';
     }
   `]
 })
-export class OBFPageComponent implements OnInit {
+export class OBFPageComponent {
 
   constructor() { }
-
-  ngOnInit() {
-  }
 
 }

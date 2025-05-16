@@ -1,5 +1,5 @@
 /* ::START::LICENCE::
-Copyright eQualityTime ©2018, ©2019, ©2020, ©2021
+Copyright eQualityTime ©2018, ©2019, ©2020, ©2021, ©2022, ©2023, ©2024, ©2025
 This file is part of OVFPlayer.
 OVFPlayer is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -83,33 +83,93 @@ export class LoadBoardAction {
 
 export class Button {
 
-  @IsNotEmpty({ message: 'Button id must be specified'})
-  @IsString({ message: 'Button id must be a string'})
-  id: string;
+  @IsNotEmpty({ message: 'Button id must be specified' })
+  @IsString({ message: 'Button id must be a string' })
+  private _id: string;
+  public get id(): string {
+    return this._id;
+  }
+  public set id(value: string) {
+    this._id = value;
+  }
 
   @IsNotEmpty()
   @IsString()
-  label: string;
+  private _label: string;
+  public get label(): string {
+    return this._label;
+  }
+  public set label(value: string) {
+    this._label = value;
+  }
 
   @IsOptional()
   @IsString()
-  vocalization: string;
+  private _vocalization: string;
+  public get vocalization(): string {
+    return this._vocalization;
+  }
+  public set vocalization(value: string) {
+    this._vocalization = value;
+  }
 
   @IsOptional()
   @IsString()
-  imageId: string;
+  private _imageId: string;
+  public get imageId(): string {
+    return this._imageId;
+  }
+  public set imageId(value: string) {
+    this._imageId = value;
+  }
 
   @IsOptional()
   @IsString()
-  soundId: string;
+  private _soundId: string;
+  public get soundId(): string {
+    return this._soundId;
+  }
+  public set soundId(value: string) {
+    this._soundId = value;
+  }
 
-  backgroundColor: string;
-  borderColor: string;
-  actions: string[];
-  loadBoardAction: LoadBoardAction;
+  private _backgroundColor: string;
+  public get backgroundColor(): string {
+    return this._backgroundColor;
+  }
+  public set backgroundColor(value: string) {
+    this._backgroundColor = value;
+  }
+  private _borderColor: string;
+  public get borderColor(): string {
+    return this._borderColor;
+  }
+  public set borderColor(value: string) {
+    this._borderColor = value;
+  }
+  private _actions: string[];
+  public get actions(): string[] {
+    return this._actions;
+  }
+  public set actions(value: string[]) {
+    this._actions = value;
+  }
+  private _loadBoardAction: LoadBoardAction;
+  public get loadBoardAction(): LoadBoardAction {
+    return this._loadBoardAction;
+  }
+  public set loadBoardAction(value: LoadBoardAction) {
+    this._loadBoardAction = value;
+  }
 
   @IsDefined()
-  parent: OBFBoard;
+  private _parent: OBFBoard;
+  public get parent(): OBFBoard {
+    return this._parent;
+  }
+  public set parent(value: OBFBoard) {
+    this._parent = value;
+  }
 
   deserialize(input: any, parent: OBFBoard): Button {
     this.id = stringify(input.id);

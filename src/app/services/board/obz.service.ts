@@ -1,5 +1,5 @@
 /* ::START::LICENCE::
-Copyright eQualityTime ©2018, ©2019, ©2020, ©2021
+Copyright eQualityTime ©2018, ©2019, ©2020, ©2021, ©2022, ©2023, ©2024, ©2025
 This file is part of OVFPlayer.
 OVFPlayer is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError, from, of } from 'rxjs';
-import { flatMap, catchError, first } from 'rxjs/operators';
+import { mergeMap, catchError, first } from 'rxjs/operators';
 import { ConfigService } from '../config/config.service';
 import { UrlUtils } from '../../url-utils';
 import { OBZBoardSet } from '../../obzboard-set';
@@ -67,7 +67,7 @@ export class ObzService {
     this.progress.progress(ProgressService.message('Parsing'));
     this.log(`Blobifying ${boardURL}`);
     return boardSet.blobify(this.http, this.progress).pipe(
-      flatMap(blobified => {
+      mergeMap(blobified => {
         this.progress.progress(ProgressService.message('Caching'));
         this.log(`Caching ${boardURL}`);
         return this.boardCache.save(blobified);
@@ -83,7 +83,7 @@ export class ObzService {
 
   private loadOBFFile(boardURL: string): Observable<OBZBoardSet> {
     return this.http.get<OBFBoard>(boardURL).pipe(
-      flatMap(page => {
+      mergeMap(page => {
         const boardSet = new OBZBoardSet();
         boardSet.rootBoardKey = 'root';
         boardSet.setBoard('root', new OBFBoard().deserialize(page));
@@ -106,14 +106,14 @@ export class ObzService {
   private loadOBZFile(boardURL: string): Observable<OBZBoardSet> {
 
     return this.getOBZFile(boardURL).pipe(
-      flatMap(blob => {
+      mergeMap(blob => {
         return this.parseOBZFile(blob).pipe(
           catchError(error => throwError(
             new FatalOpenVoiceFactoryError(ErrorCodes.OBZ_PARSE_ERROR, `Could not parse ${boardURL} as a zip file`, error)
           ))
         );
       }),
-      flatMap(boardSet => this.cacheBoardSet(boardURL, boardSet))
+      mergeMap(boardSet => this.cacheBoardSet(boardURL, boardSet))
     );
   }
 
@@ -124,12 +124,12 @@ export class ObzService {
     const validate   = this.validate;
     const zipper = new JSZip();
 
-    return from(zipper.loadAsync(blob).then(function(zip) {
+    return from<Promise<OBZBoardSet>>(zipper.loadAsync(blob).then<Promise<OBZBoardSet>>(function(zip): Promise<OBZBoardSet> {
       const manifestFile = zip.file('manifest.json');
       if (!manifestFile) {
         throw new FatalOpenVoiceFactoryError(ErrorCodes.MISSING_MANIFEST, 'No manifest file!');
       }
-      return manifestFile.async('text').then(function (manifest: string) {
+      return manifestFile.async('text').then(async function (manifest: string): Promise<OBZBoardSet> {
 
         let manifestJSON = null;
         try {
@@ -151,7 +151,9 @@ export class ObzService {
           promises = promises.concat(Object.values(manifestJSON.paths.sounds).map(sound => parseSound(zip, sound.toString(), boardSet)));
         }
 
-        return Promise.all(promises).then(() => validate(boardSet));
+        await Promise.all(promises);
+        const result: OBZBoardSet = validate(boardSet);
+        return result;
       }, function (fail) {
         // error loading manifest
         throw new FatalOpenVoiceFactoryError(ErrorCodes.MANIFEST_LOAD_ERROR, 'Could not load manifest.json', fail);

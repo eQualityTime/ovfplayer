@@ -1,5 +1,5 @@
 /* ::START::LICENCE::
-Copyright eQualityTime ©2018, ©2019, ©2020, ©2021
+Copyright eQualityTime ©2018, ©2019, ©2020, ©2021, ©2022, ©2023, ©2024, ©2025
 This file is part of OVFPlayer.
 OVFPlayer is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -82,7 +82,7 @@ export class OBZBoardSet implements ImageResolver, SoundResolver {
     // TODO: error handling might be nice...
 
     // go through all url & data images & sounds and blobify into maps
-    return forkJoin(this.blobifyImages(httpClient, progress), this.blobifySounds(httpClient, progress)).pipe(
+    return forkJoin([this.blobifyImages(httpClient, progress), this.blobifySounds(httpClient, progress)]).pipe(
       map(result => this)
     );
   }
@@ -172,4 +172,13 @@ export class OBZBoardSet implements ImageResolver, SoundResolver {
     const byteArray = new Uint8Array(Array.from(atob(data)).map(char => char.charCodeAt(0)));
     return new Blob([byteArray], { type: type });
   }
+}
+
+
+export interface SavedOBZBoardSet {
+
+  boards: Map<string, OBFBoard>;
+  images: Map<string, Blob>;
+  sounds: Map<string, string>;
+  rootBoardKey: string;
 }

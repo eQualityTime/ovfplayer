@@ -11,6 +11,7 @@ module.exports = function (config) {
       require('karma-jasmine-html-reporter'),
       require('karma-coverage-istanbul-reporter'),
       require('karma-junit-reporter'),
+      require('karma-spec-reporter'),
       require('@angular-devkit/build-angular/plugins/karma'),
       require('./karma-obz-preprocessor')
     ],
@@ -32,7 +33,7 @@ module.exports = function (config) {
       '../test/fixtures/obz/*.obz': ['obz']
     },
     files: ['../test/fixtures/obz/*.obz'],
-    reporters: ['progress', 'kjhtml', 'junit'],
+    reporters: ['progress', 'kjhtml', 'junit', 'coverage-istanbul', 'spec'],
     junitReporter: {
       outputDir: '../test-results',
       outputFile: 'junit.xml',

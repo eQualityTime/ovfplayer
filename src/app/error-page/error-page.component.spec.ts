@@ -1,5 +1,5 @@
 /* ::START::LICENCE::
-Copyright eQualityTime ©2018, ©2019, ©2020, ©2021
+Copyright eQualityTime ©2018, ©2019, ©2020, ©2021, ©2022, ©2023, ©2024, ©2025
 This file is part of OVFPlayer.
 OVFPlayer is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -12,26 +12,31 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: */
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, inject, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ErrorPageComponent } from './error-page.component';
 import { OBFPageComponent } from '../obfpage/obfpage.component';
-import { MatCardModule } from '@angular/material';
+import { MatCardModule } from '@angular/material/card';
 import { RouterTestingModule } from '@angular/router/testing';
+import { ErrorDetails, ErrorService } from '../services/error/error.service';
 
 describe('ErrorPageComponent', () => {
   let component: ErrorPageComponent;
   let fixture: ComponentFixture<ErrorPageComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ ErrorPageComponent, OBFPageComponent ],
-      imports: [ MatCardModule, RouterTestingModule.withRoutes([]) ]
+      imports: [ MatCardModule, RouterTestingModule.withRoutes([]) ],
+      providers: [ErrorService]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
+    const errorService = TestBed.inject(ErrorService);
+    const errorDetails: ErrorDetails = {"location": "test", "message": "testing", "causeChain": "none"};
+    errorService.lastError = errorDetails;
     fixture = TestBed.createComponent(ErrorPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -39,5 +44,10 @@ describe('ErrorPageComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should produce the right href for the last error', () => {
+    const expectedHref = "mailto:support@equalitytime.co.uk?subject=testing&body=Location:%20test%0AMessage:%20testing%0ACause:%20none";
+    expect(component.errorHRef).toBe(expectedHref);
   });
 });
