@@ -337,6 +337,7 @@ describe('ButtonPageComponent - speak on trigger', () => {
 
   it('should handle button click - do not speak sound', () => {
     const button = { actions: [], soundId: '1' };
+    spyOn(Audio.prototype, 'play').and.stub();  // chrome errors if we try to actually play audio without user interaction
     component.handleButtonClick(<Button>button);
     expect(speechbarService.sayButton).not.toHaveBeenCalled();
   });
