@@ -118,25 +118,23 @@ describe('ConfigPageComponent', () => {
   it('should not save config changes if save is not pressed', done => {
     fixture.detectChanges();
     expect(component.displayedButtons).not.toBe(configServiceStub.displayedButtons);
-    const displayTab = fixture.nativeElement.querySelector('div.mat-tab-label span[name="displayedButtons"]');
+    const displayTab = fixture.nativeElement.querySelector('div[role="tab"] span[name="displayedButtons"]');
     displayTab.click();
     fixture.detectChanges();
     fixture.whenStable().then(() => {
       fixture.detectChanges();
-      const showSpeakButton = fixture.debugElement.query(By.css('mat-checkbox[name="showSpeakButton"] label'));
-      const theDiv = <DebugElement>showSpeakButton.childNodes[0];
-      const theInput = <DebugElement>theDiv.childNodes[0];
-      expect(theInput.attributes['aria-checked']).toBe('false');
-      expect(configServiceStub.displayedButtons.showSpeakButton).toBeFalsy();
+      const showSpeakButton = fixture.debugElement.query(By.css('input[name="showSpeakButton"]'));
+      expect(showSpeakButton.nativeNode.checked).toBeFalse();
+      expect(configServiceStub.displayedButtons.showSpeakButton).toBeFalse();
       showSpeakButton.nativeElement.click();
       fixture.detectChanges();
       fixture.whenStable().then(() => {
         // checkbox should now be checked
-        expect(theInput.attributes['aria-checked']).toBe('true');
+        expect(showSpeakButton.nativeNode.checked).toBeTrue();
         // internal component state should also be true
-        expect(component.displayedButtons.showSpeakButton).toBeTruthy();
+        expect(component.displayedButtons.showSpeakButton).toBeTrue();
         // but actual config should still be false
-        expect(configServiceStub.displayedButtons.showSpeakButton).toBeFalsy();
+        expect(configServiceStub.displayedButtons.showSpeakButton).toBeFalse();
         done();
       });
     });
@@ -145,30 +143,28 @@ describe('ConfigPageComponent', () => {
   it('should save config changes if save is pressed', done => {
     fixture.detectChanges();
     expect(component.displayedButtons).not.toBe(configServiceStub.displayedButtons);
-    const displayTab = fixture.nativeElement.querySelector('div.mat-tab-label span[name="displayedButtons"]');
+    const displayTab = fixture.nativeElement.querySelector('div[role="tab"] span[name="displayedButtons"]');
     displayTab.click();
     fixture.detectChanges();
     fixture.whenStable().then(() => {
       fixture.detectChanges();
-      const showSpeakButton = fixture.debugElement.query(By.css('mat-checkbox[name="showSpeakButton"] label'));
-      const theDiv = <DebugElement>showSpeakButton.childNodes[0];
-      const theInput = <DebugElement>theDiv.childNodes[0];
-      expect(theInput.attributes['aria-checked']).toBe('false');
-      expect(configServiceStub.displayedButtons.showSpeakButton).toBeFalsy();
+      const showSpeakButton = fixture.debugElement.query(By.css('input[name="showSpeakButton"]'));
+      expect(showSpeakButton.nativeNode.checked).toBeFalse();
+      expect(configServiceStub.displayedButtons.showSpeakButton).toBeFalse();
       showSpeakButton.nativeElement.click();
       fixture.detectChanges();
       fixture.whenStable().then(() => {
         // checkbox should now be checked
-        expect(theInput.attributes['aria-checked']).toBe('true');
+        expect(showSpeakButton.nativeNode.checked).toBeTrue();
 
         // call save
         component.save();
         fixture.detectChanges();
 
         // internal component state should also be true
-        expect(component.displayedButtons.showSpeakButton).toBeTruthy();
+        expect(component.displayedButtons.showSpeakButton).toBeTrue();
         // config should now also be true
-        expect(configServiceStub.displayedButtons.showSpeakButton).toBeTruthy();
+        expect(configServiceStub.displayedButtons.showSpeakButton).toBeTrue();
         done();
       });
     });
