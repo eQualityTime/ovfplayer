@@ -37,6 +37,8 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 
 .formLabel {
   white-space: normal;
+  padding-bottom: 25px;
+  font-size: 16px;
 }
 
 .formButtons {
@@ -47,6 +49,7 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 
 .clickable {
   cursor: pointer;
+  padding-bottom: 20px;
 }
 
 .clickable, i {
@@ -64,7 +67,10 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
   color: red;
 }
 
-/* TODO(mdc-migration): The following rule targets internal classes of radio that may no longer apply for the MDC version. */
-mat-radio-button {
-  padding: 25px;
+.mat-mdc-radio-button {
+  margin: 25px;
+}
+
+.mat-mdc-card {
+  padding: 15px;
 }

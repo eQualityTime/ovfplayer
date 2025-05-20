@@ -118,14 +118,14 @@ class ScannableSpeechbarProvider extends Subscriber<ScanningModel> implements Sc
   private rows: ScannableSpeechbarRow[];
 
   constructor(displayedButtons: ButtonDisplayConfig, speakOnSpeechbarClick: boolean, speechbarComponent: SpeechbarComponent) {
-    super((scanningModel: ScanningModel) => {
+    super({next: (scanningModel: ScanningModel) => {
       speechbarComponent.scanningModel = scanningModel;
 
       if (speechbarComponent.scanningModel.currentSelection &&
         speechbarComponent.scanningModel.currentSelection.type === ScannableButton.TYPE) {
         (<ScannableButton>speechbarComponent.scanningModel.currentSelection).handler();
       }
-    });
+    }, error: () => {}, complete: () => {}});
     this.rows = [new ScannableSpeechbarRow(displayedButtons, speakOnSpeechbarClick, speechbarComponent)];
   }
 

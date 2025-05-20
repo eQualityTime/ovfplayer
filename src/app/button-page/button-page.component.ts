@@ -90,14 +90,14 @@ class ScannableButtonRowProvider extends Subscriber<ScanningModel> implements Sc
   private scanningModel: ScanningModel;
 
   constructor(board: OBFBoard, buttonPressHandler: (Button) => void) {
-    super((scanningModel: ScanningModel) => {
+    super({next: (scanningModel: ScanningModel) => {
       this.scanningModel = scanningModel;
 
       if (this.scanningModel.currentSelection && this.scanningModel.currentSelection.type === ScannableButton.TYPE) {
         const button = (<ScannableButton>this.scanningModel.currentSelection).button;
         buttonPressHandler(button);
       }
-    });
+    }, error: () => {}, complete: () => {}});
     const rowHeight = (100 / board.grid.rows).toString() + '%';
     this.rows = board.grid.order.map((row, index) => new ScannableButtonRow(this, board, row, index + 1, rowHeight));
   }
