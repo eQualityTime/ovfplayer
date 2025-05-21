@@ -97,7 +97,7 @@ class ScannableButtonRowProvider extends Subscriber<ScanningModel> implements Sc
         const button = (<ScannableButton>this.scanningModel.currentSelection).button;
         buttonPressHandler(button);
       }
-    }, error: () => {}, complete: () => {}});
+    }, error: (err: any) => { console.log(err); }, complete: () => {}});
     const rowHeight = (100 / board.grid.rows).toString() + '%';
     this.rows = board.grid.order.map((row, index) => new ScannableButtonRow(this, board, row, index + 1, rowHeight));
   }

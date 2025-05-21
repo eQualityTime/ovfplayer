@@ -125,7 +125,7 @@ class ScannableSpeechbarProvider extends Subscriber<ScanningModel> implements Sc
         speechbarComponent.scanningModel.currentSelection.type === ScannableButton.TYPE) {
         (<ScannableButton>speechbarComponent.scanningModel.currentSelection).handler();
       }
-    }, error: () => {}, complete: () => {}});
+    }, error: (err: any) => { console.log(err); }, complete: () => {}});
     this.rows = [new ScannableSpeechbarRow(displayedButtons, speakOnSpeechbarClick, speechbarComponent)];
   }
 
