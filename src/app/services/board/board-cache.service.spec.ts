@@ -14,7 +14,7 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: */
 import { TestBed, inject } from '@angular/core/testing';
 import { BoardCacheService } from './board-cache.service';
-import { LocalStorage } from '@ngx-pwa/local-storage';
+import { StorageMap } from '@ngx-pwa/local-storage';
 import { of } from 'rxjs';
 import { OBZBoardSet } from '../../obzboard-set';
 
@@ -31,45 +31,45 @@ describe('BoardCacheService', () => {
 
   it(
     'should call removeItem when clear',
-    inject([BoardCacheService, LocalStorage], (service: BoardCacheService, localStorage: LocalStorage) => {
-      spyOn(localStorage, 'removeItem').and.returnValue(of(true));
+    inject([BoardCacheService, StorageMap], (service: BoardCacheService, localStorage: StorageMap) => {
+      spyOn(localStorage, 'delete').and.returnValue(of(undefined));
       service.clear();
-      expect(localStorage.removeItem).toHaveBeenCalled();
+      expect(localStorage.delete).toHaveBeenCalled();
     })
   );
 
   it('should call setItem when save', (done) => {
-    inject([BoardCacheService, LocalStorage], (service: BoardCacheService, localStorage: LocalStorage) => {
-      spyOn(localStorage, 'setItem').and.returnValue(of(true));
+    inject([BoardCacheService, StorageMap], (service: BoardCacheService, localStorage: StorageMap) => {
+      spyOn(localStorage, 'set').and.returnValue(of(undefined));
       const boardSet = new OBZBoardSet();
       service.save(boardSet).subscribe(ret => {
         expect(ret).toBe(boardSet);
         done();
       });
-      expect(localStorage.setItem).toHaveBeenCalled();
+      expect(localStorage.set).toHaveBeenCalled();
     })();
   });
 
   it('should call getItem when retrieve', (done) => {
-    inject([BoardCacheService, LocalStorage], (service: BoardCacheService, localStorage: LocalStorage) => {
+    inject([BoardCacheService, StorageMap], (service: BoardCacheService, localStorage: StorageMap) => {
       const boardSet = {
         rootBoardKey: 'testRoot',
         images: [],
         sounds: [],
         boards: []
       };
-      spyOn(localStorage, 'getItem').and.returnValue(of(boardSet));
+      spyOn(localStorage, 'get').and.returnValue(of(boardSet));
       service.retrieve().subscribe(ret => {
         expect(ret.rootBoardKey).toBe('testRoot');
         done();
       });
-      expect(localStorage.getItem).toHaveBeenCalled();
+      expect(localStorage.get).toHaveBeenCalled();
     })();
   });
 
   it('should throw error when cache is empty', (done) => {
-    inject([BoardCacheService, LocalStorage], (service: BoardCacheService, localStorage: LocalStorage) => {
-      spyOn(localStorage, 'getItem').and.returnValue(of(null));
+    inject([BoardCacheService, StorageMap], (service: BoardCacheService, localStorage: StorageMap) => {
+      spyOn(localStorage, 'get').and.returnValue(of(null));
       service.retrieve().subscribe({
         next: () => {},
         error: (err) => {
@@ -77,7 +77,7 @@ describe('BoardCacheService', () => {
           done();
         }
       });
-      expect(localStorage.getItem).toHaveBeenCalled();
+      expect(localStorage.get).toHaveBeenCalled();
     })();
   });
 });

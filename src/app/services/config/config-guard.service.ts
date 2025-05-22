@@ -13,13 +13,13 @@ You should have received a copy of the GNU General Public License
 along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: */
 import { Injectable } from '@angular/core';
-import { CanActivate, Router, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
+import { Router, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
 import { ConfigService } from './config.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ConfigGuardService implements CanActivate {
+export class ConfigGuardService  {
 
   constructor(private router: Router, private config: ConfigService) { }
 

@@ -13,7 +13,7 @@ You should have received a copy of the GNU General Public License
 along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: */
 import { Injectable } from '@angular/core';
-import { LocalStorage } from '@ngx-pwa/local-storage';
+import { StorageMap } from '@ngx-pwa/local-storage';
 import { OBZBoardSet, SavedOBZBoardSet } from '../../obzboard-set';
 import { Observable } from 'rxjs';
 import { map, first } from 'rxjs/operators';
@@ -26,15 +26,15 @@ export class BoardCacheService {
 
   private static BOARD_CACHE_KEY = 'ovfCurrentBoard';
 
-  constructor(private localStorage: LocalStorage) { }
+  constructor(private localStorage: StorageMap) { }
 
   public clear(): Observable<boolean> {
     this.log('Clearing local board cache');
-    return this.localStorage.removeItem(BoardCacheService.BOARD_CACHE_KEY).pipe(first());
+    return this.localStorage.delete(BoardCacheService.BOARD_CACHE_KEY).pipe(first());
   }
 
   public retrieve(): Observable<OBZBoardSet> {
-    return this.localStorage.getItem(BoardCacheService.BOARD_CACHE_KEY).pipe(map((data: SavedOBZBoardSet) => {
+    return this.localStorage.get(BoardCacheService.BOARD_CACHE_KEY).pipe(map((data: SavedOBZBoardSet) => {
       if (data) {
         this.log('Successfully loaded board from cache');
 
@@ -62,7 +62,7 @@ export class BoardCacheService {
   }
 
   public save(boardSet: OBZBoardSet): Observable<OBZBoardSet> {
-    return this.localStorage.setItem(BoardCacheService.BOARD_CACHE_KEY, boardSet).pipe(
+    return this.localStorage.set(BoardCacheService.BOARD_CACHE_KEY, boardSet).pipe(
       map(success => boardSet),
       first()
     );

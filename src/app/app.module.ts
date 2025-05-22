@@ -35,7 +35,7 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTabsModule } from '@angular/material/tabs';
 
-import { WebStorageModule } from 'ngx-store';
+import { WebStorageModule } from '@efaps/ngx-store';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
