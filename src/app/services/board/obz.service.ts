@@ -21,7 +21,7 @@ import { UrlUtils } from '../../url-utils';
 import { OBZBoardSet } from '../../obzboard-set';
 import { OBFBoard } from '../../obfboard';
 
-import * as JSZip from 'jszip';
+import JSZip from 'jszip';
 import { FatalOpenVoiceFactoryError, ErrorCodes } from '../../errors';
 import { BoardCacheService } from './board-cache.service';
 import { ProgressService } from '../progress/progress.service';

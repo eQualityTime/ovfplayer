@@ -13,21 +13,22 @@ You should have received a copy of the GNU General Public License
 along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: */
 import { TestBed, inject } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { OBZFixture } from '../../../test-utils/OBZFixture';
 import { ObzService } from './obz.service';
 import { ErrorCodes } from '../../errors';
 import { BoardCacheService } from './board-cache.service';
 import { of, throwError } from 'rxjs';
 import { OBZBoardSet } from '../../obzboard-set';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('ObzService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [ObzService, BoardCacheService]
-    });
+    imports: [],
+    providers: [ObzService, BoardCacheService, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+});
   });
 
   it('should be created', inject([ObzService], (service: ObzService) => {

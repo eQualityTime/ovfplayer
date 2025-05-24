@@ -22,9 +22,10 @@ import { OBFBoard, Button } from '../obfboard';
 import { ObfButtonComponent } from '../obf-button/obf-button.component';
 import { MatRippleModule } from '@angular/material/core';
 import { ProgressComponent } from '../progress/progress.component';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { InteractionEventHandlerDirective } from '../interaction-event-handler.directive';
 import { ConfigService, InteractionEventType } from '../services/config/config.service';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('ButtonPageComponent', () => {
   let component: ButtonPageComponent;
@@ -53,10 +54,10 @@ describe('ButtonPageComponent', () => {
     };
 
     TestBed.configureTestingModule({
-      imports: [ MatRippleModule, HttpClientTestingModule ],
-      declarations: [ ButtonPageComponent, ObfButtonComponent, ProgressComponent, InteractionEventHandlerDirective ],
-      providers: [ BoardService, SpeechbarService, {provide: ConfigService, useValue: configServiceStub} ]
-    })
+    declarations: [ButtonPageComponent, ObfButtonComponent, ProgressComponent, InteractionEventHandlerDirective],
+    imports: [MatRippleModule],
+    providers: [BoardService, SpeechbarService, { provide: ConfigService, useValue: configServiceStub }, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+})
     .compileComponents();
   }));
 
@@ -220,10 +221,10 @@ describe('ButtonPageComponent - speak on trigger', () => {
     };
 
     TestBed.configureTestingModule({
-      imports: [ MatRippleModule, HttpClientTestingModule ],
-      declarations: [ ButtonPageComponent, ObfButtonComponent, ProgressComponent, InteractionEventHandlerDirective ],
-      providers: [ BoardService, SpeechbarService, {provide: ConfigService, useValue: configServiceStub} ]
-    })
+    declarations: [ButtonPageComponent, ObfButtonComponent, ProgressComponent, InteractionEventHandlerDirective],
+    imports: [MatRippleModule],
+    providers: [BoardService, SpeechbarService, { provide: ConfigService, useValue: configServiceStub }, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+})
     .compileComponents();
   }));
 

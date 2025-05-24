@@ -17,7 +17,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule, ErrorHandler } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { LayoutModule } from '@angular/cdk/layout';
 
 import { MatButtonModule } from '@angular/material/button';
@@ -50,47 +50,41 @@ import { OBFPageComponent } from './obfpage/obfpage.component';
 import { ProgressComponent } from './progress/progress.component';
 import { InteractionEventHandlerDirective } from './interaction-event-handler.directive';
 
-@NgModule({
-  declarations: [
-    AppComponent,
-    ButtonPageComponent,
-    SpeechbarComponent,
-    ConfigPageComponent,
-    MainPageComponent,
-    ObfButtonComponent,
-    ErrorPageComponent,
-    OBFPageComponent,
-    ProgressComponent,
-    InteractionEventHandlerDirective
-  ],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    FormsModule,
-    HttpClientModule,
-    MatGridListModule,
-    MatCardModule,
-    MatFormFieldModule,
-    MatCheckboxModule,
-    MatMenuModule,
-    MatIconModule,
-    MatInputModule,
-    MatButtonModule,
-    MatSnackBarModule,
-    MatTabsModule,
-    LayoutModule,
-    AppRoutingModule,
-    WebStorageModule,
-    MatRippleModule,
-    MatSliderModule,
-    MatRadioModule,
-    MatSelectModule
-  ],
-  providers: [
-    {
-      provide: ErrorHandler, useClass: GlobalErrorHandlerService
-    }
-  ],
-  bootstrap: [AppComponent]
-})
+@NgModule({ declarations: [
+        AppComponent,
+        ButtonPageComponent,
+        SpeechbarComponent,
+        ConfigPageComponent,
+        MainPageComponent,
+        ObfButtonComponent,
+        ErrorPageComponent,
+        OBFPageComponent,
+        ProgressComponent,
+        InteractionEventHandlerDirective
+    ],
+    bootstrap: [AppComponent], imports: [BrowserModule,
+        BrowserAnimationsModule,
+        FormsModule,
+        MatGridListModule,
+        MatCardModule,
+        MatFormFieldModule,
+        MatCheckboxModule,
+        MatMenuModule,
+        MatIconModule,
+        MatInputModule,
+        MatButtonModule,
+        MatSnackBarModule,
+        MatTabsModule,
+        LayoutModule,
+        AppRoutingModule,
+        WebStorageModule,
+        MatRippleModule,
+        MatSliderModule,
+        MatRadioModule,
+        MatSelectModule], providers: [
+        {
+            provide: ErrorHandler, useClass: GlobalErrorHandlerService
+        },
+        provideHttpClient(withInterceptorsFromDi())
+    ] })
 export class AppModule { }
