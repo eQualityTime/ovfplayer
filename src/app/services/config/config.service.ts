@@ -13,7 +13,7 @@ You should have received a copy of the GNU General Public License
 along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: */
 import { Injectable } from '@angular/core';
-import { LocalStorage } from 'ngx-store';
+import { LocalStorage } from '@efaps/ngx-store';
 import { Subject } from 'rxjs';
 
 export interface ButtonDisplayConfig {

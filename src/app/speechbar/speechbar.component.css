@@ -19,6 +19,7 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 
 .speechbar {
   display: flex;
+  flex-direction: row;
   overflow-x: scroll;
   overflow-y: hidden;
   flex-grow: 1;
@@ -53,6 +54,12 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
   background: var(--button-image) no-repeat 50% 35%;
   background-size: auto 25%;
   line-height: normal;
+  letter-spacing: normal;
+}
+
+.shortTextButton {
+  padding-left: 25px;
+  padding-right: 25px;
 }
 
 .scanHighlight {

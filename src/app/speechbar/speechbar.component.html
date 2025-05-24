@@ -16,19 +16,19 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
     [class.scanHighlight]="buttonRow.isHighlighted()"
     [class.scanSelect]="buttonRow.isSelected()">
   <div class="stackedButtonContainer">
-    <button class="stackedButton" mat-raised-button [appInteractionEventHandler]="buttonRow.speak.handler" [disabled]="speaking"
+    <button class="stackedButton shortTextButton" mat-raised-button [appInteractionEventHandler]="buttonRow.speak.handler" [disabled]="speaking"
             [class.scanHighlight]="buttonRow.speak.isHighlighted()"
             [class.scanSelect]="buttonRow.speak.isSelected()"
             style="--button-image: url('assets/images/speechbubble.png')"
             *ngIf="buttonRow.speak">{{buttonRow.speak.label}}</button>
-    <button class="stackedButton" mat-raised-button [appInteractionEventHandler]="buttonRow.home.handler"
+    <button class="stackedButton shortTextButton" mat-raised-button [appInteractionEventHandler]="buttonRow.home.handler"
             [class.scanHighlight]="buttonRow.home.isHighlighted()"
             [class.scanSelect]="buttonRow.home.isSelected()"
             style="--button-image: url('assets/images/home.png')"
             *ngIf="buttonRow.home">{{buttonRow.home.label}}</button>
   </div>
 
-  <mat-card class="speechbar" *ngIf="showIconsInSpeechbar; else vocalization"
+  <mat-card appearance="outlined" class="speechbar" *ngIf="showIconsInSpeechbar; else vocalization"
             [appInteractionEventHandler]="buttonRow.speechbar && buttonRow.speechbar.handler"
             [class.scanHighlight]="buttonRow.speechbar && buttonRow.speechbar.isHighlighted()"
             [class.scanSelect]="buttonRow.speechbar && buttonRow.speechbar.isSelected()">
@@ -37,11 +37,11 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
     </div>
   </mat-card>
   <ng-template #vocalization>
-    <mat-card class="speechbar" [appInteractionEventHandler]="buttonRow.speechbar && buttonRow.speechbar.handler"
+    <mat-card appearance="outlined" class="speechbar" [appInteractionEventHandler]="buttonRow.speechbar && buttonRow.speechbar.handler"
               [class.scanHighlight]="buttonRow.speechbar && buttonRow.speechbar.isHighlighted()"
               [class.scanSelect]="buttonRow.speechbar && buttonRow.speechbar.isSelected()">
       <div class="speechbarTextItem" *ngFor="let butt of buttons">
-        <mat-card class="speechbarText">
+        <mat-card appearance="outlined" class="speechbarText">
           {{butt.getVocalization()}}
         </mat-card>
       </div>
@@ -54,12 +54,12 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
             [class.scanSelect]="buttonRow.backspace.isSelected()"
             style="--button-image: url('assets/images/left.png')"
             *ngIf="buttonRow.backspace">{{buttonRow.backspace.label}}</button>
-    <button class="stackedButton" mat-raised-button [appInteractionEventHandler]="buttonRow.clear.handler"
+    <button class="stackedButton shortTextButton" mat-raised-button [appInteractionEventHandler]="buttonRow.clear.handler"
             [class.scanHighlight]="buttonRow.clear.isHighlighted()"
             [class.scanSelect]="buttonRow.clear.isSelected()"
             style="--button-image: url('assets/images/erase.png')"
             *ngIf="buttonRow.clear">{{buttonRow.clear.label}}</button>
-    <button class="stackedButton" mat-raised-button [appInteractionEventHandler]="buttonRow.back.handler"
+    <button class="stackedButton shortTextButton" mat-raised-button [appInteractionEventHandler]="buttonRow.back.handler"
             [class.scanHighlight]="buttonRow.back.isHighlighted()"
             [class.scanSelect]="buttonRow.back.isSelected()"
             style="--button-image: url('assets/images/undo.png')"

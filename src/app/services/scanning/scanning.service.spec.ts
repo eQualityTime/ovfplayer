@@ -22,7 +22,7 @@ class TestProvider extends Subscriber<ScanningModel> implements ScannableCollect
   private rows: ScannableCollection[];
 
   constructor(rows: ScannableCollection[], next: (ScanningModel) => void) {
-    super(next);
+    super({next: next, error: (err: any) => { console.log(err); }, complete: () => {}});
     this.rows = rows;
   }
 
