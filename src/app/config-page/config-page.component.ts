@@ -80,16 +80,16 @@ export class ConfigPageComponent implements OnInit {
     // TODO: some kind of validation
 
     // clear local cache of page to force a refresh
-    this.boardCache.clear().subscribe(
-      () => {
+    this.boardCache.clear().subscribe({
+      next: () => {
         this.router.navigate(['/main']);
       },
-      (error) => {
+      error: (error) => {
         // not much we can do really
         console.error('Error clearing cache', error);
         this.router.navigate(['/main']);
       }
-    );
+    });
   }
 
   copyToClipboard() {
