@@ -40,9 +40,8 @@ describe('ObfButtonComponent', () => {
     }));
 
     TestBed.configureTestingModule({
-      imports: [ MatRippleModule ],
-      declarations: [ ObfButtonComponent, InteractionEventHandlerDirective ]
-    })
+    imports: [MatRippleModule, ObfButtonComponent, InteractionEventHandlerDirective]
+})
     .compileComponents();
   }));
 

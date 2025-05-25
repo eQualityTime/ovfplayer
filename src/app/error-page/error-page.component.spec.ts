@@ -26,10 +26,9 @@ describe('ErrorPageComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ ErrorPageComponent, OBFPageComponent ],
-      imports: [ MatCardModule, RouterModule ],
-      providers: [ErrorService]
-    })
+    imports: [MatCardModule, RouterModule, ErrorPageComponent, OBFPageComponent],
+    providers: [ErrorService]
+})
     .compileComponents();
   }));
 

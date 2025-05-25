@@ -29,10 +29,9 @@ describe('GlobalErrorHandlerService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ErrorPageComponent],
-      providers: [GlobalErrorHandlerService, ErrorService],
-      imports: [RouterModule.forRoot([{ path: 'error', component: ErrorPageComponent }])]
-    });
+    providers: [GlobalErrorHandlerService, ErrorService],
+    imports: [RouterModule.forRoot([{ path: 'error', component: ErrorPageComponent }]), ErrorPageComponent]
+});
 
     router = TestBed.inject(Router);
     errSer = TestBed.inject(ErrorService);

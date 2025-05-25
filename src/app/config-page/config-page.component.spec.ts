@@ -69,12 +69,11 @@ describe('ConfigPageComponent', () => {
     snackbarStub = {};
 
     TestBed.configureTestingModule({
-      declarations: [ ConfigPageComponent, OBFPageComponent ],
-      providers: [
-        {provide: ConfigService, useValue: configServiceStub},
-        {provide: MatSnackBar, useValue: snackbarStub }
-      ],
-      imports: [
+    providers: [
+        { provide: ConfigService, useValue: configServiceStub },
+        { provide: MatSnackBar, useValue: snackbarStub }
+    ],
+    imports: [
         FormsModule,
         MatFormFieldModule,
         MatCardModule,
@@ -85,13 +84,14 @@ describe('ConfigPageComponent', () => {
         MatSliderModule,
         MatIconModule,
         MatRadioModule,
-        MatSelectModule, 
+        MatSelectModule,
         RouterModule.forRoot([
-          {path: 'config', component: ConfigPageComponent}, 
-          {path: 'main', component: ConfigPageComponent}
-        ])
-      ]
-    }).compileComponents();
+            { path: 'config', component: ConfigPageComponent },
+            { path: 'main', component: ConfigPageComponent }
+        ]),
+        ConfigPageComponent, OBFPageComponent
+    ]
+}).compileComponents();
   }));
 
   beforeEach(() => {

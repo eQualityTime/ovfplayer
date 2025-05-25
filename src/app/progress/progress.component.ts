@@ -15,12 +15,13 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ProgressObject, ProgressService } from '../services/progress/progress.service';
 import { Subscription } from 'rxjs';
+import { NgIf } from '@angular/common';
 
 @Component({
     selector: 'app-progress',
     templateUrl: './progress.component.html',
     styleUrls: ['./progress.component.css'],
-    standalone: false
+    imports: [NgIf]
 })
 export class ProgressComponent implements OnInit, OnDestroy {
 

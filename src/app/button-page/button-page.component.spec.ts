@@ -54,8 +54,7 @@ describe('ButtonPageComponent', () => {
     };
 
     TestBed.configureTestingModule({
-    declarations: [ButtonPageComponent, ObfButtonComponent, ProgressComponent, InteractionEventHandlerDirective],
-    imports: [MatRippleModule],
+    imports: [MatRippleModule, ButtonPageComponent, ObfButtonComponent, ProgressComponent, InteractionEventHandlerDirective],
     providers: [BoardService, SpeechbarService, { provide: ConfigService, useValue: configServiceStub }, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
 })
     .compileComponents();
@@ -221,8 +220,7 @@ describe('ButtonPageComponent - speak on trigger', () => {
     };
 
     TestBed.configureTestingModule({
-    declarations: [ButtonPageComponent, ObfButtonComponent, ProgressComponent, InteractionEventHandlerDirective],
-    imports: [MatRippleModule],
+    imports: [MatRippleModule, ButtonPageComponent, ObfButtonComponent, ProgressComponent, InteractionEventHandlerDirective],
     providers: [BoardService, SpeechbarService, { provide: ConfigService, useValue: configServiceStub }, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
 })
     .compileComponents();

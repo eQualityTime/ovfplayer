@@ -15,12 +15,16 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 import { Component, OnInit } from '@angular/core';
 import { ErrorService, ErrorDetails } from '../services/error/error.service';
 import { Router } from '@angular/router';
+import { OBFPageComponent } from '../obfpage/obfpage.component';
+import { MatCard } from '@angular/material/card';
+import { NgIf } from '@angular/common';
+import { MatButton, MatAnchor } from '@angular/material/button';
 
 @Component({
     selector: 'app-error-page',
     templateUrl: './error-page.component.html',
     styleUrls: ['./error-page.component.css'],
-    standalone: false
+    imports: [OBFPageComponent, MatCard, NgIf, MatButton, MatAnchor]
 })
 export class ErrorPageComponent implements OnInit {
 

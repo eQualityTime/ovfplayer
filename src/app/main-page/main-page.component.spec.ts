@@ -31,15 +31,12 @@ describe('MainPageComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-    declarations: [
-        MainPageComponent,
+    imports: [MatCardModule, MatRippleModule, MainPageComponent,
         SpeechbarComponent,
         ButtonPageComponent,
         ObfButtonComponent,
         ProgressComponent,
-        InteractionEventHandlerDirective
-    ],
-    imports: [MatCardModule, MatRippleModule],
+        InteractionEventHandlerDirective],
     providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
 })
     .compileComponents();

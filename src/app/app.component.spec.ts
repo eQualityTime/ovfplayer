@@ -23,13 +23,11 @@ describe('AppComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [
+    imports: [
+        RouterModule,
         AppComponent
-      ],
-      imports: [
-        RouterModule
-      ],
-    }).compileComponents();
+    ],
+}).compileComponents();
   }));
 
   beforeEach(() => {

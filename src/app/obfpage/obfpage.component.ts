@@ -27,8 +27,7 @@ import { Component } from '@angular/core';
     .inner {
       margin: 20px;
     }
-  `],
-    standalone: false
+  `]
 })
 export class OBFPageComponent {
 

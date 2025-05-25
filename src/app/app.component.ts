@@ -13,12 +13,13 @@ You should have received a copy of the GNU General Public License
 along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: */
 import { Component } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.css'],
-    standalone: false
+    imports: [RouterOutlet]
 })
 export class AppComponent {
 }
