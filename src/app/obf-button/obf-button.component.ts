@@ -18,9 +18,10 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { AppearanceConfig, ConfigService } from '../services/config/config.service';
 
 @Component({
-  selector: 'app-obf-button',
-  templateUrl: './obf-button.component.html',
-  styleUrls: ['./obf-button.component.css']
+    selector: 'app-obf-button',
+    templateUrl: './obf-button.component.html',
+    styleUrls: ['./obf-button.component.css'],
+    standalone: false
 })
 export class ObfButtonComponent implements OnInit, OnDestroy {
 

@@ -15,9 +15,9 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-obfpage',
-  template: `<div class="obfpage"><div class="inner"><ng-content></ng-content></div></div>`,
-  styles: [`
+    selector: 'app-obfpage',
+    template: `<div class="obfpage"><div class="inner"><ng-content></ng-content></div></div>`,
+    styles: [`
     .obfpage {
       width: 100%;
       height: 100%;
@@ -27,7 +27,8 @@ import { Component } from '@angular/core';
     .inner {
       margin: 20px;
     }
-  `]
+  `],
+    standalone: false
 })
 export class OBFPageComponent {
 

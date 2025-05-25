@@ -28,10 +28,9 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTabsModule } from '@angular/material/tabs';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { DebugElement } from '@angular/core';
 import { OBFPageComponent } from '../obfpage/obfpage.component';
 import { By } from '@angular/platform-browser';
-import { RouterTestingModule } from '@angular/router/testing';
+import { RouterModule } from '@angular/router';
 
 
 describe('ConfigPageComponent', () => {
@@ -87,7 +86,7 @@ describe('ConfigPageComponent', () => {
         MatIconModule,
         MatRadioModule,
         MatSelectModule, 
-        RouterTestingModule.withRoutes([
+        RouterModule.forRoot([
           {path: 'config', component: ConfigPageComponent}, 
           {path: 'main', component: ConfigPageComponent}
         ])
@@ -115,7 +114,7 @@ describe('ConfigPageComponent', () => {
     expect(component.voiceConfig).not.toBe(configServiceStub.voiceConfig);
   });
 
-  it('should not save config changes if save is not pressed', done => {
+  it('should not save config changes if save is not pressed', async() => {
     fixture.detectChanges();
     expect(component.displayedButtons).not.toBe(configServiceStub.displayedButtons);
     const displayTab = fixture.nativeElement.querySelector('div[role="tab"] span[name="displayedButtons"]');
@@ -135,12 +134,11 @@ describe('ConfigPageComponent', () => {
         expect(component.displayedButtons.showSpeakButton).toBeTrue();
         // but actual config should still be false
         expect(configServiceStub.displayedButtons.showSpeakButton).toBeFalse();
-        done();
       });
     });
   });
 
-  it('should save config changes if save is pressed', done => {
+  it('should save config changes if save is pressed', async () => {
     fixture.detectChanges();
     expect(component.displayedButtons).not.toBe(configServiceStub.displayedButtons);
     const displayTab = fixture.nativeElement.querySelector('div[role="tab"] span[name="displayedButtons"]');
@@ -165,7 +163,6 @@ describe('ConfigPageComponent', () => {
         expect(component.displayedButtons.showSpeakButton).toBeTrue();
         // config should now also be true
         expect(configServiceStub.displayedButtons.showSpeakButton).toBeTrue();
-        done();
       });
     });
   });

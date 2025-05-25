@@ -21,9 +21,10 @@ import { VERSION } from '../../environments/version';
 import { BoardCacheService } from '../services/board/board-cache.service';
 
 @Component({
-  selector: 'app-config-page',
-  templateUrl: './config-page.component.html',
-  styleUrls: ['./config-page.component.css']
+    selector: 'app-config-page',
+    templateUrl: './config-page.component.html',
+    styleUrls: ['./config-page.component.css'],
+    standalone: false
 })
 export class ConfigPageComponent implements OnInit {
 
@@ -108,10 +109,6 @@ export class ConfigPageComponent implements OnInit {
 
   getVersion() {
     return VERSION.tag;
-  }
-
-  borderThicknessChange(event: any) {
-    this.appearanceConfig.borderThickness = event.value;
   }
 
   availableVoices() {

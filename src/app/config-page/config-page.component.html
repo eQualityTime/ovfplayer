@@ -31,16 +31,19 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
           <div class="formContainer">
             <mat-card appearance="outlined">
               <mat-form-field class="formInputField">
-                <input [(ngModel)]="boardURL" required matInput name="boardURL" placeholder="URL for obf/obz file" class="formInputUrl">
+                <input [(ngModel)]="boardURL" required matInput name="boardURL" placeholder="URL for obf/obz file"
+                  class="formInputUrl">
               </mat-form-field>
-              <div class="clickable" (click)="copyToClipboard()"><i class="material-icons">link</i>&nbsp;Create link</div>
+              <div class="clickable" (click)="copyToClipboard()"><i class="material-icons">link</i>&nbsp;Create link
+              </div>
             </mat-card>
           </div>
         </mat-tab>
         <mat-tab ngModelGroup="speechbarBehaviour" #speechbarBehaviourCtrl="ngModelGroup">
           <ng-template mat-tab-label>
             <mat-icon *ngIf="speechbarBehaviourCtrl.invalid" class="invalidTab">error</mat-icon>
-            <span [class.invalidTab]="speechbarBehaviourCtrl.invalid" name="speechbarBehaviour">Speechbar behaviour</span>
+            <span [class.invalidTab]="speechbarBehaviourCtrl.invalid" name="speechbarBehaviour">Speechbar
+              behaviour</span>
           </ng-template>
           <div class="formContainer">
             <mat-card appearance="outlined">
@@ -50,7 +53,8 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
             </mat-card>
             <mat-card appearance="outlined">
               <mat-checkbox [(ngModel)]="showIconsInSpeechbar" name="showIconsInSpeechbar">
-                <span class="formLabel">Display button images and labels in speechbar (instead of vocalisation text)</span>
+                <span class="formLabel">Display button images and labels in speechbar (instead of vocalisation
+                  text)</span>
               </mat-checkbox>
             </mat-card>
           </div>
@@ -62,12 +66,14 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
           </ng-template>
           <div class="formContainer">
             <mat-card appearance="outlined">
-              <mat-checkbox [(ngModel)]="buttonBehaviourConfig.speakOnTrigger" name="buttonBehaviourConfig.speakOnTrigger">
+              <mat-checkbox [(ngModel)]="buttonBehaviourConfig.speakOnTrigger"
+                name="buttonBehaviourConfig.speakOnTrigger">
                 <span class="formLabel">Speak when button is pressed (as well as adding to speechbar)</span>
               </mat-checkbox>
             </mat-card>
             <mat-card appearance="outlined">
-              <mat-radio-group [(ngModel)]="buttonBehaviourConfig.triggerEvent" name="buttonBehaviourConfig.triggerEvent">
+              <mat-radio-group [(ngModel)]="buttonBehaviourConfig.triggerEvent"
+                name="buttonBehaviourConfig.triggerEvent">
                 <div class="formLabel">Event to use to trigger button usage</div>
                 <mat-radio-button [value]="interactionEventType.click">Full click</mat-radio-button>
                 <mat-radio-button [value]="interactionEventType.mouseup">Release</mat-radio-button>
@@ -140,8 +146,8 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
             </mat-card>
             <mat-card appearance="outlined">
               <mat-form-field class="formInputField">
-                <input [required]="scanningConfig.enabled" type="number" [(ngModel)]="scanningConfig.time" name="scanningTime"
-                        matInput placeholder="Time to stay on each scanned item (in milliseconds)">
+                <input [required]="scanningConfig.enabled" type="number" [(ngModel)]="scanningConfig.time"
+                  name="scanningTime" matInput placeholder="Time to stay on each scanned item (in milliseconds)">
               </mat-form-field>
             </mat-card>
           </div>
@@ -154,10 +160,11 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
           <div class="formContainer">
             <mat-card appearance="outlined">
               <div>
-                <mat-slider min="1" max="10" step="1" color="Primary"
-                  [(ngModel)]="appearanceConfig.borderThickness" name="borderThickness" thumbLabel="true"
-                 #ngSlider><input matSliderThumb (input)="borderThicknessChange({source: ngSliderThumb, parent: ngSlider, value: ngSliderThumb.value})" #ngSliderThumb="matSliderThumb" /></mat-slider>
-                <div class="borderExample" [style.border-width]="appearanceConfig.borderThickness + 'px'">Border Thickness</div>
+                <mat-slider min="1" max="10" step="1" color="Primary" thumbLabel="true" #ngSlider><input matSliderThumb
+                    [(ngModel)]="appearanceConfig.borderThickness" name="borderThickness"
+                    #ngSliderThumb="matSliderThumb" /></mat-slider>
+                <div class="borderExample" [style.border-width]="appearanceConfig.borderThickness + 'px'">Border
+                  Thickness</div>
               </div>
             </mat-card>
             <mat-card appearance="outlined">

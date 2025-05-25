@@ -17,9 +17,10 @@ import { ErrorService, ErrorDetails } from '../services/error/error.service';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-error-page',
-  templateUrl: './error-page.component.html',
-  styleUrls: ['./error-page.component.css']
+    selector: 'app-error-page',
+    templateUrl: './error-page.component.html',
+    styleUrls: ['./error-page.component.css'],
+    standalone: false
 })
 export class ErrorPageComponent implements OnInit {
 

@@ -17,8 +17,7 @@ import { TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { GlobalErrorHandlerService } from './global-error-handler.service';
 import { FatalOpenVoiceFactoryError, OpenVoiceFactoryError } from 'src/app/errors';
 import { ErrorService } from './error.service';
-import { RouterTestingModule } from '@angular/router/testing';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { ErrorPageComponent } from 'src/app/error-page/error-page.component';
 import { Location } from '@angular/common';
 
@@ -32,7 +31,7 @@ describe('GlobalErrorHandlerService', () => {
     TestBed.configureTestingModule({
       declarations: [ErrorPageComponent],
       providers: [GlobalErrorHandlerService, ErrorService],
-      imports: [RouterTestingModule.withRoutes([{ path: 'error', component: ErrorPageComponent }])]
+      imports: [RouterModule.forRoot([{ path: 'error', component: ErrorPageComponent }])]
     });
 
     router = TestBed.inject(Router);

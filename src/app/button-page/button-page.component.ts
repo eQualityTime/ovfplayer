@@ -116,9 +116,10 @@ class ScannableButtonRowProvider extends Subscriber<ScanningModel> implements Sc
 }
 
 @Component({
-  selector: 'app-button-page',
-  templateUrl: './button-page.component.html',
-  styleUrls: ['./button-page.component.css']
+    selector: 'app-button-page',
+    templateUrl: './button-page.component.html',
+    styleUrls: ['./button-page.component.css'],
+    standalone: false
 })
 export class ButtonPageComponent implements OnInit, OnDestroy {
 

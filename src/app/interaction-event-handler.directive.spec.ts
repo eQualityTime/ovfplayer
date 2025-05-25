@@ -19,7 +19,8 @@ import { Component } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
 @Component({
-  template: '<div [appInteractionEventHandler]="testHandler"></div>'
+    template: '<div [appInteractionEventHandler]="testHandler"></div>',
+    standalone: false
 })
 class TestClickHandlerComponent {
   testHandler() {

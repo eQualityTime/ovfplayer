@@ -16,7 +16,8 @@ import { Directive, HostListener, Input } from '@angular/core';
 import { ConfigService, InteractionEventType } from './services/config/config.service';
 
 @Directive({
-  selector: '[appInteractionEventHandler]'
+    selector: '[appInteractionEventHandler]',
+    standalone: false
 })
 export class InteractionEventHandlerDirective {
 

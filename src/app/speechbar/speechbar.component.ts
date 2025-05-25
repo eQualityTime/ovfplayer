@@ -135,9 +135,10 @@ class ScannableSpeechbarProvider extends Subscriber<ScanningModel> implements Sc
 }
 
 @Component({
-  selector: 'app-speechbar',
-  templateUrl: './speechbar.component.html',
-  styleUrls: ['./speechbar.component.css']
+    selector: 'app-speechbar',
+    templateUrl: './speechbar.component.html',
+    styleUrls: ['./speechbar.component.css'],
+    standalone: false
 })
 export class SpeechbarComponent implements OnInit, OnDestroy {
   private _displayedButtons: ButtonDisplayConfig;

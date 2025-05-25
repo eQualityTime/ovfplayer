@@ -17,9 +17,10 @@ import { ProgressObject, ProgressService } from '../services/progress/progress.s
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-progress',
-  templateUrl: './progress.component.html',
-  styleUrls: ['./progress.component.css']
+    selector: 'app-progress',
+    templateUrl: './progress.component.html',
+    styleUrls: ['./progress.component.css'],
+    standalone: false
 })
 export class ProgressComponent implements OnInit, OnDestroy {
 
