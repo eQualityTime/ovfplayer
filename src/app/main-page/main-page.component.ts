@@ -15,11 +15,15 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 import { Component } from '@angular/core';
 import { ScanningService } from '../services/scanning/scanning.service';
 import { ConfigService } from '../services/config/config.service';
+import { NgIf, NgTemplateOutlet } from '@angular/common';
+import { SpeechbarComponent } from '../speechbar/speechbar.component';
+import { ButtonPageComponent } from '../button-page/button-page.component';
 
 @Component({
-  selector: 'app-main-page',
-  templateUrl: './main-page.component.html',
-  styleUrls: ['./main-page.component.css']
+    selector: 'app-main-page',
+    templateUrl: './main-page.component.html',
+    styleUrls: ['./main-page.component.css'],
+    imports: [NgIf, NgTemplateOutlet, SpeechbarComponent, ButtonPageComponent]
 })
 export class MainPageComponent {
 

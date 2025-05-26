@@ -19,11 +19,25 @@ import { ConfigService, ButtonDisplayConfig, ScanningConfig, AppearanceConfig, B
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { VERSION } from '../../environments/version';
 import { BoardCacheService } from '../services/board/board-cache.service';
+import { OBFPageComponent } from '../obfpage/obfpage.component';
+import { MatCard } from '@angular/material/card';
+import { FormsModule } from '@angular/forms';
+import { MatButton } from '@angular/material/button';
+import { MatTabGroup, MatTab, MatTabLabel } from '@angular/material/tabs';
+import { NgIf, NgFor } from '@angular/common';
+import { MatIcon } from '@angular/material/icon';
+import { MatFormField } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
+import { MatSelect, MatOption } from '@angular/material/select';
+import { MatSlider, MatSliderThumb } from '@angular/material/slider';
 
 @Component({
-  selector: 'app-config-page',
-  templateUrl: './config-page.component.html',
-  styleUrls: ['./config-page.component.css']
+    selector: 'app-config-page',
+    templateUrl: './config-page.component.html',
+    styleUrls: ['./config-page.component.css'],
+    imports: [OBFPageComponent, MatCard, FormsModule, MatButton, MatTabGroup, MatTab, MatTabLabel, NgIf, MatIcon, MatFormField, MatInput, MatCheckbox, MatRadioGroup, MatRadioButton, MatSelect, MatOption, NgFor, MatSlider, MatSliderThumb]
 })
 export class ConfigPageComponent implements OnInit {
 
@@ -79,16 +93,16 @@ export class ConfigPageComponent implements OnInit {
     // TODO: some kind of validation
 
     // clear local cache of page to force a refresh
-    this.boardCache.clear().subscribe(
-      () => {
+    this.boardCache.clear().subscribe({
+      next: () => {
         this.router.navigate(['/main']);
       },
-      (error) => {
+      error: (error) => {
         // not much we can do really
         console.error('Error clearing cache', error);
         this.router.navigate(['/main']);
       }
-    );
+    });
   }
 
   copyToClipboard() {
@@ -108,10 +122,6 @@ export class ConfigPageComponent implements OnInit {
 
   getVersion() {
     return VERSION.tag;
-  }
-
-  borderThicknessChange(event: any) {
-    this.appearanceConfig.borderThickness = event.value;
   }
 
   availableVoices() {

@@ -18,9 +18,7 @@ import { TestBed, ComponentFixture, fakeAsync, tick, waitForAsync  } from '@angu
 import { Component } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
-@Component({
-  template: '<div [appInteractionEventHandler]="testHandler"></div>'
-})
+@Component({ template: '<div [appInteractionEventHandler]="testHandler"></div>' , imports: [InteractionEventHandlerDirective]})
 class TestClickHandlerComponent {
   testHandler() {
     return 3;
@@ -43,12 +41,11 @@ describe('ClickHandlerDirective', () => {
     };
 
     TestBed.configureTestingModule({
-      declarations: [ TestClickHandlerComponent, InteractionEventHandlerDirective ],
+      imports: [TestClickHandlerComponent, InteractionEventHandlerDirective],
       providers: [
-        {provide: ConfigService, useValue: configServiceStub}
+          { provide: ConfigService, useValue: configServiceStub }
       ]
-    })
-    .compileComponents();
+    }).compileComponents();
   }));
 
   beforeEach(() => {

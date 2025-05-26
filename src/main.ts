@@ -12,18 +12,47 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: */
-import { enableProdMode } from '@angular/core';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { enableProdMode, ErrorHandler, importProvidersFrom } from '@angular/core';
 
-import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
+import { GlobalErrorHandlerService } from './app/services/error/global-error-handler.service';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { BrowserModule, bootstrapApplication } from '@angular/platform-browser';
+import { provideAnimations } from '@angular/platform-browser/animations';
+import { FormsModule } from '@angular/forms';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatTabsModule } from '@angular/material/tabs';
+import { LayoutModule } from '@angular/cdk/layout';
+import { AppRoutingModule } from './app/app-routing.module';
+import { WebStorageModule } from '@efaps/ngx-store';
+import { MatRippleModule } from '@angular/material/core';
+import { MatSliderModule } from '@angular/material/slider';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatSelectModule } from '@angular/material/select';
+import { AppComponent } from './app/app.component';
 
 if (environment.production) {
   enableProdMode();
 }
 
-platformBrowserDynamic()
-  .bootstrapModule(AppModule)
+bootstrapApplication(AppComponent, {
+    providers: [
+        importProvidersFrom(BrowserModule, FormsModule, MatGridListModule, MatCardModule, MatFormFieldModule, MatCheckboxModule, MatMenuModule, MatIconModule, MatInputModule, MatButtonModule, MatSnackBarModule, MatTabsModule, LayoutModule, AppRoutingModule, WebStorageModule, MatRippleModule, MatSliderModule, MatRadioModule, MatSelectModule),
+        {
+            provide: ErrorHandler, useClass: GlobalErrorHandlerService
+        },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideAnimations()
+    ]
+})
   .then(() => {
     registerServiceWorker('service-worker');
   });

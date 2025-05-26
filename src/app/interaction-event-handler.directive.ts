@@ -15,9 +15,7 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 import { Directive, HostListener, Input } from '@angular/core';
 import { ConfigService, InteractionEventType } from './services/config/config.service';
 
-@Directive({
-  selector: '[appInteractionEventHandler]'
-})
+@Directive({ selector: '[appInteractionEventHandler]' })
 export class InteractionEventHandlerDirective {
 
   @Input()

@@ -15,10 +15,10 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 import { OBZBoardSet } from './obzboard-set';
 import { OBFBoard } from './obfboard';
 import { inject, TestBed } from '@angular/core/testing';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { ProgressService } from './services/progress/progress.service';
 import { of } from 'rxjs';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 describe('OBZBoardSet', () => {
 
@@ -60,9 +60,9 @@ describe('OBZBoardSet', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [ProgressService]
-    });
+    imports: [],
+    providers: [ProgressService, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+});
   });
 
   it('should be created', () => {

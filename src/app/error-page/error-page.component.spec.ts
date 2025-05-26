@@ -17,8 +17,8 @@ import { ComponentFixture, inject, TestBed, waitForAsync } from '@angular/core/t
 import { ErrorPageComponent } from './error-page.component';
 import { OBFPageComponent } from '../obfpage/obfpage.component';
 import { MatCardModule } from '@angular/material/card';
-import { RouterTestingModule } from '@angular/router/testing';
 import { ErrorDetails, ErrorService } from '../services/error/error.service';
+import { RouterModule } from '@angular/router';
 
 describe('ErrorPageComponent', () => {
   let component: ErrorPageComponent;
@@ -26,10 +26,9 @@ describe('ErrorPageComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ ErrorPageComponent, OBFPageComponent ],
-      imports: [ MatCardModule, RouterTestingModule.withRoutes([]) ],
-      providers: [ErrorService]
-    })
+    imports: [MatCardModule, RouterModule, ErrorPageComponent, OBFPageComponent],
+    providers: [ErrorService]
+})
     .compileComponents();
   }));
 

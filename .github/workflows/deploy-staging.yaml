@@ -23,7 +23,7 @@ jobs:
     - name: Deploy staging
       uses: ./.github/actions/deploy-to-gh-pages-action
       with: 
-        node-version: 20.9.x
+        node-version: 22.16.x
         build-href: 'https://equalitytime.github.io/teststaging/'
         additional-build-args: '--configuration=staging'
         ghpages-repo: 'eQualityTime/teststaging'

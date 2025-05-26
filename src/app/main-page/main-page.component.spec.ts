@@ -13,7 +13,7 @@ You should have received a copy of the GNU General Public License
 along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: */
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { MatCardModule } from '@angular/material/card';
 import { MatRippleModule } from '@angular/material/core';
 
@@ -23,6 +23,7 @@ import { ButtonPageComponent } from '../button-page/button-page.component';
 import { ObfButtonComponent } from '../obf-button/obf-button.component';
 import { ProgressComponent } from '../progress/progress.component';
 import { InteractionEventHandlerDirective } from '../interaction-event-handler.directive';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('MainPageComponent', () => {
   let component: MainPageComponent;
@@ -30,16 +31,14 @@ describe('MainPageComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        MainPageComponent,
+    imports: [MatCardModule, MatRippleModule, MainPageComponent,
         SpeechbarComponent,
         ButtonPageComponent,
         ObfButtonComponent,
         ProgressComponent,
-        InteractionEventHandlerDirective
-      ],
-      imports: [ MatCardModule, HttpClientTestingModule, MatRippleModule ]
-    })
+        InteractionEventHandlerDirective],
+    providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+})
     .compileComponents();
   }));
 

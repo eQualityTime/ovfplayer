@@ -12,7 +12,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: */
-import * as urlParse from 'url-parse';
+import urlParse from 'url-parse';
 
 export class UrlUtils {
   public getSlug(url: string): string {

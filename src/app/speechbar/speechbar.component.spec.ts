@@ -52,14 +52,13 @@ describe('SpeechbarComponent', () => {
     };
 
     TestBed.configureTestingModule({
-      declarations: [ SpeechbarComponent, ObfButtonComponent, InteractionEventHandlerDirective ],
-      providers: [
-        {provide: ConfigService, useValue: configServiceStub},
-        {provide: BoardService, useValue: boardServiceStub},
-        {provide: SpeechbarService, useValue: speechbarServiceStub}
-      ],
-      imports: [ MatCardModule, MatRippleModule ]
-    })
+    providers: [
+        { provide: ConfigService, useValue: configServiceStub },
+        { provide: BoardService, useValue: boardServiceStub },
+        { provide: SpeechbarService, useValue: speechbarServiceStub }
+    ],
+    imports: [MatCardModule, MatRippleModule, SpeechbarComponent, ObfButtonComponent, InteractionEventHandlerDirective]
+})
     .compileComponents();
   }));
 

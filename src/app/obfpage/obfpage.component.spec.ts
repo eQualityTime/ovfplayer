@@ -22,8 +22,8 @@ describe('OBFPageComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ OBFPageComponent ]
-    })
+    imports: [OBFPageComponent]
+})
     .compileComponents();
   }));
 

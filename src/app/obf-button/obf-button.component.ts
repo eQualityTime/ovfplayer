@@ -16,11 +16,15 @@ import { Component, OnInit, Input, OnDestroy, HostBinding } from '@angular/core'
 import { Button } from '../obfboard';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AppearanceConfig, ConfigService } from '../services/config/config.service';
+import { MatRipple } from '@angular/material/core';
+import { InteractionEventHandlerDirective } from '../interaction-event-handler.directive';
+import { NgIf } from '@angular/common';
 
 @Component({
-  selector: 'app-obf-button',
-  templateUrl: './obf-button.component.html',
-  styleUrls: ['./obf-button.component.css']
+    selector: 'app-obf-button',
+    templateUrl: './obf-button.component.html',
+    styleUrls: ['./obf-button.component.css'],
+    imports: [MatRipple, InteractionEventHandlerDirective, NgIf]
 })
 export class ObfButtonComponent implements OnInit, OnDestroy {
 
