@@ -4,7 +4,7 @@
 name: Build and Test
 
 on:
-  pull_request_target:
+  pull_request:
     branches:
       - 'develop'
   workflow_call:
@@ -15,6 +15,10 @@ on:
       coverage:
         description: "Whether the minimum code coverage was met"
         value: ${{ jobs.build.outputs.coverage }}
+permissions:
+  contents: read
+  checks: write
+  pull-requests: write
 
 
 jobs:
