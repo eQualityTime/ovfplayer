@@ -12,21 +12,26 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: -->
-<div class="board" *ngIf="board; else noBoard">
-  <div class="boardRow"
-      *ngFor="let row of buttonProvider.getScannableCollections()"
-      [class.scanHighlight]="row.isHighlighted()"
-      [class.scanSelect]="row.isSelection()"
-      [style.height]="row.rowHeight">
-    <div class="boardButton"
-        *ngFor="let butt of row.displayButtons"
-        [class.scanHighlight]="butt && butt.isHighlighted()"
-        [class.scanSelect]="butt && butt.isSelection()">
-      <app-obf-button *ngIf="butt" [butt]="butt.button" [clickHandler]="handleButtonClick.bind(this)"></app-obf-button>
-    </div>
+@if (board) {
+  <div class="board">
+    @for (row of buttonProvider.getScannableCollections(); track row) {
+      <div class="boardRow"
+        [class.scanHighlight]="row.isHighlighted()"
+        [class.scanSelect]="row.isSelection()"
+        [style.height]="row.rowHeight">
+        @for (butt of row.displayButtons; track butt) {
+          <div class="boardButton"
+            [class.scanHighlight]="butt && butt.isHighlighted()"
+            [class.scanSelect]="butt && butt.isSelection()">
+            @if (butt) {
+              <app-obf-button [butt]="butt.button" [clickHandler]="handleButtonClick.bind(this)"></app-obf-button>
+            }
+          </div>
+        }
+      </div>
+    }
   </div>
-</div>
-
-<ng-template #noBoard>
+} @else {
   <app-progress></app-progress>
-</ng-template>
+}
+

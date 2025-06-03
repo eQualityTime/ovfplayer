@@ -17,14 +17,14 @@ import { ErrorService, ErrorDetails } from '../services/error/error.service';
 import { Router } from '@angular/router';
 import { OBFPageComponent } from '../obfpage/obfpage.component';
 import { MatCard } from '@angular/material/card';
-import { NgIf } from '@angular/common';
+
 import { MatButton, MatAnchor } from '@angular/material/button';
 
 @Component({
     selector: 'app-error-page',
     templateUrl: './error-page.component.html',
     styleUrls: ['./error-page.component.css'],
-    imports: [OBFPageComponent, MatCard, NgIf, MatButton, MatAnchor]
+    imports: [OBFPageComponent, MatCard, MatButton, MatAnchor]
 })
 export class ErrorPageComponent implements OnInit {
 

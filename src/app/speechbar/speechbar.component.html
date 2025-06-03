@@ -13,57 +13,72 @@ You should have received a copy of the GNU General Public License
 along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: -->
 <div class="speechbarContainer"
-    [class.scanHighlight]="buttonRow.isHighlighted()"
-    [class.scanSelect]="buttonRow.isSelected()">
+  [class.scanHighlight]="buttonRow.isHighlighted()"
+  [class.scanSelect]="buttonRow.isSelected()">
   <div class="stackedButtonContainer">
-    <button class="stackedButton shortTextButton" mat-raised-button [appInteractionEventHandler]="buttonRow.speak.handler" [disabled]="speaking"
-            [class.scanHighlight]="buttonRow.speak.isHighlighted()"
-            [class.scanSelect]="buttonRow.speak.isSelected()"
-            style="--button-image: url('assets/images/speechbubble.png')"
-            *ngIf="buttonRow.speak">{{buttonRow.speak.label}}</button>
-    <button class="stackedButton shortTextButton" mat-raised-button [appInteractionEventHandler]="buttonRow.home.handler"
-            [class.scanHighlight]="buttonRow.home.isHighlighted()"
-            [class.scanSelect]="buttonRow.home.isSelected()"
-            style="--button-image: url('assets/images/home.png')"
-            *ngIf="buttonRow.home">{{buttonRow.home.label}}</button>
+    @if (buttonRow.speak) {
+      <button class="stackedButton shortTextButton" mat-raised-button [appInteractionEventHandler]="buttonRow.speak.handler" [disabled]="speaking"
+        [class.scanHighlight]="buttonRow.speak.isHighlighted()"
+        [class.scanSelect]="buttonRow.speak.isSelected()"
+        style="--button-image: url('assets/images/speechbubble.png')"
+      >{{buttonRow.speak.label}}</button>
+    }
+    @if (buttonRow.home) {
+      <button class="stackedButton shortTextButton" mat-raised-button [appInteractionEventHandler]="buttonRow.home.handler"
+        [class.scanHighlight]="buttonRow.home.isHighlighted()"
+        [class.scanSelect]="buttonRow.home.isSelected()"
+        style="--button-image: url('assets/images/home.png')"
+      >{{buttonRow.home.label}}</button>
+    }
   </div>
 
-  <mat-card appearance="outlined" class="speechbar" *ngIf="showIconsInSpeechbar; else vocalization"
-            [appInteractionEventHandler]="buttonRow.speechbar && buttonRow.speechbar.handler"
-            [class.scanHighlight]="buttonRow.speechbar && buttonRow.speechbar.isHighlighted()"
-            [class.scanSelect]="buttonRow.speechbar && buttonRow.speechbar.isSelected()">
-    <div class="speechbarButtonItem" *ngFor="let butt of buttons">
-      <app-obf-button [butt]="butt"></app-obf-button>
-    </div>
-  </mat-card>
-  <ng-template #vocalization>
-    <mat-card appearance="outlined" class="speechbar" [appInteractionEventHandler]="buttonRow.speechbar && buttonRow.speechbar.handler"
-              [class.scanHighlight]="buttonRow.speechbar && buttonRow.speechbar.isHighlighted()"
-              [class.scanSelect]="buttonRow.speechbar && buttonRow.speechbar.isSelected()">
-      <div class="speechbarTextItem" *ngFor="let butt of buttons">
-        <mat-card appearance="outlined" class="speechbarText">
-          {{butt.getVocalization()}}
-        </mat-card>
-      </div>
+  @if (showIconsInSpeechbar) {
+    <mat-card appearance="outlined" class="speechbar"
+      [appInteractionEventHandler]="buttonRow.speechbar && buttonRow.speechbar.handler"
+      [class.scanHighlight]="buttonRow.speechbar && buttonRow.speechbar.isHighlighted()"
+      [class.scanSelect]="buttonRow.speechbar && buttonRow.speechbar.isSelected()">
+      @for (butt of buttons; track butt) {
+        <div class="speechbarButtonItem">
+          <app-obf-button [butt]="butt"></app-obf-button>
+        </div>
+      }
     </mat-card>
-  </ng-template>
+  } @else {
+    <mat-card appearance="outlined" class="speechbar" [appInteractionEventHandler]="buttonRow.speechbar && buttonRow.speechbar.handler"
+      [class.scanHighlight]="buttonRow.speechbar && buttonRow.speechbar.isHighlighted()"
+      [class.scanSelect]="buttonRow.speechbar && buttonRow.speechbar.isSelected()">
+      @for (butt of buttons; track butt) {
+        <div class="speechbarTextItem">
+          <mat-card appearance="outlined" class="speechbarText">
+            {{butt.getVocalization()}}
+          </mat-card>
+        </div>
+      }
+    </mat-card>
+  }
 
   <div class="stackedButtonContainer">
-    <button class="stackedButton" mat-raised-button [appInteractionEventHandler]="buttonRow.backspace.handler"
-            [class.scanHighlight]="buttonRow.backspace.isHighlighted()"
-            [class.scanSelect]="buttonRow.backspace.isSelected()"
-            style="--button-image: url('assets/images/left.png')"
-            *ngIf="buttonRow.backspace">{{buttonRow.backspace.label}}</button>
-    <button class="stackedButton shortTextButton" mat-raised-button [appInteractionEventHandler]="buttonRow.clear.handler"
-            [class.scanHighlight]="buttonRow.clear.isHighlighted()"
-            [class.scanSelect]="buttonRow.clear.isSelected()"
-            style="--button-image: url('assets/images/erase.png')"
-            *ngIf="buttonRow.clear">{{buttonRow.clear.label}}</button>
-    <button class="stackedButton shortTextButton" mat-raised-button [appInteractionEventHandler]="buttonRow.back.handler"
-            [class.scanHighlight]="buttonRow.back.isHighlighted()"
-            [class.scanSelect]="buttonRow.back.isSelected()"
-            style="--button-image: url('assets/images/undo.png')"
-            [disabled]="!stackContents"
-            *ngIf="buttonRow.back">{{buttonRow.back.label}}</button>
+    @if (buttonRow.backspace) {
+      <button class="stackedButton" mat-raised-button [appInteractionEventHandler]="buttonRow.backspace.handler"
+        [class.scanHighlight]="buttonRow.backspace.isHighlighted()"
+        [class.scanSelect]="buttonRow.backspace.isSelected()"
+        style="--button-image: url('assets/images/left.png')"
+      >{{buttonRow.backspace.label}}</button>
+    }
+    @if (buttonRow.clear) {
+      <button class="stackedButton shortTextButton" mat-raised-button [appInteractionEventHandler]="buttonRow.clear.handler"
+        [class.scanHighlight]="buttonRow.clear.isHighlighted()"
+        [class.scanSelect]="buttonRow.clear.isSelected()"
+        style="--button-image: url('assets/images/erase.png')"
+      >{{buttonRow.clear.label}}</button>
+    }
+    @if (buttonRow.back) {
+      <button class="stackedButton shortTextButton" mat-raised-button [appInteractionEventHandler]="buttonRow.back.handler"
+        [class.scanHighlight]="buttonRow.back.isHighlighted()"
+        [class.scanSelect]="buttonRow.back.isSelected()"
+        style="--button-image: url('assets/images/undo.png')"
+        [disabled]="!stackContents"
+      >{{buttonRow.back.label}}</button>
+    }
   </div>
 </div>

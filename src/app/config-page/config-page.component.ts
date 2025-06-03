@@ -24,7 +24,7 @@ import { MatCard } from '@angular/material/card';
 import { FormsModule } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
 import { MatTabGroup, MatTab, MatTabLabel } from '@angular/material/tabs';
-import { NgIf, NgFor } from '@angular/common';
+
 import { MatIcon } from '@angular/material/icon';
 import { MatFormField } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
@@ -37,7 +37,7 @@ import { MatSlider, MatSliderThumb } from '@angular/material/slider';
     selector: 'app-config-page',
     templateUrl: './config-page.component.html',
     styleUrls: ['./config-page.component.css'],
-    imports: [OBFPageComponent, MatCard, FormsModule, MatButton, MatTabGroup, MatTab, MatTabLabel, NgIf, MatIcon, MatFormField, MatInput, MatCheckbox, MatRadioGroup, MatRadioButton, MatSelect, MatOption, NgFor, MatSlider, MatSliderThumb]
+    imports: [OBFPageComponent, MatCard, FormsModule, MatButton, MatTabGroup, MatTab, MatTabLabel, MatIcon, MatFormField, MatInput, MatCheckbox, MatRadioGroup, MatRadioButton, MatSelect, MatOption, MatSlider, MatSliderThumb]
 })
 export class ConfigPageComponent implements OnInit {
 
