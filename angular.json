@@ -11,12 +11,11 @@
       "schematics": {},
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:application",
+          "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": {
-              "base": "dist/open-voice-factory"
-            },
+            "outputPath": "dist/open-voice-factory",
             "index": "src/index.html",
+            "main": "src/main.ts",
             "polyfills": ["zone.js"],
             "tsConfig": "src/tsconfig.app.json",
             "assets": [
@@ -50,8 +49,7 @@
             "extractLicenses": false,
             "sourceMap": true,
             "optimization": false,
-            "namedChunks": true,
-            "browser": "src/main.ts"
+            "namedChunks": true
           },
           "configurations": {
             "production": {
@@ -74,12 +72,6 @@
               "extractLicenses": true
             },
             "staging": {
-              "budgets": [
-                {
-                  "type": "any",
-                  "maximumWarning": "6kb"
-                }
-              ],
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
