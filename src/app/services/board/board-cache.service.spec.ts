@@ -17,6 +17,7 @@ import { BoardCacheService } from './board-cache.service';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { of } from 'rxjs';
 import { OBZBoardSet } from '../../obzboard-set';
+import { OBFBoard } from 'src/app/obfboard';
 
 describe('BoardCacheService', () => {
   beforeEach(() => {
@@ -78,6 +79,59 @@ describe('BoardCacheService', () => {
         }
       });
       expect(localStorage.get).toHaveBeenCalled();
+    })();
+  });
+
+  it('should be able to put a board into the cache and get it back out again', (done) => {
+    
+    inject([BoardCacheService], (service: BoardCacheService) => {
+      const boardSet = new OBZBoardSet();
+      boardSet.rootBoardKey = undefined;
+      const testBoardJSON = {
+        format: 'board_format',
+        id: 5,
+        locale: 'en_GB',
+        name: 'board_name',
+        description_html: '<b>desc</b>',
+        grid: {
+          rows: 2,
+          columns: 2,
+          order: [[1, null],
+          [null, 2]]
+        },
+        buttons: [
+          {
+            id: 1,
+            label: 'button1'
+          },
+          {
+            id: 2,
+            label: 'button2'
+          }
+        ],
+        images: [
+          {
+            id: 1,
+            url: 'http://example.com'
+          }
+        ],
+        sounds: [
+          {
+            id: 1,
+            url: 'http://another.com'
+          }
+        ]
+      };
+      const testBoard = new OBFBoard().deserialize(testBoardJSON);
+      boardSet.setBoard('test', testBoard);
+
+      service.save(boardSet).subscribe({next: (ret) => {
+        expect(ret).toBe(boardSet);
+        service.retrieve().subscribe({next: (ret) => {
+          expect(ret).toEqual(boardSet);
+          done();
+        }, error: done.fail });
+      }, error: done.fail });
     })();
   });
 });

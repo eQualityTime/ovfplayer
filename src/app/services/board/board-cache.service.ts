@@ -18,6 +18,7 @@ import { OBZBoardSet, SavedOBZBoardSet } from '../../obzboard-set';
 import { Observable } from 'rxjs';
 import { map, first } from 'rxjs/operators';
 import { OBFBoard } from '../../obfboard';
+import { VERSION } from '../../../environments/version';
 
 @Injectable({
   providedIn: 'root'
@@ -28,13 +29,17 @@ export class BoardCacheService {
 
   constructor(private localStorage: StorageMap) { }
 
-  public clear(): Observable<boolean> {
+  private getCacheKey(): string {
+    return BoardCacheService.BOARD_CACHE_KEY + (VERSION.tag.startsWith('DEV') ? 'DEV' : '');
+  }
+
+  public clear(): Observable<undefined> {
     this.log('Clearing local board cache');
-    return this.localStorage.delete(BoardCacheService.BOARD_CACHE_KEY).pipe(first());
+    return this.localStorage.delete(this.getCacheKey());
   }
 
   public retrieve(): Observable<OBZBoardSet> {
-    return this.localStorage.get(BoardCacheService.BOARD_CACHE_KEY).pipe(map((data: SavedOBZBoardSet) => {
+    return this.localStorage.get(this.getCacheKey()).pipe(map((data: SavedOBZBoardSet) => {
       if (data) {
         this.log('Successfully loaded board from cache');
 
@@ -62,7 +67,7 @@ export class BoardCacheService {
   }
 
   public save(boardSet: OBZBoardSet): Observable<OBZBoardSet> {
-    return this.localStorage.set(BoardCacheService.BOARD_CACHE_KEY, boardSet).pipe(
+    return this.localStorage.set(this.getCacheKey(), boardSet).pipe(
       map(success => boardSet),
       first()
     );
