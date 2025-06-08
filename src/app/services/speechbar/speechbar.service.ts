@@ -13,19 +13,17 @@ You should have received a copy of the GNU General Public License
 along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: */
 import { Injectable } from '@angular/core';
-import { Button, Image, OBFBoard, LoadBoardAction } from '../../obfboard';
+import { Button } from '../../obfboard';
 import { Observable, Observer } from 'rxjs';
 import { ConfigService } from '../config/config.service';
 
 export class ButtonFacade extends Button {
 
-  private button: Button;
   private appendages: string[] = [];
 
   constructor(button: Button) {
     super();
-    this.button = button;
-    // copies all the button properties into this facade because we can't override properties with accessors
+    // copies all the button properties into this "facade" because we can't override properties with accessors
     this.deserialize(JSON.parse(JSON.stringify(button)), button.parent);
   }
 

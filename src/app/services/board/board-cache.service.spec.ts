@@ -22,7 +22,7 @@ import { OBFBoard } from 'src/app/obfboard';
 describe('BoardCacheService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [ BoardCacheService ]
+      providers: [BoardCacheService]
     });
   });
 
@@ -72,7 +72,7 @@ describe('BoardCacheService', () => {
     inject([BoardCacheService, StorageMap], (service: BoardCacheService, localStorage: StorageMap) => {
       spyOn(localStorage, 'get').and.returnValue(of(null));
       service.retrieve().subscribe({
-        next: () => {},
+        next: () => { },
         error: (err) => {
           expect(err).toBeTruthy();
           done();
@@ -83,7 +83,7 @@ describe('BoardCacheService', () => {
   });
 
   it('should be able to put a board into the cache and get it back out again', (done) => {
-    
+
     inject([BoardCacheService], (service: BoardCacheService) => {
       spyOn(service, 'getCacheKey').and.returnValue('cache_test_only');
 
@@ -126,25 +126,33 @@ describe('BoardCacheService', () => {
       };
       const testBoard = new OBFBoard().deserialize(testBoardJSON);
       boardSet.setBoard('test', testBoard);
-      
+
       // does this want to fail? or just warn?
       // Failure means the test can never get cleaned up because we don't then run the delete
       // Warning means the test can never end up deleting real data that has a key clash (may be irrelevant due to domain scoping?)
-      service.retrieve().subscribe({next: () => { done.fail('Cache contains "test" item before test') }, error: () => {
-        const cleanup = (callback: () => void) => {
-          service.clear().subscribe({next: () => {
-            service.retrieve().subscribe({next: () => { done.fail('Cache contains "test" item after test') }, error: () => { callback(); }});
-          }, error: done.fail});
-        };
+      service.retrieve().subscribe({
+        next: () => { done.fail('Cache contains "test" item before test') }, error: () => {
+          const cleanup = (callback: () => void) => {
+            service.clear().subscribe({
+              next: () => {
+                service.retrieve().subscribe({ next: () => { done.fail('Cache contains "test" item after test') }, error: () => { callback(); } });
+              }, error: done.fail
+            });
+          };
 
-        service.save(boardSet).subscribe({next: (ret) => {
-          expect(ret).toBe(boardSet);
-          service.retrieve().subscribe({next: (ret) => {
-            expect(ret).toEqual(boardSet);
-            cleanup(done);
-          }, error: (err) => { cleanup(() => { done.fail(err); }); }});
-        }, error: (err) => { cleanup(() => { done.fail(err); }); } });
-        }});
+          service.save(boardSet).subscribe({
+            next: (ret) => {
+              expect(ret).toBe(boardSet);
+              service.retrieve().subscribe({
+                next: (ret) => {
+                  expect(ret).toEqual(boardSet);
+                  cleanup(done);
+                }, error: (err) => { cleanup(() => { done.fail(err); }); }
+              });
+            }, error: (err) => { cleanup(() => { done.fail(err); }); }
+          });
+        }
+      });
     })();
   });
 });
