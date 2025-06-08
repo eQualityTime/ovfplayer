@@ -29,7 +29,7 @@ export class BoardCacheService {
 
   constructor(private localStorage: StorageMap) { }
 
-  private getCacheKey(): string {
+  public getCacheKey(): string {
     return BoardCacheService.BOARD_CACHE_KEY + (VERSION.tag.startsWith('DEV') ? 'DEV' : '');
   }
 
