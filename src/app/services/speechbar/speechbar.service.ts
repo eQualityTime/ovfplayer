@@ -24,7 +24,12 @@ export class ButtonFacade extends Button {
   constructor(button: Button) {
     super();
     // copies all the button properties into this "facade" because we can't override properties with accessors
-    this.deserialize(JSON.parse(JSON.stringify(button)), button.parent);
+    this.deserialize(JSON.parse(JSON.stringify(button, (key, value) => {
+        if (key === "parent") {
+            return undefined; // Exclude the 'parent' property to avoid circular issues
+        }
+        return value; // Keep other properties unchanged
+    })), button.parent); // deserializing fixes the parent
   }
 
   append(appendage: string) {

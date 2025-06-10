@@ -15,7 +15,7 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 import { TestBed, inject } from '@angular/core/testing';
 
 import { SpeechbarService, ButtonFacade } from './speechbar.service';
-import { Button } from '../../obfboard';
+import { Button, OBFBoard } from '../../obfboard';
 
 describe('SpeechbarService', () => {
 
@@ -292,15 +292,18 @@ describe('SpeechbarService', () => {
 
 describe('SpeechbarService.ButtonFacade', () => {
 
+  const mockParent = new OBFBoard();
   const mockButton = new Button().deserialize({
     id: 1,
     label: 'hello',
     vocalization: 'vocal'
-  }, null);
+  }, mockParent);
+  mockParent.buttons = [mockButton];
 
   it('should be created', () => {
     const fb = new ButtonFacade(mockButton);
     expect(fb).toBeTruthy();
+    expect(fb.parent).toBe(mockButton.parent);
   });
 
   it('should pass through', () => {
@@ -316,6 +319,8 @@ describe('SpeechbarService.ButtonFacade', () => {
     expect(fb.id).toBe('1');
     expect(fb.label).toBe('helloa');
     expect(fb.vocalization).toBe('vocala');
+    expect(mockButton.label).toBe('hello');
+    expect(mockButton.vocalization).toBe('vocal');
   });
 });
 
