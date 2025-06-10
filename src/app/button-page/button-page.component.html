@@ -14,12 +14,12 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: -->
 @if (board) {
   <div class="board">
-    @for (row of buttonProvider.getScannableCollections(); track row) {
+    @for (row of buttonProvider.getScannableCollections(); track $index) {
       <div class="boardRow"
         [class.scanHighlight]="row.isHighlighted()"
         [class.scanSelect]="row.isSelection()"
         [style.height]="row.rowHeight">
-        @for (butt of row.displayButtons; track butt) {
+        @for (butt of row.displayButtons; track $index) {
           <div class="boardButton"
             [class.scanHighlight]="butt && butt.isHighlighted()"
             [class.scanSelect]="butt && butt.isSelection()">
