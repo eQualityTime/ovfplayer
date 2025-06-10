@@ -17,11 +17,12 @@ import { BoardCacheService } from './board-cache.service';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { of } from 'rxjs';
 import { OBZBoardSet } from '../../obzboard-set';
+import { OBFBoard } from 'src/app/obfboard';
 
 describe('BoardCacheService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [ BoardCacheService ]
+      providers: [BoardCacheService]
     });
   });
 
@@ -71,13 +72,84 @@ describe('BoardCacheService', () => {
     inject([BoardCacheService, StorageMap], (service: BoardCacheService, localStorage: StorageMap) => {
       spyOn(localStorage, 'get').and.returnValue(of(null));
       service.retrieve().subscribe({
-        next: () => {},
+        next: () => { },
         error: (err) => {
           expect(err).toBeTruthy();
           done();
         }
       });
       expect(localStorage.get).toHaveBeenCalled();
+    })();
+  });
+
+  it('should be able to put a board into the cache and get it back out again', (done) => {
+
+    inject([BoardCacheService], (service: BoardCacheService) => {
+      spyOn(service, 'getCacheKey').and.returnValue('cache_test_only');
+
+      const boardSet = new OBZBoardSet();
+      boardSet.rootBoardKey = undefined;
+      const testBoardJSON = {
+        format: 'board_format',
+        id: 5,
+        locale: 'en_GB',
+        name: 'board_name',
+        description_html: '<b>desc</b>',
+        grid: {
+          rows: 2,
+          columns: 2,
+          order: [[1, null],
+          [null, 2]]
+        },
+        buttons: [
+          {
+            id: 1,
+            label: 'button1'
+          },
+          {
+            id: 2,
+            label: 'button2'
+          }
+        ],
+        images: [
+          {
+            id: 1,
+            url: 'http://example.com'
+          }
+        ],
+        sounds: [
+          {
+            id: 1,
+            url: 'http://another.com'
+          }
+        ]
+      };
+      const testBoard = new OBFBoard().deserialize(testBoardJSON);
+      boardSet.setBoard('test', testBoard);
+
+      service.retrieve().subscribe({
+        next: () => { done.fail('Cache contains "test" item before test') }, error: () => {
+          const cleanup = (callback: () => void) => {
+            service.clear().subscribe({
+              next: () => {
+                service.retrieve().subscribe({ next: () => { done.fail('Cache contains "test" item after test') }, error: () => { callback(); } });
+              }, error: done.fail
+            });
+          };
+
+          service.save(boardSet).subscribe({
+            next: (ret) => {
+              expect(ret).toBe(boardSet);
+              service.retrieve().subscribe({
+                next: (ret) => {
+                  expect(ret).toEqual(boardSet);
+                  cleanup(done);
+                }, error: (err) => { cleanup(() => { done.fail(err); }); }
+              });
+            }, error: (err) => { cleanup(() => { done.fail(err); }); }
+          });
+        }
+      });
     })();
   });
 });

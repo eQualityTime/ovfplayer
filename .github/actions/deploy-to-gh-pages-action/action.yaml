@@ -43,7 +43,7 @@ runs:
     - name: Npm install extras
       shell: bash
       run: |
-        npm install -g @angular/cli@11.2.12
+        npm install -g @angular/cli@19.2.13
         npm install -g workbox-cli@3.6.3
         npm install
 

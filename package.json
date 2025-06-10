@@ -25,7 +25,7 @@
     "@angular/router": "^20.0.0",
     "@efaps/ngx-store": "^11.0.0",
     "@ngx-pwa/local-storage": "^20.0.0",
-    "class-validator": "^0.9.1",
+    "class-validator": "^0.14.2",
     "core-js": "^2.5.4",
     "jszip": "^3.10.1",
     "lodash.get": "^4.4.2",
