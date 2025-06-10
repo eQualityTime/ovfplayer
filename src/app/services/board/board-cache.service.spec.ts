@@ -127,9 +127,6 @@ describe('BoardCacheService', () => {
       const testBoard = new OBFBoard().deserialize(testBoardJSON);
       boardSet.setBoard('test', testBoard);
 
-      // does this want to fail? or just warn?
-      // Failure means the test can never get cleaned up because we don't then run the delete
-      // Warning means the test can never end up deleting real data that has a key clash (may be irrelevant due to domain scoping?)
       service.retrieve().subscribe({
         next: () => { done.fail('Cache contains "test" item before test') }, error: () => {
           const cleanup = (callback: () => void) => {
