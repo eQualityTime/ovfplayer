@@ -12,8 +12,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: */
-var util = require('util');
-require('fs')
+import { format } from 'util';
+import 'fs';
 
 var TEMPLATE = '' +
   'window.__obz__ = window.__obz__ || {};\n' +
@@ -36,7 +36,7 @@ var createOBZPreprocessor = function (logger, basePath, config) {
       .replace(/\.obz$/, '');
     log.log('Processing "%s" to "%s".', file.originalPath, fixtureName);
     file.path = file.path + '.js';
-    done(util.format(TEMPLATE, fixtureName, convertContent(content)));
+    done(format(TEMPLATE, fixtureName, convertContent(content)));
   };
   ret.handleBinaryFiles = true;
   return ret;
@@ -44,4 +44,4 @@ var createOBZPreprocessor = function (logger, basePath, config) {
 
 createOBZPreprocessor.$inject = ['logger', 'config.basePath', 'config.OBZPreprocessor'];
 
-module.exports = createOBZPreprocessor;
+export default createOBZPreprocessor;

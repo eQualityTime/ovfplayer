@@ -12,6 +12,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: */
-module.exports = {
-  'preprocessor:obz': ['factory', require('./karma-obz-preprocessor')]
+export default {
+  'preprocessor:obz': ['factory', require('./karma-obz-preprocessor').default]
 };
