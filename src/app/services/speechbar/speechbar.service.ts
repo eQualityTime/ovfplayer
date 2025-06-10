@@ -13,74 +13,32 @@ You should have received a copy of the GNU General Public License
 along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: */
 import { Injectable } from '@angular/core';
-import { Button, Image, OBFBoard, LoadBoardAction } from '../../obfboard';
+import { Button } from '../../obfboard';
 import { Observable, Observer } from 'rxjs';
 import { ConfigService } from '../config/config.service';
 
 export class ButtonFacade extends Button {
 
-  private button: Button;
   private appendages: string[] = [];
 
   constructor(button: Button) {
     super();
-    this.button = button;
+    // copies all the button properties into this "facade" because we can't override properties with accessors
+    this.deserialize(JSON.parse(JSON.stringify(button)), button.parent);
   }
 
   append(appendage: string) {
     this.appendages.push(appendage);
-  }
-
-  getVocalization(): string {
-    return this.vocalization || this.label;
-  }
-
-  getImage(): Image {
-    return this.button.getImage();
+    this.update();
   }
 
   private augment(initial: string): string {
     return [initial].concat(this.appendages).join('');
   }
 
-  get id(): string {
-    return this.button.id;
-  }
-
-  get label(): string {
-    return this.augment(this.button.label);
-  }
-
-  get vocalization(): string {
-    return this.button.vocalization ? this.augment(this.button.vocalization) : this.button.vocalization;
-  }
-
-  get imageId(): string {
-    return this.button.imageId;
-  }
-
-  get soundId(): string {
-    return this.button.soundId;
-  }
-
-  get backgroundColor(): string {
-    return this.button.backgroundColor;
-  }
-
-  get borderColor(): string {
-    return this.button.borderColor;
-  }
-
-  get actions(): string[] {
-    return this.button.actions;
-  }
-
-  get loadBoardAction(): LoadBoardAction {
-    return this.button.loadBoardAction;
-  }
-
-  get parent(): OBFBoard {
-    return this.button.parent;
+  private update() {
+    this.label = this.augment(this.label);
+    this.vocalization = this.vocalization ? this.augment(this.vocalization) : this.vocalization;
   }
 }
 
