@@ -12,9 +12,14 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: -->
-<div class="scanRegion" *ngIf="scanningEnabled(); else content;" (click)="handleClick()">
+@if (scanningEnabled()) {
+  <div class="scanRegion" (click)="handleClick()">
     <ng-container *ngTemplateOutlet="content"></ng-container>
-</div>
+  </div>
+} @else {
+  <div class="speechbar"><app-speechbar></app-speechbar></div>
+  <div class="buttonPage"><app-button-page></app-button-page></div>
+}
 
 
 <ng-template #content>

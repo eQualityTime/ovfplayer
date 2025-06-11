@@ -25,7 +25,7 @@ import {
   Scannable
 } from '../services/scanning/scanning.service';
 import { ConfigService } from '../services/config/config.service';
-import { NgIf, NgFor } from '@angular/common';
+
 import { ObfButtonComponent } from '../obf-button/obf-button.component';
 import { ProgressComponent } from '../progress/progress.component';
 
@@ -122,7 +122,7 @@ class ScannableButtonRowProvider extends Subscriber<ScanningModel> implements Sc
     selector: 'app-button-page',
     templateUrl: './button-page.component.html',
     styleUrls: ['./button-page.component.css'],
-    imports: [NgIf, NgFor, ObfButtonComponent, ProgressComponent]
+    imports: [ObfButtonComponent, ProgressComponent]
 })
 export class ButtonPageComponent implements OnInit, OnDestroy {
 

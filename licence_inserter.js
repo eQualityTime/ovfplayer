@@ -1,6 +1,10 @@
-const replace = require('replace-in-file');
-const fs = require('fs');
-const { resolve } = require('path');
+import { replaceInFileSync } from 'replace-in-file';
+import { readFileSync } from 'fs';
+import { resolve, dirname } from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const LICENCE_SUFFIX  = '::END::LICENCE::';
 const LICENCE_PREFIX  = '::START::LICENCE::';
@@ -9,7 +13,7 @@ const FILE_EXTENSIONS = ['js', 'ts', 'html', 'css'];
 const IGNORE_DIRS     = ['dist', 'node_modules', 'e2e'];
 
 function readHeader() {
-  return fs.readFileSync(resolve(__dirname, 'licence-header.txt'), 'utf-8');
+  return readFileSync(resolve(__dirname, 'licence-header.txt'), 'utf-8');
 }
 
 function buildGlobs() {
@@ -22,6 +26,7 @@ function buildIgnore() {
 
 function updateFiles() {
   console.log('Updating licence in files');
+  console.log(__dirname);
   const globs = buildGlobs();
   console.log(globs);
   const licenceHeader = readHeader();
@@ -32,11 +37,11 @@ function updateFiles() {
     ignore: buildIgnore()
   };
   try {
-    const changes = replace.sync(options);
+    const changes = replaceInFileSync(options).filter(result => result.hasChanged);
     if (changes.length === 0) {
       console.log('No files updated');
     } else {
-      console.log('Modified files:', changes.join('\n\t'));
+      console.log('Modified files:', changes.map(result => result.file).join('\n\t'));
     }
   }
   catch (error) {

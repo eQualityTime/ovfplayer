@@ -12,14 +12,16 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: -->
-<div class="maxSpace" *ngIf="currentProgress">
-  <div class="progressContainer">
-    <div class="spinner">
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
+@if (currentProgress) {
+  <div class="maxSpace">
+    <div class="progressContainer">
+      <div class="spinner">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+      <div class="progressMessage">{{currentProgress.message}}</div>
     </div>
-    <div class="progressMessage">{{currentProgress.message}}</div>
   </div>
-</div>
+}

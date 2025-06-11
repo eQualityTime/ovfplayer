@@ -26,7 +26,7 @@ import {
   ScannableCollectionProvider
 } from '../services/scanning/scanning.service';
 import { PageStackService } from '../services/page-stack/page-stack.service';
-import { NgIf, NgFor } from '@angular/common';
+
 import { MatButton } from '@angular/material/button';
 import { InteractionEventHandlerDirective } from '../interaction-event-handler.directive';
 import { MatCard } from '@angular/material/card';
@@ -143,7 +143,7 @@ class ScannableSpeechbarProvider extends Subscriber<ScanningModel> implements Sc
     selector: 'app-speechbar',
     templateUrl: './speechbar.component.html',
     styleUrls: ['./speechbar.component.css'],
-    imports: [NgIf, MatButton, InteractionEventHandlerDirective, MatCard, NgFor, ObfButtonComponent]
+    imports: [MatButton, InteractionEventHandlerDirective, MatCard, ObfButtonComponent]
 })
 export class SpeechbarComponent implements OnInit, OnDestroy {
   private _displayedButtons: ButtonDisplayConfig;

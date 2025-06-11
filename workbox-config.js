@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   "globDirectory": "dist/open-voice-factory/",
   "globPatterns": [
     "manifest.json",
