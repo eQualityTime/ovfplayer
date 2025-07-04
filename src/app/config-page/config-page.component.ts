@@ -120,11 +120,19 @@ export class ConfigPageComponent implements OnInit {
     this.snackBar.open('Configuration link copied to clipboard', '', { duration: 1000 });
   }
 
-  getVersion() {
+  getVersion(): string {
     return VERSION.tag;
   }
 
   availableVoices() {
     return (<any>window).speechSynthesis.getVoices();
+  }
+
+  resetToCK20() {
+    this.boardURL = ConfigService.DEFAULT_BOARD_URL_20;
+  }
+
+  resetToCK12() {
+    this.boardURL = ConfigService.DEFAULT_BOARD_URL_12;
   }
 }

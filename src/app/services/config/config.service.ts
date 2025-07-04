@@ -54,7 +54,10 @@ export interface VoiceConfig {
 })
 export class ConfigService {
 
-  @LocalStorage() _boardURL = 'https://designs.theopenvoicefactory.org/525da59342a732b0557204f2d658b273.obz';
+  static readonly DEFAULT_BOARD_URL_20: string = 'https://designs.theopenvoicefactory.org/525da59342a732b0557204f2d658b273.obz';
+  static readonly DEFAULT_BOARD_URL_12: string = 'https://designs.theopenvoicefactory.org/7ecc07ac6d32b67bb200fcf72b0bff7c.obz';
+
+  @LocalStorage() _boardURL = ConfigService.DEFAULT_BOARD_URL_20;
   @LocalStorage() _showIconsInSpeechbar = true;
   @LocalStorage() _speakOnSpeechbarClick = true;
   @LocalStorage() _displayedButtons: ButtonDisplayConfig = {

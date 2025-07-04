@@ -21,6 +21,7 @@ import { BoardCacheService } from './board-cache.service';
 import { of, throwError } from 'rxjs';
 import { OBZBoardSet } from '../../obzboard-set';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { ConfigService } from '../config/config.service';
 
 describe('ObzService', () => {
 
@@ -43,13 +44,13 @@ describe('ObzService', () => {
       spyOn(cache, 'retrieve').and.returnValue(throwError(new Error('Cache is empty')));
 
       service.getBoardSet().subscribe({
-        next() { console.log('Hmmm'); },
+        next() { done.fail('Did not error for failed download'); },
         error(err) {
           expect(err.errorCode).toBe(ErrorCodes.OBZ_DOWNLOAD_ERROR);
           done();
         }
       });
-      const request = httpMock.expectOne('https://designs.theopenvoicefactory.org/525da59342a732b0557204f2d658b273.obz');
+      const request = httpMock.expectOne(ConfigService.DEFAULT_BOARD_URL_20);
       request.error(new ErrorEvent('ERROR_LOADING_OBZ'));
       httpMock.verify();
     })();
@@ -70,6 +71,7 @@ describe('ObzService', () => {
           expect(value).toBe(boardSet);
           done();
         },
+        error: done.fail
       });
     })();
   });
@@ -78,7 +80,7 @@ describe('ObzService', () => {
     inject([ObzService], (service: ObzService) => {
       const blob = OBZFixture.load('nomanifest');
       service.parseOBZFile(blob).subscribe({
-        next: () => {},
+        next: () => { done.fail('Did not error for missing manifest'); },
         error: (reason) => {
           expect(reason.errorCode).toBe(ErrorCodes.MISSING_MANIFEST);
           done();
@@ -91,7 +93,7 @@ describe('ObzService', () => {
     inject([ObzService], (service: ObzService) => {
       const blob = OBZFixture.load('dodgymanifest');
       service.parseOBZFile(blob).subscribe({
-        next: () => { },
+        next: () => { done.fail('Did not error for binary manifest'); },
         error: (reason) => {
           expect(reason.errorCode).toBe(ErrorCodes.MANIFEST_JSON_ERROR);
           done();
@@ -104,7 +106,7 @@ describe('ObzService', () => {
     inject([ObzService], (service: ObzService) => {
       const blob = OBZFixture.load('noboard');
       service.parseOBZFile(blob).subscribe({
-        next: () => { },
+        next: () => { done.fail('Did not error for missing board'); },
         error: (reason) => {
           expect(reason.errorCode).toBe(ErrorCodes.BOARD_NOT_THERE);
           done();
@@ -117,7 +119,7 @@ describe('ObzService', () => {
     inject([ObzService], (service: ObzService) => {
       const blob = OBZFixture.load('dodgyboard');
       service.parseOBZFile(blob).subscribe({
-        next: () => { },
+        next: () => { done.fail('Did not error for unparsable board'); },
         error: (reason) => {
           expect(reason.errorCode).toBe(ErrorCodes.BOARD_PARSE_ERROR);
           done();
@@ -130,7 +132,7 @@ describe('ObzService', () => {
     inject([ObzService], (service: ObzService) => {
       const blob = OBZFixture.load('missingimage');
       service.parseOBZFile(blob).subscribe({
-        next: () => { },
+        next: () => { done.fail('Did not error for missing image'); },
         error: (reason) => {
           expect(reason.errorCode).toBe(ErrorCodes.IMAGE_NOT_THERE);
           done();
@@ -143,7 +145,7 @@ describe('ObzService', () => {
     inject([ObzService], (service: ObzService) => {
       const blob = OBZFixture.load('missingsound');
       service.parseOBZFile(blob).subscribe({
-        next: () => { },
+        next: () => { done.fail('Did not error for missing sound'); },
         error: (reason) => {
           expect(reason.errorCode).toBe(ErrorCodes.SOUND_NOT_THERE);
           done();
@@ -157,7 +159,7 @@ describe('ObzService', () => {
       const blob = OBZFixture.load('invalidroot');
       // test parseOBZFile
       service.parseOBZFile(blob).subscribe({
-        next: () => { },
+        next: () => { done.fail('Did not error for invalid root'); },
         error: (reason) => {
           expect(reason.errorCode).toBe(ErrorCodes.INVALID_ROOT);
           done();
@@ -175,6 +177,21 @@ describe('ObzService', () => {
           expect(value).toBeTruthy();
           done();
         },
+        error: done.fail
+      });
+    })();
+  });
+
+  it('parseOBZFile should not allow "zip slips" (path uses ".." folder)', (done) => {
+    inject([ObzService], (service: ObzService) => {
+      const blob = OBZFixture.load('zipslip');
+      // test parseOBZFile
+      service.parseOBZFile(blob).subscribe({
+        next: () => { done.fail('Did not error for zipslip'); },
+        error: (reason) => {
+          expect(reason.errorCode).toBe(ErrorCodes.IMAGE_NOT_THERE);
+          done();
+        }
       });
     })();
   });

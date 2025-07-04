@@ -95,10 +95,10 @@ describe('ConfigPageComponent', () => {
   }));
 
   beforeEach(() => {
+    configServiceStub = TestBed.inject(ConfigService);
     fixture = TestBed.createComponent(ConfigPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    configServiceStub = TestBed.inject(ConfigService);
   });
 
   it('should create', () => {
@@ -106,7 +106,6 @@ describe('ConfigPageComponent', () => {
   });
 
   it('should not directly reference config service config', () => {
-    fixture.detectChanges();
     expect(component.displayedButtons).not.toBe(configServiceStub.displayedButtons);
     expect(component.scanningConfig).not.toBe(configServiceStub.scanningConfig);
     expect(component.appearanceConfig).not.toBe(configServiceStub.appearanceConfig);
@@ -115,7 +114,6 @@ describe('ConfigPageComponent', () => {
   });
 
   it('should not save config changes if save is not pressed', async() => {
-    fixture.detectChanges();
     expect(component.displayedButtons).not.toBe(configServiceStub.displayedButtons);
     const displayTab = fixture.nativeElement.querySelector('div[role="tab"] span[name="displayedButtons"]');
     displayTab.click();
@@ -139,7 +137,6 @@ describe('ConfigPageComponent', () => {
   });
 
   it('should save config changes if save is pressed', async () => {
-    fixture.detectChanges();
     expect(component.displayedButtons).not.toBe(configServiceStub.displayedButtons);
     const displayTab = fixture.nativeElement.querySelector('div[role="tab"] span[name="displayedButtons"]');
     displayTab.click();
@@ -163,6 +160,24 @@ describe('ConfigPageComponent', () => {
         expect(component.displayedButtons.showSpeakButton).toBeTrue();
         // config should now also be true
         expect(configServiceStub.displayedButtons.showSpeakButton).toBeTrue();
+      });
+    });
+  });
+
+  it('should use the default boards when asked to', async () => {
+    expect(component.boardURL).not.toEqual(ConfigService.DEFAULT_BOARD_URL_12, 'was already set to CK12');
+
+    const use12Button = fixture.debugElement.query(By.css('button#useCK12'));
+    use12Button.nativeElement.click();
+    fixture.detectChanges();
+    fixture.whenStable().then(() => {
+      expect(component.boardURL).toEqual(ConfigService.DEFAULT_BOARD_URL_12, 'has not been set to CK12');
+
+      const use20Button = fixture.debugElement.query(By.css('button#useCK20'));
+      use20Button.nativeElement.click();
+      fixture.detectChanges();
+      fixture.whenStable().then(() => {
+        expect(component.boardURL).toEqual(ConfigService.DEFAULT_BOARD_URL_20, 'has not been set to CK20');
       });
     });
   });

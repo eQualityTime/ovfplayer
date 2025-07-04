@@ -19,6 +19,7 @@ import { OBFPageComponent } from '../obfpage/obfpage.component';
 import { MatCard } from '@angular/material/card';
 
 import { MatButton, MatAnchor } from '@angular/material/button';
+import { ConfigService } from '../services/config/config.service';
 
 @Component({
     selector: 'app-error-page',
@@ -38,6 +39,10 @@ export class ErrorPageComponent implements OnInit {
 
   goToConfig() {
     this.router.navigate(['/config']);
+  }
+
+  resetToDefaultBoard() {
+    this.router.navigateByUrl(`/config?pagesetURL=${encodeURI(ConfigService.DEFAULT_BOARD_URL_20)}`);
   }
 
   get errorHRef(): string {
