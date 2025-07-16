@@ -138,8 +138,10 @@ describe('OBZBoardSet', () => {
 
       boardSet.blobify(httpClient, progress).subscribe({
         next(value) {
+          fail();
         },
         error(err) {
+          expect(err.errorCode).toBe(15);
           done();
         },
       });
