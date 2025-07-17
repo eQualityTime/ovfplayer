@@ -14,8 +14,10 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: */
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { ConfigService, ButtonDisplayConfig, ScanningConfig, AppearanceConfig, ButtonBehaviourConfig,
-  InteractionEventType, VoiceConfig} from '../services/config/config.service';
+import {
+  ConfigService, ButtonDisplayConfig, ScanningConfig, AppearanceConfig, ButtonBehaviourConfig,
+  InteractionEventType, VoiceConfig
+} from '../services/config/config.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { VERSION } from '../../environments/version';
 import { BoardCacheService } from '../services/board/board-cache.service';
@@ -34,10 +36,10 @@ import { MatSelect, MatOption } from '@angular/material/select';
 import { MatSlider, MatSliderThumb } from '@angular/material/slider';
 
 @Component({
-    selector: 'app-config-page',
-    templateUrl: './config-page.component.html',
-    styleUrls: ['./config-page.component.css'],
-    imports: [OBFPageComponent, MatCard, FormsModule, MatButton, MatTabGroup, MatTab, MatTabLabel, MatIcon, MatFormField, MatInput, MatCheckbox, MatRadioGroup, MatRadioButton, MatSelect, MatOption, MatSlider, MatSliderThumb]
+  selector: 'app-config-page',
+  templateUrl: './config-page.component.html',
+  styleUrls: ['./config-page.component.css'],
+  imports: [OBFPageComponent, MatCard, FormsModule, MatButton, MatTabGroup, MatTab, MatTabLabel, MatIcon, MatFormField, MatInput, MatCheckbox, MatRadioGroup, MatRadioButton, MatSelect, MatOption, MatSlider, MatSliderThumb]
 })
 export class ConfigPageComponent implements OnInit {
 
@@ -81,7 +83,26 @@ export class ConfigPageComponent implements OnInit {
     return JSON.parse(JSON.stringify(config));
   }
 
+  refreshBoard() {
+    this.boardCache.clear().subscribe({
+      next: () => {
+        this.exitConfig();
+      },
+      error: (error) => {
+        // not much we can do really
+        console.error('Error clearing cache', error);
+        this.exitConfig();
+      }
+    });
+  }
+
+  exitConfig() {
+    this.router.navigate(['/main']);
+  }
+
   save() {
+    const clearCache = this.configService.boardURL != this.boardURL;
+
     this.configService.boardURL = this.boardURL;
     this.configService.displayedButtons = this.displayedButtons;
     this.configService.showIconsInSpeechbar = this.showIconsInSpeechbar;
@@ -92,17 +113,13 @@ export class ConfigPageComponent implements OnInit {
     this.configService.voiceConfig = this.voiceConfig;
     // TODO: some kind of validation
 
-    // clear local cache of page to force a refresh
-    this.boardCache.clear().subscribe({
-      next: () => {
-        this.router.navigate(['/main']);
-      },
-      error: (error) => {
-        // not much we can do really
-        console.error('Error clearing cache', error);
-        this.router.navigate(['/main']);
-      }
-    });
+    // clear local cache of page to force a refresh if board url has changed
+    if (clearCache) {
+      this.refreshBoard();
+    }
+    else {
+      this.exitConfig();  // otherwise just go back to main page
+    }
   }
 
   copyToClipboard() {
