@@ -53,11 +53,10 @@ export class Grid {
   }
 }
 
+@OneOf(['url', 'dataUrl', 'path']) 
 export class LoadBoardAction {
 
-  @OneOf(['url', 'dataUrl', 'path'], { message: 'Load board should have one of dataUrl, url or path'})
   id: string;
-
   name: string;
 
   @IsOptional()
@@ -81,13 +80,15 @@ export class LoadBoardAction {
   }
 }
 
+@OneOf(['label', 'imageId'])
+@OneOf(['label', 'vocalization', 'soundId', 'actions', 'loadBoardAction'])
 export class Button {
 
   @IsNotEmpty({ message: 'Button id must be specified' })
   @IsString({ message: 'Button id must be a string' })
   id: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   label: string;
 
@@ -106,6 +107,8 @@ export class Button {
   backgroundColor: string;
   borderColor: string;
   actions: string[];
+  
+  @ValidateNested()
   loadBoardAction: LoadBoardAction;
 
   @IsDefined()
@@ -143,9 +146,9 @@ export class Button {
   }
 }
 
+@OneOf(['url', 'data', 'path', 'symbol'])
 export class Image {
 
-  @OneOf(['url', 'data', 'path', 'symbol'], { message: 'Image with id "$value" must specifiy data, a url or a path' })
   @IsString({ message: 'Image id must be a string' })
   @IsNotEmpty({ message: 'Image id must be specified'})
   id: string;
@@ -200,11 +203,11 @@ export class Image {
   }
 }
 
+@OneOf(['url', 'data', 'path'])
 export class Sound {
 
   @IsNotEmpty({ message: 'Sound id must be specified'})
   @IsString({ message: 'Sound id must be a string'})
-  @OneOf(['url', 'data', 'path'], { message: 'Sound with id "$value" must specifiy data, a url or a path' })
   id: string;
 
   @IsOptional()

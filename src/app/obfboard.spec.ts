@@ -287,7 +287,79 @@ describe('obfboard.validation', () => {
     }
   });
 
-  it('should validate image OneOf', () => {
+  it('should fail for invalid loadBoardAction OneOf', () => {
+    const nameInput = {
+      id: 'test',
+      name: 'board_name',
+      grid: {
+        rows: 2,
+        columns: 2,
+        order: [
+          [1, null],
+          [null, 2]
+        ]
+      },
+      buttons: [{ id: 1, label: 'boom', load_board: { name: 'board1' } }],
+      images: [],
+      sounds: []
+    };
+    try {
+      new OBFBoard().deserialize(nameInput);
+      fail("Deserialisation with name should have errored");
+    } catch (e) {
+      expect(e.errorCode).toBe(ErrorCodes.OBF_VALIDATION);
+      expect(e.message).toContain('LoadBoardAction must specify at least one of: url, dataUrl, path');
+    }
+
+    const idInput = {
+      id: 'test',
+      name: 'board_name',
+      grid: {
+        rows: 2,
+        columns: 2,
+        order: [
+          [1, null],
+          [null, 2]
+        ]
+      },
+      buttons: [{ id: 1, label: 'boom', load_board: { id: 'board1' } }],
+      images: [],
+      sounds: []
+    };
+
+    try {
+      new OBFBoard().deserialize(idInput);
+      fail("Deserialisation with id should have errored");
+    } catch (e) {
+      expect(e.errorCode).toBe(ErrorCodes.OBF_VALIDATION);
+      expect(e.message).toContain('LoadBoardAction with id "board1" must specify at least one of: url, dataUrl, path');
+    }
+  });
+  
+  it('should validate loadBoardAction OneOf', () => {
+    const board = new OBFBoard().deserialize({
+      id: 'test',
+      name: 'board_name',
+      grid: {
+        rows: 2,
+        columns: 2,
+        order: [
+          [1, null],
+          [null, 2]
+        ]
+      },
+      buttons: [
+        { id: 1, label: 'boom', load_board: { dataUrl: 'http://boom.com' } },
+        { id: 2, label: 'boom', load_board: { url: 'http://boom.com'  } },
+        { id: 3, label: 'boom', load_board: { path: 'boom' } },
+      ],
+      images: [],
+      sounds: []
+    });
+    expect(board.buttons.length).toBe(3);
+  });
+
+  it('should fail for invalid image OneOf', () => {
     const input = {
       id: 'test',
       name: 'board_name',
@@ -300,23 +372,42 @@ describe('obfboard.validation', () => {
         ]
       },
       buttons: [],
-      images: [
-        {
-          id: 'image1'
-        }
-      ],
+      images: [{ id: 'image1' }],
       sounds: []
     };
     try {
       new OBFBoard().deserialize(input);
-      expect(true).toBe(false);
+      fail("Deserialisation should have errored");
     } catch (e) {
       expect(e.errorCode).toBe(ErrorCodes.OBF_VALIDATION);
-      expect(e.message).toContain('Image with id "image1" must specifiy data, a url or a path');
+      expect(e.message).toContain('Image with id "image1" must specify at least one of: url, data, path, symbol');
     }
   });
+  
+  it('should validate image OneOf', () => {
+    const board = new OBFBoard().deserialize({
+      id: 'test',
+      name: 'board_name',
+      grid: {
+        rows: 2,
+        columns: 2,
+        order: [
+          [1, null],
+          [null, 2]
+        ]
+      },
+      buttons: [],
+      images: [
+        { id: 'image1', data: 'boom' },
+        { id: 'image2', url: 'http://boom.com' },
+        { id: 'image3', path: 'boom' },
+      ],
+      sounds: []
+    });
+    expect(board.images.length).toBe(3);
+  });
 
-  it('should validate sound OneOf', () => {
+  it('should fail for invalid sound OneOf', () => {
     const input = {
       id: 'test',
       name: 'board_name',
@@ -334,11 +425,132 @@ describe('obfboard.validation', () => {
     };
     try {
       new OBFBoard().deserialize(input);
-      expect(true).toBe(false);
+      fail("Deserialisation should have errored");
     } catch (e) {
       expect(e.errorCode).toBe(ErrorCodes.OBF_VALIDATION);
-      expect(e.message).toContain('Sound with id "sound1" must specifiy data, a url or a path');
+      expect(e.message).toContain('Sound with id "sound1" must specify at least one of: url, data, path');
     }
   });
+
+  it('should validate sound OneOf', () => {
+    const board = new OBFBoard().deserialize({
+      id: 'test',
+      name: 'board_name',
+      grid: {
+        rows: 2,
+        columns: 2,
+        order: [
+          [1, null],
+          [null, 2]
+        ]
+      },
+      buttons: [],
+      sounds: [
+        { id: 'sound1', data: 'boom' },
+        { id: 'sound2', url: 'http://boom.com' },
+        { id: 'sound3', path: 'boom' },
+      ],
+      images: []
+    });
+    expect(board.sounds.length).toBe(3);
+  });
+
+  it('should fail for invalid button display OneOf', () => {
+    const input = {
+      id: 'test',
+      name: 'board_name',
+      grid: {
+        rows: 2,
+        columns: 2,
+        order: [
+          [1, null],
+          [null, 2]
+        ]
+      },
+      buttons: [{ id: 1, vocalization: 'fail' }],
+      sounds: [],
+      images: []
+    };
+    try {
+      new OBFBoard().deserialize(input);
+      fail("Deserialisation should have errored");
+    } catch (e) {
+      expect(e.errorCode).toBe(ErrorCodes.OBF_VALIDATION);
+      expect(e.message).toContain('Button with id "1" must specify at least one of: label, imageId');
+    }
+  });
+
+  it('should validate button display OneOf', () => {
+    const board = new OBFBoard().deserialize({
+      id: 'test',
+      name: 'board_name',
+      grid: {
+        rows: 2,
+        columns: 2,
+        order: [
+          [1, null],
+          [null, 2]
+        ]
+      },
+      buttons: [
+        { id: 1, label: 'boom' },
+        { id: 2, imageId: 'image1', vocalization: 'boom' } 
+      ],
+      sounds: [],
+      images: []
+    });
+    expect(board.buttons.length).toBe(2);
+  });
+
+  it('should fail for invalid button action OneOf', () => {
+    const input = {
+      id: 'test',
+      name: 'board_name',
+      grid: {
+        rows: 2,
+        columns: 2,
+        order: [
+          [1, null],
+          [null, 2]
+        ]
+      },
+      buttons: [{ id: 1, imageId: 'image1' }],
+      sounds: [],
+      images: []
+    };
+    try {
+      new OBFBoard().deserialize(input);
+      fail("Deserialisation should have errored");
+    } catch (e) {
+      expect(e.errorCode).toBe(ErrorCodes.OBF_VALIDATION);
+      expect(e.message).toContain('Button with id "1" must specify at least one of: label, vocalization, soundId, actions, loadBoardAction');
+    }
+  });
+
+  it('should validate button action OneOf', () => {
+    const board = new OBFBoard().deserialize({
+      id: 'test',
+      name: 'board_name',
+      grid: {
+        rows: 2,
+        columns: 2,
+        order: [
+          [1, null],
+          [null, 2]
+        ]
+      },
+      buttons: [
+        { id: 1, imageId: 'image1', label: 'boom' },
+        { id: 2, imageId: 'image1', vocalization: 'boom' },
+        { id: 3, imageId: 'image1', soundId: 'boom' },
+        { id: 4, imageId: 'image1', loadBoardAction: { path: 'boom' } },
+        { id: 5, imageId: 'image1', actions: ['boom'] }
+      ],
+      sounds: [],
+      images: []
+    });
+    expect(board.buttons.length).toBe(5);
+  });
 });
+
 

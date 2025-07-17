@@ -13,27 +13,32 @@ You should have received a copy of the GNU General Public License
 along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 ::END::LICENCE:: */
 import { registerDecorator, ValidationOptions, ValidationArguments } from 'class-validator';
+import { ClassValidationDecorator, registerClassValidator } from './custom-class-validation';
 
-export function OneOf(validationProperties: string[], validationOptions?: ValidationOptions) {
-  return function (object: Object, propertyName: string) {
-    registerDecorator({
-      name: 'OneOf',
-      target: object.constructor,
-      propertyName: propertyName,
-      constraints: [validationProperties],
-      options: validationOptions,
-      validator: {
-        validate(value: any, args: ValidationArguments) {
-          const theObject = <any>args.object;
-          function isValid(element: string): boolean {
-            const val = theObject[element];
-            return val !== undefined && val !== null;
-          }
-          return (<Array<string>>args.constraints[0]).some(isValid);
+export function OneOf(validationProperties: string[]): ClassValidationDecorator {
+  return registerClassValidator({
+    name: 'OneOf',
+    constraints: validationProperties,
+    validator: {
+      validate(value: undefined, args: ValidationArguments): boolean {
+        const theObject = <any>args.object;
+        function isValid(element: string): boolean {
+          const val = theObject[element];
+          return val !== undefined && val !== null && (val['length'] != undefined ? val['length'] > 0 : true);
         }
+        return args.constraints.some(isValid);
+      },
+
+      defaultMessage(args: ValidationArguments): string {
+        let prefix = args.targetName;
+        if (args.object['id']) {
+          prefix += ' with id "' + args.object['id'] + '"';
+        }
+
+        return  prefix + ' must specify at least one of: ' + args.constraints.join(', ');
       }
-    });
-  };
+    }
+  });
 }
 
 export function Check2DArray(widthProperty: string, heightProperty: string, validationOptions?: ValidationOptions) {
