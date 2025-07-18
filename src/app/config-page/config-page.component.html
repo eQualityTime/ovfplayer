@@ -21,6 +21,7 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
 
       <div class="formButtons">
         <button type="submit" mat-raised-button color="primary" [disabled]="!configForm.form.valid">Save</button>
+        <button type="button" mat-raised-button color="primary" (click)="exitConfig()">Cancel</button>
       </div>
       <mat-tab-group>
         <mat-tab ngModelGroup="boardURL" #boardURLCtrl="ngModelGroup">
@@ -36,10 +37,15 @@ along with OVFPlayer.  If not, see <https://www.gnu.org/licenses/>.
                 <input [(ngModel)]="boardURL" required matInput name="boardURL" placeholder="URL for obf/obz file"
                   class="formInputUrl">
               </mat-form-field>
-              <div class="clickable" (click)="copyToClipboard()"><i class="material-icons">link</i>&nbsp;Create link</div>
+              <div class="clickable" (click)="copyToClipboard()"><i class="material-icons">link</i>&nbsp;Create link
+              </div>
+              <div class="clickable" (click)="refreshBoard()"><i class="material-icons">refresh</i>&nbsp;Reload board
+                without changes</div>
               <div>
-                <button id="useCK20" mat-raised-button type="button" (click)="resetToCK20()">Use default CK20 board</button>
-                <button id="useCK12" mat-raised-button type="button" (click)="resetToCK12()">Use default CK12 board</button>
+                <button id="useCK20" mat-raised-button type="button" (click)="resetToCK20()">Use default CK20
+                  board</button>
+                <button id="useCK12" mat-raised-button type="button" (click)="resetToCK12()">Use default CK12
+                  board</button>
               </div>
             </mat-card>
           </div>
