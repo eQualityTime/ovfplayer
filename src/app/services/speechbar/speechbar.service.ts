@@ -19,32 +19,22 @@ import { ConfigService } from '../config/config.service';
 
 export class ButtonFacade extends Button {
 
-  private appendages: string[] = [];
-
   constructor(button: Button) {
     super();
     // copies all the button properties into this "facade" because we can't override properties with accessors
     this.deserialize(JSON.parse(JSON.stringify(button, (key, value) => {
-        if (key === "parent") {
-            return undefined; // Exclude the 'parent' property to avoid circular issues
-        }
-        return value; // Keep other properties unchanged
+      if (key === "parent") {
+        return undefined; // Exclude the 'parent' property to avoid circular issues
+      }
+      return value; // Keep other properties unchanged
     })), button.parent); // deserializing fixes the parent
   }
 
   append(appendage: string) {
-    this.appendages.push(appendage);
-    this.update();
+    this.label = this.label ? this.label + appendage : this.label;
+    this.vocalization = this.vocalization ? this.vocalization + appendage : this.vocalization;
   }
 
-  private augment(initial: string): string {
-    return [initial].concat(this.appendages).join('');
-  }
-
-  private update() {
-    this.label = this.augment(this.label);
-    this.vocalization = this.vocalization ? this.augment(this.vocalization) : this.vocalization;
-  }
 }
 
 @Injectable({
