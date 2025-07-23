@@ -62,10 +62,16 @@ describe('SpeechbarService', () => {
             expect(buttons.length).toBe(1);
             expect(buttons[0].label).toBe('helloless');
             expect(buttons[0].vocalization).toBe('vocalless');
+            break;
+          case 4:
+            // single button with 'lessly' appended
+            expect(buttons.length).toBe(1);
+            expect(buttons[0].label).toBe('hellolessly');
+            expect(buttons[0].vocalization).toBe('vocallessly');
             done();
             break;
           default:
-            done();
+            fail("Appended an unexpected number of times");
         }
       });
 
@@ -73,6 +79,7 @@ describe('SpeechbarService', () => {
       service.addButton(mockButton);
       // do an append action
       service.appendButton(mockButton, '+less');
+      service.appendButton(mockButton, '+ly');
     })();
   });
 
@@ -354,14 +361,14 @@ describe('SpeechbarService.speechSynthesis', () => {
     label: 'hello',
     vocalization: 'vocal'
   }, null);
-  
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [SpeechbarService]
     });
 
     service = TestBed.inject(SpeechbarService);
-    service.getButtons().subscribe((buttons) => {});
+    service.getButtons().subscribe((buttons) => { });
     synthSpeakSpy = spyOn(window.speechSynthesis, 'speak');
   });
 
